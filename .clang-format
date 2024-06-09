@@ -8,4 +8,4 @@
   PointerAlignment: Right,
   AlignConsecutiveMacros: AcrossEmptyLines,
   AlignAfterOpenBracket: "true",
-  }
+}

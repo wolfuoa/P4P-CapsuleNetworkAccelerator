@@ -17,10 +17,10 @@ static float relu(float x)
 static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], int filter, float output[OUT_IMG_ROWS][OUT_IMG_COLS])
 {
 	// Loop over all image rows
-	for (int r_image = 0; i < IN_IMG_ROWS; ++r_image)
+	for (int r_image = 0; i < OUT_IMG_ROWS; ++r_image)
 	{
 		// Loop overall image columns
-		for (int c_image = 0; j < IN_IMG_COLS; ++c_image)
+		for (int c_image = 0; j < OUT_IMG_COLS; ++c_image)
 		{
 			float sum = 0.0;
 
@@ -45,6 +45,9 @@ static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], int filter, float out
 
 void relu_conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> stream_conv_s[FILTERS]);
 {
+	// Convolution is applied for each filter.
+	// The result is stored in a 256 wide stream of 20x20 matrices.
+	// The matrices represent the convolution of each filter about the input volume.
 	// Pipeline?
 	for (int i = 0; i < FILTERS; ++i)
 	{
