@@ -57,9 +57,6 @@ void process_features(hls::stream<float> stream_conv_s[FILTERS], hls::stream<flo
 
 static void reshape(hls::stream<float> &stream_primary_caps_internal_conv_s, hls::stream<float> &stream_primary_caps_internal_reshape_s)
 {
-	// Example reshape operation (pseudo-code)
-	float buffer[OUT_IMG_ROWS][OUT_IMG_COLS][CAPSULE_DIM];
-
 	// Read from stream and store in buffer
 	for (int r = 0; r < OUT_IMG_ROWS; ++r)
 	{
@@ -67,19 +64,7 @@ static void reshape(hls::stream<float> &stream_primary_caps_internal_conv_s, hls
 		{
 			for (int d = 0; d < CAPSULE_DIM; ++d)
 			{
-				buffer[r][c][d] = stream_primary_caps_internal_conv_s.read();
-			}
-		}
-	}
-
-	// Write reshaped data to next stream
-	for (int r = 0; r < OUT_IMG_ROWS; ++r)
-	{
-		for (int c = 0; c < OUT_IMG_COLS; ++c)
-		{
-			for (int d = 0; d < CAPSULE_DIM; ++d)
-			{
-				stream_reshape_s.write(buffer[r][c][d]);
+				stream_primary_caps_internal_reshape_s.write(stream_primary_caps_internal_conv_s.read());
 			}
 		}
 	}
@@ -95,8 +80,9 @@ static void squash(hls::stream<float> &stream_primary_caps_internal_reshape_s, h
 		// Read capsule vector from the stream
 		for (int j = 0; j < CAPSULE_DIM; ++j)
 		{
-			capsule[j] = stream_reshape_s.read();
-			norm_sq += capsule[j] * capsule[j];
+			capsule[j] = stream_primary_caps_internal_reshape_s.read();
+			// Perform squaring operation
+			squared_norm += capsule[j] * capsule[j];
 		}
 
 		// Calculate scaling factor
@@ -105,7 +91,7 @@ static void squash(hls::stream<float> &stream_primary_caps_internal_reshape_s, h
 		// Apply squash and write to the output stream
 		for (int j = 0; j < CAPSULE_DIM; ++j)
 		{
-			stream_primary_caps_internal_reshape_s.write(capsule[j] * scale);
+			stream_squash_s.write(capsule[j] * scale);
 		}
 	}
 }
