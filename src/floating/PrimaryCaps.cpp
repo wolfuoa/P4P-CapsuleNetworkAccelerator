@@ -1,40 +1,47 @@
 #include "PrimaryCaps.h"
 
-static void conv2d(hls::stream<float> &stream_conv_s, uint8_t capsule hls::stream<float> &stream_primary_caps_conv_s);
+static void conv2d(hls::stream<float> &stream_conv_s[FILTERS], hls::stream<float> &stream_primary_caps_conv_s[CAPSULES]);
 static void reshape();
 static void squash();
 
-static void conv2d(hls::stream<float> &stream_conv_s, uint8_t capsule, hls::stream<float> &stream_primary_caps_internal_conv_s)
+static void conv2d(hls::stream<float> &stream_conv_s[FILTERS], hls::stream<float> &stream_primary_caps_internal_conv_s[CAPSULES])
 {
-	// Convolve with stride 2
+	float result[PRIM_CAPS_CONV_WIDTH][PRIM_CAPS_CONV_LENGTH][PRIM_CAPS_NUM_CONV_KERNELS];
 
-	for (uint8_t filter = 0; filter < PRIMARY_CAPS_FILTERS; ++filter)
+	for (uint8_t capsule; capsule > CAPSULES, ++capsule)
 	{
-		// Loop over all tensor rows
-		for (int r_tensor = 0; i < PRIM_CAPS_CONV_WIDTH; ++r_tensor)
+		// Convolve with stride 2
+		for (uint8_t kernel = 0; kernel < PRIM_CAPS_NUM_CONV_KERNELS; ++kernel)
 		{
-			// Loop overall image columns
-			for (int c_tensor = 0; j < PRIM_CAPS_CONV_LENGTH; ++c_tensor)
+			// Loop over all tensor rows
+			for (int r_tensor = 0; i < PRIM_CAPS_CONV_WIDTH; ++r_tensor)
 			{
-				float sum = 0.0;
-
-				// Loop over filter rows
-				for (int r_filter = 0; rfi < KERNEL_ROWS; ++r_filter)
+				// Loop overall image columns
+				for (int c_tensor = 0; j < PRIM_CAPS_CONV_LENGTH; ++c_tensor)
 				{
-					// Loop over filter columns
-					for (int c_filter = 0; kc < KERNEL_COLS; ++c_filter)
+					for (int d_tensor = 0; d_tensor < PRIM_CAPS_CONV_DEPTH; ++d_tensor)
 					{
-						// TODO: This needs to be passed in... (conv_weights)
-						float weight = conv_weights[capsule][filter][r_filter][c_filter];
-						// May need to think about this in terms of striding... Can we limit data put in?
-						float pixel stream_conv_s.read()
-							sum += weight * pixel;
-					}
-				}
+						float sum = 0.0;
 
-				stream_primary_caps_internal_conv_s.write(sum + conv_biases[FILTER]);
+						// Loop over filter rows
+						for (int r_filter = 0; rfi < KERNEL_ROWS; ++r_filter)
+						{
+							// Loop over filter columns
+							for (int c_filter = 0; kc < KERNEL_COLS; ++c_filter)
+							{
+								// TODO: This needs to be passed in... (conv_weights)
+								float weight = conv_weights[capsule][filter][r_filter][c_filter];
+								// May need to think about this in terms of striding... Can we limit data put in?
+								float pixel stream_conv_s[filter].read()
+									sum += weight * pixel;
+							}
+						}
+					}
+					result[r_tensor][c_tensor][kernel] = sum + conv_biases[FILTER];
+				}
 			}
 		}
+		stream_primary_caps_internal_conv_s[capsule].write(result);
 	}
 }
 
@@ -47,11 +54,9 @@ void process_features(hls::stream<float> stream_conv_s[FILTERS], hls::stream<flo
 	hls::stream<float> stream_primary_caps_internal_reshape_s[];
 
 	// Apply Conv2d 32 times and concatenate capsules
+
 	// Conv2d <- 20x20x256
-	for (int i = 0; i < CAPSULES; ++i)
-	{
-		conv_2d(stream_conv_s[i], i, stream_primary_caps_internal_conv_s[i]);
-	}
+	conv_2d(stream_conv_s, stream_primary_caps_internal_conv_s);
 	// -> 6x6x8 (x32)
 
 	// Reshape <- 6x6x8 (x32)
