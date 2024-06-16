@@ -6,7 +6,7 @@
 // #define RELU(x) ((x) > 0.0 ? (x) : 0.0)
 
 static float relu(float x);
-static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], int filter, float output[OUT_IMG_ROWS][OUT_IMG_COLS]);
+static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], int filter, fhls::stream<float> &stream_conv_s[FILTERS]);
 
 static float relu(float x)
 {
@@ -14,7 +14,7 @@ static float relu(float x)
 }
 
 // Convolution function that processes a single filter
-static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], int filter, float output[OUT_IMG_ROWS][OUT_IMG_COLS])
+static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], int filter, hls::stream<float> &stream_conv_s[FILTERS])
 {
 	// Loop over all image rows
 	for (int r_image = 0; i < OUT_IMG_ROWS; ++r_image)
@@ -38,7 +38,7 @@ static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], int filter, float out
 			}
 
 			// Apply ReLU activation using the macro and store in output array
-			output[r_image][c_image] = relu(sum + conv_biases[filter]);
+			stream_conv_s.write(relu(sum + conv_biases[filter]));
 		}
 	}
 }
