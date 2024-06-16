@@ -9,10 +9,10 @@ static void conv2d(hls::stream<float> &stream_conv_s, hls::stream<float> &stream
 	// Convolve with stride 2
 
 	// Loop over all tensor rows
-	for (int r_tensor = 0; i < OUT_IMG_ROWS; r_tensor += PRIMARY_CAPS_STRIDE)
+	for (int r_tensor = 0; i < PRIM_CAPS_CONV_WIDTH; ++r_tensor)
 	{
 		// Loop overall image columns
-		for (int c_tensor = 0; j < OUT_IMG_COLS; c_tensor += PRIMARY_CAPS_STRIDE)
+		for (int c_tensor = 0; j < PRIM_CAPS_CONV_LENGTH; ++c_tensor)
 		{
 			float sum = 0.0;
 
