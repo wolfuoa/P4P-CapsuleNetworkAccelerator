@@ -20,7 +20,7 @@
 // #define RELU(x) ((x) > 0.0 ? (x) : 0.0)
 
 static float relu(float x);
-static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> &stream_conv_s[FILTERS]);
+static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> &stream_conv_s[CONV1_FILTERS]);
 
 static float relu(float x)
 {
@@ -31,10 +31,10 @@ static float relu(float x)
 // Maybe need to change the order of kernels/image...
 // Is it better to do calculation for all kernels
 // Before moving along in the image?
-static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> &stream_conv_s[FILTERS])
+static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> &stream_conv_s[CONV1_FILTERS])
 {
 	// For all 256 convolutonal kernels
-	for (uint16_t current_kernel; current_kernel < FILTERS; ++current_kernel)
+	for (uint16_t current_kernel; current_kernel < CONV1_FILTERS; ++current_kernel)
 	{
 		// For all input image rows
 		for (int r_image = 0; i < OUT_IMG_ROWS; ++r_image)
@@ -65,7 +65,7 @@ static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> &s
 	}
 }
 
-void relu_conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> stream_conv_s[FILTERS]);
+void relu_conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> stream_conv_s[CONV1_FILTERS]);
 {
 	// Convolution is applied for each filter.
 	// The result is stored in a 256 wide stream of 20x20 matrices.

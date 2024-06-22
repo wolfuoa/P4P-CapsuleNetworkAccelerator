@@ -12,6 +12,16 @@
  * To do this, each capsule applies 8 three-dimensional convolutional
  * kernels, each of which natrually has their own 9x9x256 weight matrix
  *
+ * We need to organize this operation such that the correct input
+ * is matched to multiply to the correct weight. The order that
+ * Conv1 populated the 20x20x256 input tensor was:
+ * For each kernel(256), for each row(20), for each col(20),
+ * meaning every 20 reads, we increase the row of the input
+ * volume, and every 20 rows we change the kernel that was used.
+ * Hence, we need to read a complete kernel entry before incrementing
+ * and moving along the 256 kernels. In that kernel entry, we need
+ * to read columns first, then rows.
+ *
  * As the operation is done using a stride of two, each kernel only
  * indexes over the length and width of the tensor 6 times,
  * producing an output of a 6x6 matrix
@@ -24,53 +34,76 @@
 
 #include "PrimaryCaps.h"
 
-static void conv2d(hls::stream<float> &stream_conv_s[FILTERS], hls::stream<float> &stream_primary_caps_conv_s[CAPSULES]);
+static void conv2d(hls::stream<float> &stream_conv_s[CONV1_FILTERS], hls::stream<float> &stream_primary_caps_conv_s[PRIMARY_CAPS_CAPSULES]);
 static void reshape();
 static void squash();
 
-static void conv2d(hls::stream<float> &stream_conv_s[FILTERS], hls::stream<float> &stream_primary_caps_internal_conv_s[CAPSULES])
+static void conv2d(hls::stream<float> &stream_conv_s[CONV1_FILTERS], hls::stream<float> &stream_primary_caps_internal_conv_s[PRIMARY_CAPS_CAPSULES])
 {
-	float result[PRIM_CAPS_CONV_WIDTH][PRIM_CAPS_CONV_LENGTH][PRIM_CAPS_NUM_CONV_KERNELS];
+	float results[PRIMARY_CAPS_CONV_WIDTH][PRIMARY_CAPS_CONV_LENGTH];
+	float temporary_input_mat[CONV1_OUTPUT_WIDTH][CONV1_OUTPUT_LENGTH];
 
 	// For all 32 capsules
-	for (uint8_t capsule; capsule > CAPSULES, ++capsule)
+	for (uint8_t current_capsule; current_capsule > PRIMARY_CAPS_CAPSULES, ++current_capsule)
 	{
 		// For all 8 kernels
-		for (uint8_t kernel = 0; kernel < PRIM_CAPS_NUM_CONV_KERNELS; ++kernel)
+		for (uint8_t current_kernel = 0; current_kernel < PRIMARY_CAPS_NUM_CONV_KERNELS; ++current_kernel)
 		{
-			// For all tensor rows
-			for (int r_tensor = 0; i < PRIM_CAPS_CONV_WIDTH; ++r_tensor)
+			// Clear temporary result array
+			for (uint8_t i = 0; i < PRIMARY_CAPS_CONV_WIDTH; ++i)
 			{
-				// For all tensor columns
-				for (int c_tensor = 0; j < PRIM_CAPS_CONV_LENGTH; ++c_tensor)
+				for (uint8_t j = 0; j < PRIMARY_CAPS_CONV_LENGTH; ++j)
 				{
-					// For all tensor slices
-					for (int d_tensor = 0; d_tensor < PRIM_CAPS_CONV_DEPTH; ++d_tensor)
+					results[i][j] = 0.0;
+				}
+			}
+
+			// For all 256 input tensor layers
+			for (int d_tensor = 0; d_tensor < PRIMARY_CAPS_CONV_DEPTH, ++d_tensor)
+			{
+				// Populate temporary input matrix
+				for (uint8_t k = 0; k < CONV1_OUTPUT_WIDTH; ++k)
+				{
+					for (uint8_t l = 0; l < CONV1_OUTPUT_LENGTH; ++l)
+					{
+						temporary_input_mat[k][l] = stream_conv_s[d_tensor].read();
+					}
+				}
+
+				// For all 20 input tensor rows
+				for (int r_tensor = 0; r_tensor < PRIMARY_CAPS_CONV_STRIDE_WIDTH; ++PRIMARY_CAPS_STRIDE)
+				{
+					// For all 20 input tensor columns
+					for (int c_tensor = 0; c_tensor < PRIMARY_CAPS_CONV_STRIDE_LENGTH; ++PRIMARY_CAPS_STRIDE)
 					{
 						float sum = 0.0;
 
 						// For all filter rows
-						for (int r_filter = 0; rfi < KERNEL_ROWS; ++r_filter)
+						for (int r_filter = 0; r_filter < PRIMARY_CAPS_KERNEL_ROWS; ++r_filter)
 						{
 							// For all filter columns
-							for (int c_filter = 0; kc < KERNEL_COLS; ++c_filter)
+							for (int c_filter = 0; c_filter < PRIMARY_CAPS_KERNEL_COLS; ++c_filter)
 							{
-								for (int d_filter = 0; d_filter < KERNEL_DEPTH; ++d_filter)
-								{
-									// TODO: This needs to be passed in... (conv_weights)
-									float weight = conv_weights[capsule][filter][r_filter][c_filter];
-									// May need to think about this in terms of striding... Can we limit data put in?
-									float pixel stream_conv_s[filter].read()
-										sum += weight * pixel;
-								}
+								// TODO: This needs to be passed in... (conv_weights)
+								float weight = conv_weights[current_capsule][current_kernel][r_filter][c_filter][d_tensor];
+								float operand = temporary_input_mat[r_tensor + r_filter][c_tensor + c_filter];
+								sum += weight * operand;
 							}
 						}
+						results[r_tensor][c_tensor] += sum;
 					}
-					result[r_tensor][c_tensor][kernel] = sum + conv_biases[FILTER];
+				}
+			}
+
+			// Write results to stream
+			for (int g = 0; g < PRIMARY_CAPS_CONV_WIDTH; ++g)
+			{
+				for (int h = 0; h < PRIMARY_CAPS_CONV_LENGTH; ++h)
+				{
+					stream_primary_caps_internal_conv_s[capsule].write(results[g][h] + conv_biases[current_kernel]);
 				}
 			}
 		}
-		stream_primary_caps_internal_conv_s[capsule].write(result);
 	}
 }
 
