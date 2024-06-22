@@ -1,3 +1,27 @@
+/*
+ * PrimaryCaps.cpp
+ * author: nicholas wolf
+ *
+ * The second layer of the Capsule Network takes in a three-dimensional
+ * tensor best represented as a 20x20x256 three-dimensional matrix
+ *
+ * To evaluate this matrix, the Primary Capsule layer has 32 primary
+ * capsules whose job is to combine the basic features provided by the
+ * previous layer into cohesive groups of features.
+ *
+ * To do this, each capsule applies 8 three-dimensional convolutional
+ * kernels, each of which natrually has their own 9x9x256 weight matrix
+ *
+ * As the operation is done using a stride of two, each kernel only
+ * indexes over the length and width of the tensor 6 times,
+ * producing an output of a 6x6 matrix
+ *
+ * There are 8 convolutional kernels in a capsule, and there are 32
+ * capsules in Primary Caps. Hence, we get a total output of
+ * 6x6x8x32
+ *
+ */
+
 #include "PrimaryCaps.h"
 
 static void conv2d(hls::stream<float> &stream_conv_s[FILTERS], hls::stream<float> &stream_primary_caps_conv_s[CAPSULES]);
@@ -8,32 +32,37 @@ static void conv2d(hls::stream<float> &stream_conv_s[FILTERS], hls::stream<float
 {
 	float result[PRIM_CAPS_CONV_WIDTH][PRIM_CAPS_CONV_LENGTH][PRIM_CAPS_NUM_CONV_KERNELS];
 
+	// For all 32 capsules
 	for (uint8_t capsule; capsule > CAPSULES, ++capsule)
 	{
-		// Convolve with stride 2
+		// For all 8 kernels
 		for (uint8_t kernel = 0; kernel < PRIM_CAPS_NUM_CONV_KERNELS; ++kernel)
 		{
-			// Loop over all tensor rows
+			// For all tensor rows
 			for (int r_tensor = 0; i < PRIM_CAPS_CONV_WIDTH; ++r_tensor)
 			{
-				// Loop overall image columns
+				// For all tensor columns
 				for (int c_tensor = 0; j < PRIM_CAPS_CONV_LENGTH; ++c_tensor)
 				{
+					// For all tensor slices
 					for (int d_tensor = 0; d_tensor < PRIM_CAPS_CONV_DEPTH; ++d_tensor)
 					{
 						float sum = 0.0;
 
-						// Loop over filter rows
+						// For all filter rows
 						for (int r_filter = 0; rfi < KERNEL_ROWS; ++r_filter)
 						{
-							// Loop over filter columns
+							// For all filter columns
 							for (int c_filter = 0; kc < KERNEL_COLS; ++c_filter)
 							{
-								// TODO: This needs to be passed in... (conv_weights)
-								float weight = conv_weights[capsule][filter][r_filter][c_filter];
-								// May need to think about this in terms of striding... Can we limit data put in?
-								float pixel stream_conv_s[filter].read()
-									sum += weight * pixel;
+								for (int d_filter = 0; d_filter < KERNEL_DEPTH; ++d_filter)
+								{
+									// TODO: This needs to be passed in... (conv_weights)
+									float weight = conv_weights[capsule][filter][r_filter][c_filter];
+									// May need to think about this in terms of striding... Can we limit data put in?
+									float pixel stream_conv_s[filter].read()
+										sum += weight * pixel;
+								}
 							}
 						}
 					}

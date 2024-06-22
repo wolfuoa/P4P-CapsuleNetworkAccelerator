@@ -7,11 +7,14 @@
 #define IN_IMG_DEPTH 1
 
 // Conv1
-#define KERNEL_ROWS 9
-#define KERNEL_COLS 9
-#define FILTERS		256
+#define CONV1_KERNEL_ROWS 9
+#define CONV1_KERNEL_COLS 9
+#define FILTERS			  256
 
 // Primary caps
+#define PRIMARY_CAPS_KERNEL_ROWS   9
+#define PRIMARY_CAPS_KERNEL_COLS   9
+#define PRIMARY_CAPS_KERNEL_DEPTH  256
 #define CAPSULES				   32
 #define CAPSULE_DIM				   8
 #define PRIMARY_CAPS_STRIDE		   2
