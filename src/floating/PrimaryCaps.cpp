@@ -124,7 +124,9 @@ void process_features(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stre
 	conv_2d(stream_conv_s, stream_primary_caps_internal_conv_s);
 	// -> 6x6x8 (x32)
 
-	// Reshape <- 6x6x8 (x32)
+	// At reshape we have attained 256 6x6 feature maps containing scalars
+	// We need to transform this into 32 6x6 maps containing 8D vectors
+	// Reshape <- 256x6x6
 	reshape(stream_primary_caps_internal_conv_s, stream_primary_caps_internal_reshape_s);
 	// -> 1152 x 8
 
@@ -135,44 +137,77 @@ void process_features(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stre
 
 static void reshape(hls::stream<float> stream_primary_caps_internal_conv_s, hls::stream<float> stream_primary_caps_internal_reshape_s)
 {
-	// Flatten
+	float temporary_feature_collection[PRIMARY_CAPS_NUM_CONV_KERNELS][PRIMARY_CAPS_CONV_WIDTH][PRIMARY_CAPS_CONV_LENGTH];
+	// For each spatial position in the feature map
+	// [i, j]
+	// [k, l]
+	// Pair the corresponding scalar value with the corresponding outputs from the other feature maps
+	// v0 -> [i0, i1, i2, i3, i4, i5, i6, i7]
+	// v1 -> [j0, j1, j2, j3, j4, j5, j6, j7]
+	// ...
+	// [v00, v01]
+	// [v10, v11]
+	// Hence, we obtain a 6x6 8D output for each primary capsule
 	for (int current_capsule = 0; current_capsule < PRIMARY_CAPS_CAPSULES; ++current_capsule)
 	{
-		for (int current_kernel = 0; current_kernel < PRIMARY_CAPS_NUM_CONV_KERNELS; ++current_kernel)
+		// Stage feature maps
+		for (int i = 0; i < PRIMARY_CAPS_NUM_CONV_KERNELS; ++i)
 		{
-			for (int grid_rows = 0; grid_rows < PRIMARY_CAPS_CONV_WIDTH; ++grid_rows)
+			for (int j = 0; j < PRIMARY_CAPS_CONV_WIDTH; ++j)
 			{
-				for (int grid_cols = 0; grid_cold < PRIMARY_CAPS_CONV_LENGTH; ++grid_cols)
+				for (int k = 0; k < PRIMARY_CAPS_CONV_LENGTH; ++k)
 				{
-					stream_primary_caps_internal_reshape_s.write(stream_primary_caps_internal_conv_s[current_capsule].read());
+					temporary_feature_collection[i][j][k] = stream_primary_caps_internal_conv_s[current_capsule].read();
+				}
+			}
+		}
+
+		// For each spatial position (grid_row, grid_col)
+		for (int grid_row = 0; grid_row < PRIMARY_CAPS_CONV_WIDTH; ++grid_row)
+		{
+			for (int grid_col = 0; grid_col < PRIMARY_CAPS_CONV_LENGTH; ++grid_col)
+			{
+				// For each corresponding scalar of all feature maps within this capsule
+				// Write 8 values representing an entry of an 8D vector
+				for (int current_map = 0; current_map < PRIMARY_CAPS_NUM_CONV_KERNELS; ++current_map)
+				{
+					stream_primary_caps_internal_reshape_s.write(temporary_feature_collection[current_map][grid_row][grid_col]);
 				}
 			}
 		}
 	}
-}
 
-static void squash(hls::stream<float> stream_primary_caps_internal_reshape_s, hls::stream<float> stream_squash_s)
-{
-	float capsule[PRIMARY_CAPS_CAPSULE_DIM];
-
-	for (int i = 0; i < PRIMARY_CAPS_CAPSULES; ++i)
+	static void squash(hls::stream<float> stream_primary_caps_internal_reshape_s, hls::stream<float> stream_squash_s)
 	{
+		float vector_temp[PRIMARY_CAPS_CAPSULE_DIM];
 		float squared_norm = 0.0;
-		// Read capsule vector from the stream
-		for (int j = 0; j < PRIMARY_CAPS_CAPSULE_DIM; ++j)
-		{
-			capsule[j] = stream_primary_caps_internal_reshape_s.read();
-			// Perform squaring operation
-			squared_norm += capsule[j] * capsule[j];
-		}
+		float scale = 0.0;
 
-		// Calculate scaling factor
-		float scale = squared_norm / (1.0 + squared_norm) / sqrt(squared_norm + 1e-7);
-
-		// Apply squash and write to the output stream
-		for (int j = 0; j < PRIMARY_CAPS_CAPSULE_DIM; ++j)
+		// For all 32 capsules
+		for (int current_capsule = 0; i < PRIMARY_CAPS_CAPSULES; ++i)
 		{
-			stream_squash_s.write(capsule[j] * scale);
+			// For each 8D vector (there are 6x6 of them for each capsule)
+			for (int grid_rows = 0; grid_rows < PRIMARY_CAPS_CONV_WIDTH; ++grid_rows)
+			{
+				for (int grid_cols = 0; grid_cols < PRIMARY_CAPS_CONV_LENGTH; ++grid_cols)
+				{
+					squared_norm = 0.0;
+
+					// For each dimension of the vector
+					for (int dim = 0; dim < PRIMARY_CAPS_CAPSULE_DIM; ++dim)
+					{
+						vector_temp[dim] = stream_primary_caps_internal_reshape_s.read();
+
+						squared_norm += vector_temp[dim] * vector_temp[dim];
+					}
+
+					scale = squared_norm / (1.0 + squared_norm) / sqrt(squared_norm + 1e-7);
+
+					for (int i = 0; i < PRIMARY_CAPS_CAPSULE_DIM; ++i)
+					{
+						stream_squash_s.write(vector_temp[i] * scale);
+					}
+				}
+			}
 		}
 	}
-}

@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "stack": "cpp",
-        "istream": "cpp"
+        "istream": "cpp",
+        "ostream": "cpp"
     }
 }
