@@ -34,11 +34,9 @@
 
 #include "PrimaryCaps.h"
 
-static void conv2d(hls::stream<float> &stream_conv_s[CONV1_FILTERS], hls::stream<float> &stream_primary_caps_conv_s[PRIMARY_CAPS_CAPSULES]);
-static void reshape();
-static void squash();
+static void conv2d(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stream<float> stream_primary_caps_conv_s[PRIMARY_CAPS_CAPSULES]);
 
-static void conv2d(hls::stream<float> &stream_conv_s[CONV1_FILTERS], hls::stream<float> &stream_primary_caps_internal_conv_s[PRIMARY_CAPS_CAPSULES])
+static void conv2d(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stream<float> stream_primary_caps_internal_conv_s[PRIMARY_CAPS_CAPSULES])
 {
 	float results[PRIMARY_CAPS_CONV_WIDTH][PRIMARY_CAPS_CONV_LENGTH];
 	float temporary_input_mat[CONV1_OUTPUT_WIDTH][CONV1_OUTPUT_LENGTH];
@@ -100,7 +98,12 @@ static void conv2d(hls::stream<float> &stream_conv_s[CONV1_FILTERS], hls::stream
 			{
 				for (int h = 0; h < PRIMARY_CAPS_CONV_LENGTH; ++h)
 				{
-					stream_primary_caps_internal_conv_s[capsule].write(results[g][h] + conv_biases[current_kernel]);
+					// Each capsule goes kernel by kernel, iterating over the input volume. Each kernel
+					// produces a 6x6 convolution matrix. This process happens 8(kernel) times and 32(capsule)
+					// times, resulting in the 6x6 matrices flattened in the order of capsule[0..31] -> kernel[0..7]
+					// Ie. If we read the first item from the stream, it is the "top left" index of the 6x6 matrix
+					// produced by the first convolutional kernel of the first primary capsule.
+					stream_primary_caps_internal_conv_s[capsule].write(results[g][h] + conv_biases[current_capsule][current_kernel]);
 				}
 			}
 		}
@@ -110,10 +113,10 @@ static void conv2d(hls::stream<float> &stream_conv_s[CONV1_FILTERS], hls::stream
 // @brief process_features Process the output 20x20x256 tensor from the convolutional layer
 // @param[in] stream_conv_s the 256 wide stream of 20x20 convolutions
 // @param[out] stream_primary_caps_s the 32 wide stream of grouped features
-void process_features(hls::stream<float> stream_conv_s[FILTERS], hls::stream<float> stream_primary_caps_s[CAPSULES])
+void process_features(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stream<float> stream_primary_caps_s)
 {
-	hls::stream<float> stream_primary_caps_internal_conv_s[];
-	hls::stream<float> stream_primary_caps_internal_reshape_s[];
+	hls::stream<float> stream_primary_caps_internal_conv_s[PRIMARY_CAPS_CAPSULES];
+	hls::stream<float> stream_primary_caps_internal_reshape_s;
 
 	// Apply Conv2d 32 times and concatenate capsules
 
@@ -130,30 +133,33 @@ void process_features(hls::stream<float> stream_conv_s[FILTERS], hls::stream<flo
 	// -> 1152 x 8
 }
 
-static void reshape(hls::stream<float> &stream_primary_caps_internal_conv_s, hls::stream<float> &stream_primary_caps_internal_reshape_s)
+static void reshape(hls::stream<float> stream_primary_caps_internal_conv_s, hls::stream<float> stream_primary_caps_internal_reshape_s)
 {
-	// Read from stream and store in buffer
-	for (int r = 0; r < OUT_IMG_ROWS; ++r)
+	// Flatten
+	for (int current_capsule = 0; current_capsule < PRIMARY_CAPS_CAPSULES; ++current_capsule)
 	{
-		for (int c = 0; c < OUT_IMG_COLS; ++c)
+		for (int current_kernel = 0; current_kernel < PRIMARY_CAPS_NUM_CONV_KERNELS; ++current_kernel)
 		{
-			for (int d = 0; d < CAPSULE_DIM; ++d)
+			for (int grid_rows = 0; grid_rows < PRIMARY_CAPS_CONV_WIDTH; ++grid_rows)
 			{
-				stream_primary_caps_internal_reshape_s.write(stream_primary_caps_internal_conv_s.read());
+				for (int grid_cols = 0; grid_cold < PRIMARY_CAPS_CONV_LENGTH; ++grid_cols)
+				{
+					stream_primary_caps_internal_reshape_s.write(stream_primary_caps_internal_conv_s[current_capsule].read());
+				}
 			}
 		}
 	}
 }
 
-static void squash(hls::stream<float> &stream_primary_caps_internal_reshape_s, hls::stream<float> &stream_squash_s)
+static void squash(hls::stream<float> stream_primary_caps_internal_reshape_s, hls::stream<float> stream_squash_s)
 {
-	float capsule[CAPSULE_DIM];
+	float capsule[PRIMARY_CAPS_CAPSULE_DIM];
 
-	for (int i = 0; i < CAPSULES; ++i)
+	for (int i = 0; i < PRIMARY_CAPS_CAPSULES; ++i)
 	{
 		float squared_norm = 0.0;
 		// Read capsule vector from the stream
-		for (int j = 0; j < CAPSULE_DIM; ++j)
+		for (int j = 0; j < PRIMARY_CAPS_CAPSULE_DIM; ++j)
 		{
 			capsule[j] = stream_primary_caps_internal_reshape_s.read();
 			// Perform squaring operation
@@ -164,7 +170,7 @@ static void squash(hls::stream<float> &stream_primary_caps_internal_reshape_s, h
 		float scale = squared_norm / (1.0 + squared_norm) / sqrt(squared_norm + 1e-7);
 
 		// Apply squash and write to the output stream
-		for (int j = 0; j < CAPSULE_DIM; ++j)
+		for (int j = 0; j < PRIMARY_CAPS_CAPSULE_DIM; ++j)
 		{
 			stream_squash_s.write(capsule[j] * scale);
 		}

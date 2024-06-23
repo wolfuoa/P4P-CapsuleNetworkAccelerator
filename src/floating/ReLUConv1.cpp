@@ -20,7 +20,7 @@
 // #define RELU(x) ((x) > 0.0 ? (x) : 0.0)
 
 static float relu(float x);
-static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> &stream_conv_s[CONV1_FILTERS]);
+static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> stream_conv_s[CONV1_FILTERS]);
 
 static float relu(float x)
 {
@@ -31,7 +31,7 @@ static float relu(float x)
 // Maybe need to change the order of kernels/image...
 // Is it better to do calculation for all kernels
 // Before moving along in the image?
-static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> &stream_conv_s[CONV1_FILTERS])
+static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> stream_conv_s[CONV1_FILTERS])
 {
 	// For all 256 convolutonal kernels
 	for (uint16_t current_kernel; current_kernel < CONV1_FILTERS; ++current_kernel)
