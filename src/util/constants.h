@@ -29,10 +29,21 @@
 #define PRIMARY_CAPS_CONV_STRIDE_LENGTH CONV1_OUTPUT_LENGTH - PRIMARY_CAPS_KERNEL_COLS + 1
 
 // Digit Caps
+// The MNIST dataset has 10 classifications
 #define DIGIT_CAPS_NUM_DIGITS 10
+// The final Layer (DigitCaps) has one 16D capsule per digit class
+#define DIGIT_CAPS_DIM_CAPSULE 16
+// Per "Dynamic Routing Between Capsules"
+#define DIGIT_CAPS_ROUTING_ITERATIONS 3
+// Each capsule takes as input a 6x6x8x32 tensor.
+// You can think of it as 6x6x32 8-dimensional vectors,
+// which is 1152 capsule outputs from primcaps in total
+#define DIGIT_CAPS_INPUT_CAPSULES 1152
+// Each input capsule provices a grid of 8D vectors.
+#define DIGIT_CAPS_INPUT_DIM_CAPSULE PRIMARY_CAPS_CAPSULE_DIM
 
-#define OUT_IMG_ROWS		  IN_IMG_ROWS - KERNEL_ROWS + 1
-#define OUT_IMG_COLS		  IN_IMG_COLS - KERNEL_COLS + 1
-#define OUT_IMG_DEPTH		  IN_IMG_DEPTH
+#define OUT_IMG_ROWS				 IN_IMG_ROWS - KERNEL_ROWS + 1
+#define OUT_IMG_COLS				 IN_IMG_COLS - KERNEL_COLS + 1
+#define OUT_IMG_DEPTH				 IN_IMG_DEPTH
 
 #endif	// CONSTANTS_H

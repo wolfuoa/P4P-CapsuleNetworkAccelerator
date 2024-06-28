@@ -14,7 +14,7 @@ void get_prediction(float image[IN_IMG_ROWS][IN_IMG_COLS], float prediction[DIGI
 	// ---------------- ReLU Convolutional 2D Layer ----------------
 
 	// ------------------- Primary Capsule Layer -------------------
-	hls::stream<float> stream_primary_caps_s[PRIMARY_CAPS_CAPSULES];
+	hls::stream<float> stream_primary_caps_s;
 
 	process_features(stream_conv_s, stream_primary_caps_s);
 	// ------------------- Primary Capsule Layer -------------------
