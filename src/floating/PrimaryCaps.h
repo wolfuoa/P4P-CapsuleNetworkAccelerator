@@ -4,6 +4,6 @@
 #include "constants.h"
 #include "hls_stream.h"
 
-void process_features(hls::stream<float> stream_conv_s[FILTERS], hls::stream<float> stream_primary_caps_s[CAPSULES])
+void process_features(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stream<float> stream_primary_caps_s)
 
 #endif	// PRIMARY_CAPS_H
