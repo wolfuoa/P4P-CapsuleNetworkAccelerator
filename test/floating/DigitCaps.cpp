@@ -5,6 +5,9 @@
 
 #include "DigitCaps.h"
 
+#include <cstdint>
+#include <string>
+
 // ---------------- FUNCTION DECLARATIONS ----------------
 static void apply_weights(float *input_mat, float *weights, float *weighted_input);
 static void softmax(float *mat_b, float *mat_c);
@@ -14,9 +17,21 @@ static void agreement(float *input_mat, float *squashed_mat, float *output_mat);
 static void add(float *input_mat, float *coupling_terms);
 // ---------------- FUNCTION DECLARATIONS ----------------
 
-void dynamic_routing(hls::stream<float> stream_primary_caps_s, hls::stream<float> stream_prediction_s[DIGIT_CAPS_NUM_DIGITS])
+void dynamic_routing(float *input, float *weights, float *prediction)
 {
-	apply_weights(stream_primary_caps_s, weights, weighted_input);
+	float primary_caps[DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE];
+	float squashed_v[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
+
+	// burst read input into local array
+	memcpy(primary_caps, (const float *)input, DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float));
+
+	static float weighted_input_u[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
+	static float coupling_b[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
+	static float coupling_c[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
+	static float sum_of_products_s[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
+	static float output_agreement[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
+
+	apply_weights(primary_caps, weights, weighted_input_u);
 
 	//  routing(uˆj|i, r, l)
 	//  for all capsule i in layer l and capsule j in layer (l + 1): bij <- 0
@@ -52,6 +67,7 @@ void dynamic_routing(hls::stream<float> stream_primary_caps_s, hls::stream<float
 			add(output_agreement, coupling_b);
 		}
 	}
+	memcpy(prediction, (const float *)squashed_v, DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
 }
 
 static void apply_weights(float *input_mat, float *weights, float *weighted_input)

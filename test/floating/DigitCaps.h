@@ -4,8 +4,7 @@
 #define DIGIT_CAPS_H
 
 #include "constants.h"
-#include "hls_stream.h"
 
-void dynamic_routing(hls::stream<float> stream_primary_caps_s, hls::stream<float> stream_prediction_s[DIGIT_CAPS_NUM_DIGITS]);
+void dynamic_routing(float *input, float *weights, float *prediction);
 
 #endif	// DIGIT_CAPS_H

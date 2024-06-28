@@ -3,7 +3,6 @@
 #include "CapsuleLayer.h"
 #include "PrimaryCaps.h"
 #include "ReLUConv1.h"
-#include "hls_stream.h"
 
 void get_prediction(float image[IN_IMG_ROWS][IN_IMG_COLS], float prediction[DIGIT_CAPS_NUM_DIGITS])
 {
