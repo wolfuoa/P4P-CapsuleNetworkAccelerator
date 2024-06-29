@@ -20,7 +20,7 @@
 // #define RELU(x) ((x) > 0.0 ? (x) : 0.0)
 
 static float relu(float x);
-static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> stream_conv_s[CONV1_FILTERS]);
+static void conv_2d(float *image, float *weights, float *output);
 
 static float relu(float x)
 {
@@ -31,11 +31,20 @@ static float relu(float x)
 // Maybe need to change the order of kernels/image...
 // Is it better to do calculation for all kernels
 // Before moving along in the image?
-static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> stream_conv_s[CONV1_FILTERS])
+static void conv_2d(float *image, float *weights, float *output)
 {
+	float image_to_convolve[IN_IMG_ROWS * IN_IMG_COLS];
+	float output_buffer[OUT_IMG_ROWS * OUT_IMG_COLS * CONV1_FILTERS];
+	float weight_buffer[CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS];
+
+	// Burst read entire image input (its small)
+	memcpy(image_to_convolve, (const float *)image, IN_IMG_ROWS * IN_IMG_COLS * sizeof(float));
+
 	// For all 256 convolutonal kernels
 	for (uint16_t current_kernel; current_kernel < CONV1_FILTERS; ++current_kernel)
 	{
+		// Read in all weights required for this kernel
+		memcpy(weight_buffer, (const float *)weights + (current_kernel * CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS), CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS * sizeof(float));
 		// For all input image rows
 		for (int r_image = 0; i < OUT_IMG_ROWS; ++r_image)
 		{
@@ -50,26 +59,28 @@ static void conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> st
 					// For all current kernel columns
 					for (int c_filter = 0; c_filter < CONV1_KERNEL_COLS; ++c_filter)
 					{
-						// TODO: This needs to be passed in... (conv_weights)
-						float weight = conv_weights[current_kernel][r_filter][c_filter];
-						float pixel = image[r_image + r_filter][c_image + c_filter];
+						float weight = weights[r_filter * CONV1_KERNEL_ROWS + c_filter];
+						uint32_t current_row = r_image + r_filter;
+						float pixel = image_to_convolve[current_row * IN_IMG_COLS + c_image + c_filter];
 						sum += weight * pixel;
 					}
 				}
 
 				// Apply ReLU activation, concatenate the result to the convolutional
 				// output for that kernel
-				stream_conv_s[current_kernel].write(relu(sum + conv_biases[current_kernel]));
+				output_buffer[current_kernel] = relu(sum + conv_biases[current_kernel]);
 			}
 		}
 	}
+
+	memcpy(output, (const float *)output_buffer, OUT_IMG_ROWS * OUT_IMG_COLS * CONV1_FILTERS * sizeof(float));
 }
 
-void relu_conv_2d(float image[IN_IMG_ROWS][IN_IMG_COLS], hls::stream<float> stream_conv_s[CONV1_FILTERS]);
+void relu_conv_2d(float *image, float *output);
 {
 	// Convolution is applied for each filter.
 	// The result is stored in a 256 wide stream of 20x20 matrices.
 	// The matrices represent the convolution of each filter about the input volume.
 	// Pipeline?
-	conv_2d(image, stream_conv_s);
+	conv_2d(image, output);
 }

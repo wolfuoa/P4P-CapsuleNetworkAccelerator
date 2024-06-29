@@ -5,6 +5,8 @@
 
 #include "DigitCaps.h"
 
+#include <math.h>
+
 #include <cstdint>
 #include <string>
 
@@ -41,7 +43,7 @@ void dynamic_routing(float *input, float *weights, float *prediction)
 	//  for all capsule j in layer (l + 1): vj <- squash(sj)
 	//  for all capsule i in layer l and capsule j in layer (l + 1): bij <- bij + u^j|i * vj
 	//  return vj
-	for (int i = 0; i < DIGIT_CAPS_ROUTING_ITERATIONS; ++i)
+	for (uint32_t i = 0; i < DIGIT_CAPS_ROUTING_ITERATIONS; ++i)
 	{
 		// The coupling coefficients ci,j between capsule i and all the capsules in the layer
 		// above sum to 1 and are determined by a “routing softmax” whose initial logits
@@ -132,7 +134,7 @@ static void softmax(float *mat_b, float *mat_c)
 			sum += entry;
 		}
 
-		for (j = 0; j < DIGIT_CAPS_NUM_DIGITS; ++j)
+		for (uint32_t j = 0; j < DIGIT_CAPS_NUM_DIGITS; ++j)
 		{
 			// Divide the numerator by the denominator
 			mat_c[i + j * DIGIT_CAPS_INPUT_CAPSULES] /= (sum + 1e-7);
@@ -166,7 +168,7 @@ static void sum_of_products(float *input_mat, float *coupling_terms, float *outp
 			float sum = 0.0;
 			for (uint32_t sum_k = 0; sum_k < DIGIT_CAPS_INPUT_CAPSULES; ++sum_k)
 			{
-				sum += output_mat[i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + j + k * DIGIT_CAPS_DIM_CAPSULE];
+				sum += output_mat[sum_i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + sum_j + k * DIGIT_CAPS_DIM_CAPSULE];
 			}
 			output_mat[i * DIGIT_CAPS_DIM_CAPSULE + j] = sum;
 		}
@@ -190,7 +192,7 @@ static void squash(float *input_mat, float *squash_mat)
 
 		scale = squared_norm / (1.0 + squared_norm) / sqrt(squared_norm + 1e-7);
 
-		for (dim = 0; dim < DIGIT_CAPS_DIM_CAPSULE; ++dim)
+		for (uint32_t dim = 0; dim < DIGIT_CAPS_DIM_CAPSULE; ++dim)
 		{
 			squash_mat[i * DIGIT_CAPS_DIM_CAPSULE + dim] = (input_mat[i * DIGIT_CAPS_DIM_CAPSULE + dim] * scale);
 		}
@@ -199,12 +201,12 @@ static void squash(float *input_mat, float *squash_mat)
 
 static void agreement(float *input_mat, float *squashed_mat, float *output_mat)
 {
-	for (int i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
+	for (uint32_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
 	{
-		for (int j = 0; j < DIGIT_CAPS_INPUT_CAPSULES; ++j)
+		for (uint32_t j = 0; j < DIGIT_CAPS_INPUT_CAPSULES; ++j)
 		{
 			float sum = 0.0;
-			for (int k = 0; k < DIGIT_CAPS_DIM_CAPSULE; ++k)
+			for (uint32_t k = 0; k < DIGIT_CAPS_DIM_CAPSULE; ++k)
 			{
 				sum += input_mat[i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + j * DIGIT_CAPS_DIM_CAPSULE + k] * squashed_mat[i * DIGIT_CAPS_DIM_CAPSULE + k];
 			}
@@ -215,7 +217,7 @@ static void agreement(float *input_mat, float *squashed_mat, float *output_mat)
 
 static void add(float *input_mat, float *coupling_terms)
 {
-	for (int i = 0; i < DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES; ++i)
+	for (uint32_t i = 0; i < DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES; ++i)
 	{
 		// Update coupling terms
 		coupling_terms[i] += input_mat[i];
