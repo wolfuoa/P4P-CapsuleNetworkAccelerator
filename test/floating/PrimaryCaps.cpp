@@ -108,6 +108,8 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 			}
 		}
 	}
+
+	memcpy(output, (const float *)output_buffer, PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
 }
 
 // @brief process_features Process the output 20x20x256 tensor from the convolutional layer
@@ -184,7 +186,7 @@ static void squash(float *input, float *output)
 	// For all 32 capsules
 	for (int current_capsule = 0; current_capsule < PRIMARY_CAPS_CAPSULES; ++current_capsule)
 	{
-		memcpy(input_buffer, input + current_capsule * dim, dim * sizeof(float));
+		memcpy(input_buffer, (const float *)input + current_capsule * dim, dim * sizeof(float));
 		// For each 8D vector (there are 6x6 of them for each capsule)
 		for (int grid_rows = 0; grid_rows < PRIMARY_CAPS_CONV_WIDTH; ++grid_rows)
 		{
