@@ -34,6 +34,8 @@
 
 #include "PrimaryCaps.h"
 
+#include <math.h>
+
 #include <string>
 
 static void conv_2d(float *input, float *weights, float *biases, float *output);
@@ -49,7 +51,7 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 	float biases_buffer[PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
 
 	memcpy(input_buffer, (const float *)input, CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS * sizeof(float));
-	memcpy(biases_buffer, (const float *)biases, PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES);
+	memcpy(biases_buffer, (const float *)biases, PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
 
 	uint32_t prim_caps_kernel_dim = PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH;
 	// For all 32 capsules
@@ -167,17 +169,22 @@ static void reshape(float *input, float *output)
 			}
 		}
 	}
+
+	memcpy(output, (const float *)output_buffer, dim * PRIMARY_CAPS_CAPSULES * sizeof(float));
 }
 
 static void squash(float *input, float *output)
 {
-	float vector_temp[PRIMARY_CAPS_CAPSULE_DIM];
+	uint32_t dim = PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_NUM_CONV_KERNELS;
+	float input_buffer[dim];
+	float output_buffer[dim * PRIMARY_CAPS_CAPSULES];
 	float squared_norm = 0.0;
 	float scale = 0.0;
 
 	// For all 32 capsules
 	for (int current_capsule = 0; current_capsule < PRIMARY_CAPS_CAPSULES; ++current_capsule)
 	{
+		memcpy(input_buffer, input + current_capsule * dim, dim * sizeof(float));
 		// For each 8D vector (there are 6x6 of them for each capsule)
 		for (int grid_rows = 0; grid_rows < PRIMARY_CAPS_CONV_WIDTH; ++grid_rows)
 		{
@@ -186,20 +193,22 @@ static void squash(float *input, float *output)
 				squared_norm = 0.0;
 
 				// For each dimension of the vector
-				for (int dim = 0; dim < PRIMARY_CAPS_CAPSULE_DIM; ++dim)
+				for (int i = 0; i < PRIMARY_CAPS_CAPSULE_DIM; ++i)
 				{
-					vector_temp[dim] = stream_primary_caps_internal_reshape_s.read();
+					float value = input_buffer[grid_rows * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM + grid_cols * PRIMARY_CAPS_CAPSULE_DIM + i];
 
-					squared_norm += vector_temp[dim] * vector_temp[dim];
+					squared_norm += value * value;
 				}
 
 				scale = squared_norm / (1.0 + squared_norm) / sqrt(squared_norm + 1e-7);
 
 				for (int i = 0; i < PRIMARY_CAPS_CAPSULE_DIM; ++i)
 				{
-					stream_squash_s.write(vector_temp[i] * scale);
+					output_buffer[current_capsule * dim + grid_rows * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM + grid_cols * PRIMARY_CAPS_CAPSULE_DIM + i] = (input_buffer[grid_rows * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM + grid_cols * PRIMARY_CAPS_CAPSULE_DIM + i] * scale);
 				}
 			}
 		}
 	}
+
+	memcpy(output, (const float *)output_buffer, dim * PRIMARY_CAPS_CAPSULES * sizeof(float));
 }
