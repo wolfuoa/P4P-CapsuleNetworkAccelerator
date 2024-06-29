@@ -1,3 +1,11 @@
+/*
+ * CapsuleNetwork.cpp
+ * author: nicholas wolf
+ *
+ * The top level of the capsule network...
+ * Routes individual layers together
+ */
+
 #include "CapsuleNetwork.h"
 
 #include <string>
