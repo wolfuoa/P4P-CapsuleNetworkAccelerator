@@ -42,8 +42,8 @@
 // Each input capsule provices a grid of 8D vectors.
 #define DIGIT_CAPS_INPUT_DIM_CAPSULE PRIMARY_CAPS_CAPSULE_DIM
 
-#define OUT_IMG_ROWS				 IN_IMG_ROWS - KERNEL_ROWS + 1
-#define OUT_IMG_COLS				 IN_IMG_COLS - KERNEL_COLS + 1
+#define OUT_IMG_ROWS				 IN_IMG_ROWS - CONV1_KERNEL_ROWS + 1
+#define OUT_IMG_COLS				 IN_IMG_COLS - CONV1_KERNEL_COLS + 1
 #define OUT_IMG_DEPTH				 IN_IMG_DEPTH
 
 #endif	// CONSTANTS_H
