@@ -176,38 +176,39 @@ static void reshape(hls::stream<float> stream_primary_caps_internal_conv_s, hls:
 			}
 		}
 	}
+}
 
-	static void squash(hls::stream<float> stream_primary_caps_internal_reshape_s, hls::stream<float> stream_squash_s)
+static void squash(hls::stream<float> stream_primary_caps_internal_reshape_s, hls::stream<float> stream_squash_s)
+{
+	float vector_temp[PRIMARY_CAPS_CAPSULE_DIM];
+	float squared_norm = 0.0;
+	float scale = 0.0;
+
+	// For all 32 capsules
+	for (int current_capsule = 0; current_capsule < PRIMARY_CAPS_CAPSULES; ++current_capsule)
 	{
-		float vector_temp[PRIMARY_CAPS_CAPSULE_DIM];
-		float squared_norm = 0.0;
-		float scale = 0.0;
-
-		// For all 32 capsules
-		for (int current_capsule = 0; i < PRIMARY_CAPS_CAPSULES; ++i)
+		// For each 8D vector (there are 6x6 of them for each capsule)
+		for (int grid_rows = 0; grid_rows < PRIMARY_CAPS_CONV_WIDTH; ++grid_rows)
 		{
-			// For each 8D vector (there are 6x6 of them for each capsule)
-			for (int grid_rows = 0; grid_rows < PRIMARY_CAPS_CONV_WIDTH; ++grid_rows)
+			for (int grid_cols = 0; grid_cols < PRIMARY_CAPS_CONV_LENGTH; ++grid_cols)
 			{
-				for (int grid_cols = 0; grid_cols < PRIMARY_CAPS_CONV_LENGTH; ++grid_cols)
+				squared_norm = 0.0;
+
+				// For each dimension of the vector
+				for (int dim = 0; dim < PRIMARY_CAPS_CAPSULE_DIM; ++dim)
 				{
-					squared_norm = 0.0;
+					vector_temp[dim] = stream_primary_caps_internal_reshape_s.read();
 
-					// For each dimension of the vector
-					for (int dim = 0; dim < PRIMARY_CAPS_CAPSULE_DIM; ++dim)
-					{
-						vector_temp[dim] = stream_primary_caps_internal_reshape_s.read();
+					squared_norm += vector_temp[dim] * vector_temp[dim];
+				}
 
-						squared_norm += vector_temp[dim] * vector_temp[dim];
-					}
+				scale = squared_norm / (1.0 + squared_norm) / sqrt(squared_norm + 1e-7);
 
-					scale = squared_norm / (1.0 + squared_norm) / sqrt(squared_norm + 1e-7);
-
-					for (int i = 0; i < PRIMARY_CAPS_CAPSULE_DIM; ++i)
-					{
-						stream_squash_s.write(vector_temp[i] * scale);
-					}
+				for (int i = 0; i < PRIMARY_CAPS_CAPSULE_DIM; ++i)
+				{
+					stream_squash_s.write(vector_temp[i] * scale);
 				}
 			}
 		}
 	}
+}
