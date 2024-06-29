@@ -36,9 +36,11 @@
 
 #include <string>
 
-static void conv2d(float *input, float *weights, float *biases, float *output);
+static void conv_2d(float *input, float *weights, float *biases, float *output);
+static void reshape(float *input, float *output);
+static void squash(float *input, float *output);
 
-static void conv2d(float *input, float *weights, float *biases, float *output)
+static void conv_2d(float *input, float *weights, float *biases, float *output)
 {
 	float results[PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH];
 	float input_buffer[CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS];
@@ -92,6 +94,8 @@ static void conv2d(float *input, float *weights, float *biases, float *output)
 			{
 				for (int h = 0; h < PRIMARY_CAPS_CONV_LENGTH; ++h)
 				{
+					// TODO: Im certain we can skip the reshape by doing something different here
+
 					// Each capsule goes kernel by kernel, iterating over the input volume. Each kernel
 					// produces a 6x6 convolution matrix. This process happens 8(kernel) times and 32(capsule)
 					// times, resulting in the 6x6 matrices flattened in the order of capsule[0..31] -> kernel[0..7]
@@ -107,31 +111,33 @@ static void conv2d(float *input, float *weights, float *biases, float *output)
 // @brief process_features Process the output 20x20x256 tensor from the convolutional layer
 // @param[in] stream_conv_s the 256 wide stream of 20x20 convolutions
 // @param[out] stream_primary_caps_s the 32 wide stream of grouped features
-void process_features(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stream<float> stream_primary_caps_s)
+void process_features(float *input, float *weights, float *biases, float *output)
 {
-	hls::stream<float> stream_primary_caps_internal_conv_s[PRIMARY_CAPS_CAPSULES];
-	hls::stream<float> stream_primary_caps_internal_reshape_s;
-
 	// Apply Conv2d 32 times and concatenate capsules
 
+	float conv_output[PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
+	float reshape_output[PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
 	// Conv2d <- 20x20x256
-	conv_2d(stream_conv_s, stream_primary_caps_internal_conv_s);
+	conv_2d(input, weights, biases, conv_output);
 	// -> 6x6x8 (x32)
 
 	// At reshape we have attained 256 6x6 feature maps containing scalars
 	// We need to transform this into 32 6x6 maps containing 8D vectors
 	// Reshape <- 256x6x6
-	reshape(stream_primary_caps_internal_conv_s, stream_primary_caps_internal_reshape_s);
+	reshape(conv_output, reshape_output);
 	// -> 1152 x 8
 
 	// Squash <- 1152 x 8
-	squash(stream_primary_caps_internal_reshape_s, stream_primary_caps_s);
+	squash(reshape_output, output);
 	// -> 1152 x 8
 }
 
-static void reshape(hls::stream<float> stream_primary_caps_internal_conv_s, hls::stream<float> stream_primary_caps_internal_reshape_s)
+static void reshape(float *input, float *output)
 {
-	float temporary_feature_collection[PRIMARY_CAPS_NUM_CONV_KERNELS][PRIMARY_CAPS_CONV_WIDTH][PRIMARY_CAPS_CONV_LENGTH];
+	uint32_t dim = PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_NUM_CONV_KERNELS;
+	uint32_t output_index = 0;
+	float temporary_feature_collection[dim];
+	float output_buffer[dim * PRIMARY_CAPS_CAPSULES];
 	// For each spatial position in the feature map
 	// [i, j]
 	// [k, l]
@@ -145,16 +151,7 @@ static void reshape(hls::stream<float> stream_primary_caps_internal_conv_s, hls:
 	for (int current_capsule = 0; current_capsule < PRIMARY_CAPS_CAPSULES; ++current_capsule)
 	{
 		// Stage feature maps
-		for (int i = 0; i < PRIMARY_CAPS_NUM_CONV_KERNELS; ++i)
-		{
-			for (int j = 0; j < PRIMARY_CAPS_CONV_WIDTH; ++j)
-			{
-				for (int k = 0; k < PRIMARY_CAPS_CONV_LENGTH; ++k)
-				{
-					temporary_feature_collection[i][j][k] = stream_primary_caps_internal_conv_s[current_capsule].read();
-				}
-			}
-		}
+		memcpy(temporary_feature_collection, (const float *)input + current_capsule * dim, dim * sizeof(float));
 
 		// For each spatial position (grid_row, grid_col)
 		for (int grid_row = 0; grid_row < PRIMARY_CAPS_CONV_WIDTH; ++grid_row)
@@ -165,14 +162,14 @@ static void reshape(hls::stream<float> stream_primary_caps_internal_conv_s, hls:
 				// Write 8 values representing an entry of an 8D vector
 				for (int current_map = 0; current_map < PRIMARY_CAPS_NUM_CONV_KERNELS; ++current_map)
 				{
-					stream_primary_caps_internal_reshape_s.write(temporary_feature_collection[current_map][grid_row][grid_col]);
+					output_buffer[output_index++] = temporary_feature_collection[current_map * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH + grid_row * PRIMARY_CAPS_CONV_LENGTH + grid_col];
 				}
 			}
 		}
 	}
 }
 
-static void squash(hls::stream<float> stream_primary_caps_internal_reshape_s, hls::stream<float> stream_squash_s)
+static void squash(float *input, float *output)
 {
 	float vector_temp[PRIMARY_CAPS_CAPSULE_DIM];
 	float squared_norm = 0.0;

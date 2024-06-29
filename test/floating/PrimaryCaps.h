@@ -3,6 +3,6 @@
 
 #include "constants.h"
 
-void process_features(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stream<float> stream_primary_caps_s)
+void process_features(float *input, float *weights, float *biases, float *output);
 
 #endif	// PRIMARY_CAPS_H
