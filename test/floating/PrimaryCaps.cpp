@@ -34,45 +34,40 @@
 
 #include "PrimaryCaps.h"
 
-static void conv2d(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stream<float> stream_primary_caps_conv_s[PRIMARY_CAPS_CAPSULES]);
+#include <string>
 
-static void conv2d(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stream<float> stream_primary_caps_internal_conv_s[PRIMARY_CAPS_CAPSULES])
+static void conv2d(float *input, float *weights, float *biases, float *output);
+
+static void conv2d(float *input, float *weights, float *biases, float *output)
 {
-	float results[PRIMARY_CAPS_CONV_WIDTH][PRIMARY_CAPS_CONV_LENGTH];
-	float temporary_input_mat[CONV1_OUTPUT_WIDTH][CONV1_OUTPUT_LENGTH];
+	float results[PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH];
+	float input_buffer[CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS];
+	float output_buffer[PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
+	float weight_buffer[PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH];
+	float biases_buffer[PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
 
+	memcpy(input_buffer, (const float *)input, CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS * sizeof(float));
+	memcpy(biases_buffer, (const float *)biases, PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES);
+
+	uint32_t prim_caps_kernel_dim = PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH;
 	// For all 32 capsules
-	for (uint8_t current_capsule; current_capsule > PRIMARY_CAPS_CAPSULES, ++current_capsule)
+	for (uint8_t current_capsule = 0; current_capsule > PRIMARY_CAPS_CAPSULES; ++current_capsule)
 	{
 		// For all 8 kernels
 		for (uint8_t current_kernel = 0; current_kernel < PRIMARY_CAPS_NUM_CONV_KERNELS; ++current_kernel)
 		{
+			memcpy(weight_buffer, (const float *)weights + current_capsule * prim_caps_kernel_dim * PRIMARY_CAPS_NUM_CONV_KERNELS + current_kernel * prim_caps_kernel_dim, prim_caps_kernel_dim * sizeof(float));
 			// Clear temporary result array
-			for (uint8_t i = 0; i < PRIMARY_CAPS_CONV_WIDTH; ++i)
-			{
-				for (uint8_t j = 0; j < PRIMARY_CAPS_CONV_LENGTH; ++j)
-				{
-					results[i][j] = 0.0;
-				}
-			}
+			memset(results, 0.0, PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * sizeof(float));
 
 			// For all 256 input tensor layers
-			for (int d_tensor = 0; d_tensor < PRIMARY_CAPS_CONV_DEPTH, ++d_tensor)
+			for (int d_tensor = 0; d_tensor < PRIMARY_CAPS_CONV_DEPTH; ++d_tensor)
 			{
-				// Populate temporary input matrix
-				for (uint8_t k = 0; k < CONV1_OUTPUT_WIDTH; ++k)
-				{
-					for (uint8_t l = 0; l < CONV1_OUTPUT_LENGTH; ++l)
-					{
-						temporary_input_mat[k][l] = stream_conv_s[d_tensor].read();
-					}
-				}
-
 				// For all 20 input tensor rows
-				for (int r_tensor = 0; r_tensor < PRIMARY_CAPS_CONV_STRIDE_WIDTH; ++PRIMARY_CAPS_STRIDE)
+				for (int r_tensor = 0; r_tensor < PRIMARY_CAPS_CONV_STRIDE_WIDTH; r_tensor += PRIMARY_CAPS_STRIDE)
 				{
 					// For all 20 input tensor columns
-					for (int c_tensor = 0; c_tensor < PRIMARY_CAPS_CONV_STRIDE_LENGTH; ++PRIMARY_CAPS_STRIDE)
+					for (int c_tensor = 0; c_tensor < PRIMARY_CAPS_CONV_STRIDE_LENGTH; c_tensor += PRIMARY_CAPS_STRIDE)
 					{
 						float sum = 0.0;
 
@@ -82,13 +77,12 @@ static void conv2d(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stream<
 							// For all filter columns
 							for (int c_filter = 0; c_filter < PRIMARY_CAPS_KERNEL_COLS; ++c_filter)
 							{
-								// TODO: This needs to be passed in... (conv_weights)
-								float weight = conv_weights[current_capsule][current_kernel][r_filter][c_filter][d_tensor];
-								float operand = temporary_input_mat[r_tensor + r_filter][c_tensor + c_filter];
+								float weight = weight_buffer[d_tensor * PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS + r_filter * PRIMARY_CAPS_KERNEL_COLS + c_filter];
+								float operand = input_buffer[d_tensor * CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH + (r_tensor + r_filter) * CONV1_OUTPUT_LENGTH + c_tensor + c_filter];
 								sum += weight * operand;
 							}
 						}
-						results[r_tensor][c_tensor] += sum;
+						results[r_tensor * PRIMARY_CAPS_CONV_LENGTH / 2 + c_tensor / 2] += sum;
 					}
 				}
 			}
@@ -103,7 +97,7 @@ static void conv2d(hls::stream<float> stream_conv_s[CONV1_FILTERS], hls::stream<
 					// times, resulting in the 6x6 matrices flattened in the order of capsule[0..31] -> kernel[0..7]
 					// Ie. If we read the first item from the stream, it is the "top left" index of the 6x6 matrix
 					// produced by the first convolutional kernel of the first primary capsule.
-					stream_primary_caps_internal_conv_s[capsule].write(results[g][h] + conv_biases[current_capsule][current_kernel]);
+					output_buffer[current_capsule * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_NUM_CONV_KERNELS + current_kernel * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH + g * PRIMARY_CAPS_CONV_LENGTH + h] = (results[g * PRIMARY_CAPS_CONV_LENGTH + h] + biases_buffer[current_capsule * PRIMARY_CAPS_NUM_CONV_KERNELS + current_kernel]);
 				}
 			}
 		}
