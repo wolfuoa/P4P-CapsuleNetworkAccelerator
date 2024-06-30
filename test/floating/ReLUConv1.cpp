@@ -69,6 +69,7 @@ static void conv_2d(float *image, float *weights, float *biases, float *output)
 						float pixel = image_to_convolve[current_row * IN_IMG_COLS + c_image + c_filter];
 						sum += weight * pixel;
 					}
+					// printf("sum: %f\n", sum);
 				}
 
 				// Apply ReLU activation, concatenate the result to the convolutional

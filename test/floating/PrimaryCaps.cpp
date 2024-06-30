@@ -85,6 +85,7 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 								float operand = input_buffer[d_tensor * CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH + (r_tensor + r_filter) * CONV1_OUTPUT_LENGTH + c_tensor + c_filter];
 								sum += weight * operand;
 							}
+							// printf("sum %f\n", sum);
 						}
 						results[r_tensor * PRIMARY_CAPS_CONV_LENGTH / 2 + c_tensor / 2] += sum;
 					}

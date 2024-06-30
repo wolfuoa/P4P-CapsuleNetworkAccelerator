@@ -8,6 +8,10 @@
 
 #include "CapsuleNetwork.h"
 
+#include <stdint.h>
+
+#include <fstream>
+#include <iostream>
 #include <string>
 
 #include "CapsuleLayer.h"
@@ -33,6 +37,16 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 
 	printf("Made out of conv2d\n");
 
+	std::ofstream output;
+	output.open("../dump/output_conv_1.txt");
+
+	for (int i = 0; i < CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS; i++)
+	{
+		output << std::setprecision(10) << *(output_conv + i) << std::endl;
+	}
+
+	output.close();
+
 	// ------------------- Primary Capsule Layer -------------------
 	uint32_t prim_dim = PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES;
 	float *output_prim = (float *)malloc(PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
@@ -49,7 +63,14 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 
 	printf("Made out of Primcaps\n");
 
-	// printf("kel: %f\n", output_prim[5]);
+	output.open("../dump/output_prim_caps.txt");
+
+	for (int i = 0; i < PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH; i++)
+	{
+		output << std::setprecision(10) << *(output_conv + i) << std::endl;
+	}
+
+	output.close();
 
 	// -------------------- Digit Capsule Layer --------------------
 	uint32_t digit_dim = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE;
@@ -58,5 +79,14 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 	memcpy(digit_weights, (const float *)weights, digit_dim * sizeof(float));
 
 	run(output_prim, digit_weights, prediction);
+
+	output.open("../dump/output_digit_caps.txt");
+
+	for (int i = 0; i < DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE; i++)
+	{
+		output << std::setprecision(10) << *(output_conv + i) << std::endl;
+	}
+
+	output.close();
 	// -------------------- Digit Capsule Layer --------------------
 }
