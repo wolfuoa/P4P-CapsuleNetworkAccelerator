@@ -7,6 +7,8 @@
 
 #define PRINT_DEBUG 1
 
+#include <math.h>
+
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -20,6 +22,8 @@ static errno_t get_data_n(const char* file_name, uint32_t data_amount, float* ou
 
 static uint16_t get_max_prediction(float* prediction);
 
+static void convert_to_magnitude(float* vector, float* output);
+
 int main(void)
 {
 	uint32_t conv1_num_weights = CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS * CONV1_FILTERS;
@@ -31,6 +35,7 @@ int main(void)
 	float image[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH];
 	float label[1];
 	float prediction[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
+	float magnitudes[DIGIT_CAPS_NUM_DIGITS];
 
 	// float* biases = (float*)malloc(CONV1_FILTERS + PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
 	// float* image = (float*)malloc(IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
@@ -76,15 +81,13 @@ int main(void)
 
 	get_prediction(image, weights, biases, prediction);
 
+	convert_to_magnitude(prediction, magnitudes);
+
 	for (uint8_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
 	{
-		for (uint16_t j = 0; j < DIGIT_CAPS_DIM_CAPSULE; ++j)
-		{
-			std::cout << "adw: " << prediction[i * DIGIT_CAPS_DIM_CAPSULE + j] << std::endl;
-		}
 		// std::cout << "pred: " << prediction[i] << std::endl;
 	}
-	uint16_t max_prediction = get_max_prediction(prediction);
+	uint16_t max_prediction = get_max_prediction(magnitudes);
 	std::cout << "Most likely prediction: " << max_prediction << std::endl;
 
 	free(weights);
@@ -138,4 +141,20 @@ static uint16_t get_max_prediction(float* prediction)
 		}
 	}
 	return digit;
+}
+
+static void convert_to_magnitude(float* vector, float* output)
+{
+	float sum = 0.0;
+
+	for (uint8_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
+	{
+		sum = 0.0;
+		for (uint8_t j = 0; j < DIGIT_CAPS_DIM_CAPSULE; ++j)
+		{
+			float value = vector[i * DIGIT_CAPS_DIM_CAPSULE + j];
+			sum += value * value;
+		}
+		output[i] = sqrt(sum);
+	}
 }
