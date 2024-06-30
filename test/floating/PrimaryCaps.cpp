@@ -49,6 +49,7 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 	float output_buffer[PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
 	float weight_buffer[PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH];
 	float biases_buffer[PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
+	printf("Reached1\n");
 
 	memcpy(input_buffer, (const float *)input, CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS * sizeof(float));
 	memcpy(biases_buffer, (const float *)biases, PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
@@ -108,7 +109,7 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 			}
 		}
 	}
-
+	printf("Reached1\n");
 	memcpy(output, (const float *)output_buffer, PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
 }
 
@@ -123,6 +124,7 @@ void process_features(float *input, float *weights, float *biases, float *output
 	float reshape_output[PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
 	// Conv2d <- 20x20x256
 	conv_2d(input, weights, biases, conv_output);
+
 	// -> 6x6x8 (x32)
 
 	// At reshape we have attained 256 6x6 feature maps containing scalars

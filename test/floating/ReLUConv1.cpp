@@ -35,10 +35,10 @@ static float relu(float x)
 // Before moving along in the image?
 static void conv_2d(float *image, float *weights, float *biases, float *output)
 {
-	float image_to_convolve[IN_IMG_ROWS * IN_IMG_COLS];
-	float output_buffer[OUT_IMG_ROWS * OUT_IMG_COLS * CONV1_FILTERS];
-	float weight_buffer[CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS];
-	float biases_buffer[CONV1_FILTERS];
+	float *image_to_convolve = (float *)malloc(IN_IMG_ROWS * IN_IMG_COLS * sizeof(float));
+	float *output_buffer = (float *)malloc(OUT_IMG_ROWS * OUT_IMG_COLS * CONV1_FILTERS * sizeof(float));
+	float *weight_buffer = (float *)malloc(CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS * sizeof(float));
+	float *biases_buffer = (float *)malloc(CONV1_FILTERS * sizeof(float));
 
 	// Burst read entire image input (its small)
 	memcpy(image_to_convolve, (const float *)image, IN_IMG_ROWS * IN_IMG_COLS * sizeof(float));
@@ -51,6 +51,7 @@ static void conv_2d(float *image, float *weights, float *biases, float *output)
 	{
 		// Read in all weights required for this kernel
 		memcpy(weight_buffer, (const float *)weights + (current_kernel * CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS), CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS * sizeof(float));
+
 		// For all input image rows
 		for (int r_image = 0; r_image < OUT_IMG_ROWS; ++r_image)
 		{
@@ -84,9 +85,12 @@ static void conv_2d(float *image, float *weights, float *biases, float *output)
 
 void relu_conv_2d(float *image, float *weights, float *biases, float *output)
 {
+	float *temp_weights = (float *)malloc(CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS * CONV1_FILTERS * sizeof(float));
+	memcpy(temp_weights, (const float *)weights, CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS * CONV1_FILTERS * sizeof(float));
+
 	// Convolution is applied for each filter.
 	// The result is stored in a 256 wide stream of 20x20 matrices.
 	// The matrices represent the convolution of each filter about the input volume.
 	// Pipeline?
-	conv_2d(image, weights, biases, output);
+	conv_2d(image, temp_weights, biases, output);
 }

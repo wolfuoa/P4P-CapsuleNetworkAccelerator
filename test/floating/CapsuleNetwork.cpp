@@ -30,6 +30,8 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 	relu_conv_2d(image, conv_weights, conv_biases, output_conv);
 	// ---------------- ReLU Convolutional 2D Layer ----------------
 
+	printf("Made out of conv2d\n");
+
 	// ------------------- Primary Capsule Layer -------------------
 	uint32_t prim_dim = PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES;
 	float output_prim[PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
@@ -43,6 +45,8 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 
 	process_features(output_conv, prim_weights, prim_biases, output_prim);
 	// ------------------- Primary Capsule Layer -------------------
+
+	printf("Made out of Primcaps\n");
 
 	// -------------------- Digit Capsule Layer --------------------
 	uint32_t digit_dim = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE;
