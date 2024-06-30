@@ -31,8 +31,9 @@ int main(void)
 
 	float* weights = (float*)malloc((conv1_num_weights + primary_caps_num_weights + digitcaps_num_weights) * sizeof(float));
 	float biases[CONV1_FILTERS + PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
+	float images[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST];
 	float image[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH];
-	float label[1];
+	float labels[NUM_IMAGES_TO_TEST];
 	float prediction[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
 	float magnitudes[DIGIT_CAPS_NUM_DIGITS];
 
@@ -49,45 +50,26 @@ int main(void)
 	get_data("../../models/quant_primarycap_conv2d_bias_float.txt", CONV1_FILTERS, biases);
 
 	// TODO: Get successive images
-	get_data_n("../../datasets/MNIST/images.txt", IN_IMG_ROWS * IN_IMG_COLS, image);
-	get_data_n("../../datasets/MNIST/labels.txt", 1, label);
+	get_data_n("../../datasets/MNIST/images.txt", IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST, images);
+	get_data_n("../../datasets/MNIST/labels.txt", NUM_IMAGES_TO_TEST, labels);
 
-#if PRINT_DEBUG
-	for (uint16_t i; i < 10; ++i)
+	for (uint8_t i = 0; i < NUM_IMAGES_TO_TEST; ++i)
 	{
-		std::cout << "weights: " << weights[i] << std::endl;
+		// acquire next image to test
+		memcpy(image, (const float*)images + i * IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH, IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
+
+		get_prediction(image, weights, biases, prediction);
+
+		convert_to_magnitude(prediction, magnitudes);
+
+		for (uint8_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
+		{
+			std::cout << "pred: " << magnitudes[i] << std::endl;
+		}
+		uint16_t max_prediction = get_max_prediction(magnitudes);
+		std::cout << "Label: " << labels[i] << std::endl;
+		std::cout << "CapsNet prediction: " << max_prediction << std::endl;
 	}
-
-	std::cout << std::endl;
-
-	for (uint16_t i; i < 10; ++i)
-	{
-		std::cout << "biases: " << biases[i] << std::endl;
-	}
-
-	std::cout << std::endl;
-
-	for (uint16_t i; i < IN_IMG_ROWS * IN_IMG_COLS; ++i)
-	{
-		printf("imagine %f\n", image[i]);
-	}
-
-	std::cout << std::endl;
-
-	printf("label: %f\n", label[0]);
-
-#endif	// PRINT_DEBUG
-
-	get_prediction(image, weights, biases, prediction);
-
-	convert_to_magnitude(prediction, magnitudes);
-
-	for (uint8_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
-	{
-		// std::cout << "pred: " << prediction[i] << std::endl;
-	}
-	uint16_t max_prediction = get_max_prediction(magnitudes);
-	std::cout << "Most likely prediction: " << max_prediction << std::endl;
 
 	free(weights);
 }

@@ -426,7 +426,8 @@ CMakeFiles/capsNetTest.dir/CapsuleNetworkTestbench.cpp.o: /Users/wolf/Desktop/P4
   /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stddef.h \
   /Library/Developer/CommandLineTools/usr/lib/clang/14.0.0/include/stdint.h \
   /Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/floating/CapsuleNetwork.h \
-  /Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/util/constants.h
+  /Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/util/constants.h \
+  /Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/util/testing_suite.h
 
 CMakeFiles/capsNetTest.dir/floating/CapsuleNetwork.cpp.o: /Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/floating/CapsuleNetwork.cpp \
   /Library/Developer/CommandLineTools/SDKs/MacOSX13.1.sdk/usr/include/Availability.h \
@@ -1897,6 +1898,8 @@ CMakeFiles/capsNetTest.dir/floating/ReLUConv1.cpp.o: /Users/wolf/Desktop/P4P/202
 /Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/floating/PrimaryCaps.h:
 
 /Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/floating/CapsuleNetwork.cpp:
+
+/Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/util/testing_suite.h:
 
 /Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/floating/CapsuleNetwork.h:
 
