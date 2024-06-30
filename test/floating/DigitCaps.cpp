@@ -23,17 +23,17 @@ static void add(float *input_mat, float *coupling_terms);
 
 void dynamic_routing(float *input, float *weights, float *prediction)
 {
-	float primary_caps[DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE];
-	float squashed_v[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
+	float *primary_caps = (float *)malloc(DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float));
+	float *squashed_v = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
 
 	// burst read input into local array
 	memcpy(primary_caps, (const float *)input, DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float));
 
-	static float weighted_input_u[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
-	static float coupling_b[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
-	static float coupling_c[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
-	static float sum_of_products_s[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
-	static float output_agreement[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
+	float *weighted_input_u = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
+	float *coupling_b = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * sizeof(float));
+	float *coupling_c = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * sizeof(float));
+	float *sum_of_products_s = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
+	float *output_agreement = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * sizeof(float));
 
 	apply_weights(primary_caps, weights, weighted_input_u);
 

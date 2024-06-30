@@ -5,7 +5,7 @@
  * Tests the capsule network with MNIST images
  */
 
-#define PRINT_DEBUG 0
+#define PRINT_DEBUG 1
 
 #include <fstream>
 #include <iostream>
@@ -29,13 +29,13 @@ int main(void)
 	float* weights = (float*)malloc((conv1_num_weights + primary_caps_num_weights + digitcaps_num_weights) * sizeof(float));
 	float biases[CONV1_FILTERS + PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
 	float image[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH];
-	float label[DIGIT_CAPS_NUM_DIGITS];
+	float label[1];
+	float prediction[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
 
 	// float* biases = (float*)malloc(CONV1_FILTERS + PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
 	// float* image = (float*)malloc(IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
 	// float* label = (float*)malloc(DIGIT_CAPS_NUM_DIGITS * sizeof(float));
-
-	float prediction[DIGIT_CAPS_NUM_DIGITS];
+	// float* prediction = (float*)malloc(DIGIT_CAPS_NUM_DIGITS * sizeof(float));
 
 	get_data("../../models/quant_conv1_kernel_float.txt", 0, weights);
 	get_data("../../models/quant_primarycap_conv2d_kernel_float.txt", conv1_num_weights, weights);
@@ -45,37 +45,32 @@ int main(void)
 	get_data("../../models/quant_primarycap_conv2d_bias_float.txt", CONV1_FILTERS, biases);
 
 	// TODO: Get successive images
-	get_data_n("../../datasets/MNIST/t10k-images-idx3-ubyte", IN_IMG_ROWS * IN_IMG_COLS, image);
-	get_data_n("../../datasets/MNIST/t10k-labels-idx1-ubyte", DIGIT_CAPS_NUM_DIGITS, label);
+	get_data_n("../../datasets/MNIST/images.txt", IN_IMG_ROWS * IN_IMG_COLS, image);
+	get_data_n("../../datasets/MNIST/labels.txt", 1, label);
 
 #if PRINT_DEBUG
-	for (uint8_t spec; spec < 10; ++spec)
+	for (uint16_t i; i < 10; ++i)
 	{
-		std::cout << weights[spec] << std::endl;
+		std::cout << "weights: " << weights[i] << std::endl;
 	}
 
 	std::cout << std::endl;
 
-	for (uint8_t spec; spec < 10; ++spec)
+	for (uint16_t i; i < 10; ++i)
 	{
-		std::cout << biases[spec] << std::endl;
+		std::cout << "biases: " << biases[i] << std::endl;
 	}
 
 	std::cout << std::endl;
 
-	for (uint16_t spec; spec < IN_IMG_ROWS * IN_IMG_COLS; ++spec)
+	for (uint16_t i; i < IN_IMG_ROWS * IN_IMG_COLS; ++i)
 	{
-		std::cout << image[spec] << std::endl;
+		printf("imagine %f\n", image[i]);
 	}
 
 	std::cout << std::endl;
 
-	for (uint8_t spec; spec < 10; ++spec)
-	{
-		std::cout << label[spec] << std::endl;
-	}
-
-	std::cout << get_max_prediction(label) << std::endl;
+	printf("label: %f\n", label[0]);
 
 #endif	// PRINT_DEBUG
 
@@ -83,8 +78,11 @@ int main(void)
 
 	for (uint8_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
 	{
-		std::cout << "label: " << label[i] << std::endl;
-		std::cout << "pred: " << prediction[i] << std::endl;
+		for (uint16_t j = 0; j < DIGIT_CAPS_DIM_CAPSULE; ++j)
+		{
+			std::cout << "adw: " << prediction[i * DIGIT_CAPS_DIM_CAPSULE + j] << std::endl;
+		}
+		// std::cout << "pred: " << prediction[i] << std::endl;
 	}
 	uint16_t max_prediction = get_max_prediction(prediction);
 	std::cout << "Most likely prediction: " << max_prediction << std::endl;

@@ -48,9 +48,11 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 
 	printf("Made out of Primcaps\n");
 
+	// printf("kel: %f\n", output_prim[5]);
+
 	// -------------------- Digit Capsule Layer --------------------
 	uint32_t digit_dim = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE;
-	float digit_weights[digit_dim];
+	float *digit_weights = (float *)malloc(digit_dim * sizeof(float));
 
 	memcpy(digit_weights, (const float *)weights, digit_dim * sizeof(float));
 

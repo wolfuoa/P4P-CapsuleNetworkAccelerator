@@ -47,11 +47,10 @@ static void conv_2d(float *image, float *weights, float *biases, float *output)
 	memcpy(biases_buffer, (const float *)biases, CONV1_FILTERS);
 
 	// For all 256 convolutonal kernels
-	for (uint16_t current_kernel; current_kernel < CONV1_FILTERS; ++current_kernel)
+	for (uint16_t current_kernel = 0; current_kernel < CONV1_FILTERS; ++current_kernel)
 	{
 		// Read in all weights required for this kernel
 		memcpy(weight_buffer, (const float *)weights + (current_kernel * CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS), CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS * sizeof(float));
-
 		// For all input image rows
 		for (int r_image = 0; r_image < OUT_IMG_ROWS; ++r_image)
 		{
@@ -59,7 +58,6 @@ static void conv_2d(float *image, float *weights, float *biases, float *output)
 			for (int c_image = 0; c_image < OUT_IMG_COLS; ++c_image)
 			{
 				float sum = 0.0;
-
 				// For all current kernel rows
 				for (int r_filter = 0; r_filter < CONV1_KERNEL_ROWS; ++r_filter)
 				{
