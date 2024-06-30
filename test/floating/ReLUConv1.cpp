@@ -81,16 +81,17 @@ static void conv_2d(float *image, float *weights, float *biases, float *output)
 	}
 
 	memcpy(output, (const float *)output_buffer, OUT_IMG_ROWS * OUT_IMG_COLS * CONV1_FILTERS * sizeof(float));
+	free(image_to_convolve);
+	free(output_buffer);
+	free(weight_buffer);
+	free(biases_buffer);
 }
 
 void relu_conv_2d(float *image, float *weights, float *biases, float *output)
 {
-	float *temp_weights = (float *)malloc(CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS * CONV1_FILTERS * sizeof(float));
-	memcpy(temp_weights, (const float *)weights, CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS * CONV1_FILTERS * sizeof(float));
-
 	// Convolution is applied for each filter.
 	// The result is stored in a 256 wide stream of 20x20 matrices.
 	// The matrices represent the convolution of each filter about the input volume.
 	// Pipeline?
-	conv_2d(image, temp_weights, biases, output);
+	conv_2d(image, weights, biases, output);
 }

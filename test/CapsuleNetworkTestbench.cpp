@@ -88,6 +88,8 @@ int main(void)
 	}
 	uint16_t max_prediction = get_max_prediction(prediction);
 	std::cout << "Most likely prediction: " << max_prediction << std::endl;
+
+	free(weights);
 }
 
 static errno_t get_data(const std::string& file_name, uint32_t start_index, float* output)
