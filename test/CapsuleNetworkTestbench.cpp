@@ -31,14 +31,14 @@ int main(void)
 
 	float* weights = (float*)malloc((conv1_num_weights + primary_caps_num_weights + digitcaps_num_weights) * sizeof(float));
 	float biases[CONV1_FILTERS + PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
-	float images[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST];
+	// float images[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST];
 	float image[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH];
 	float labels[NUM_IMAGES_TO_TEST];
 	float prediction[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
 	float magnitudes[DIGIT_CAPS_NUM_DIGITS];
 
 	// float* biases = (float*)malloc(CONV1_FILTERS + PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
-	// float* image = (float*)malloc(IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
+	float* images = (float*)malloc(IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST * sizeof(float));
 	// float* label = (float*)malloc(DIGIT_CAPS_NUM_DIGITS * sizeof(float));
 	// float* prediction = (float*)malloc(DIGIT_CAPS_NUM_DIGITS * sizeof(float));
 
@@ -71,6 +71,7 @@ int main(void)
 		std::cout << "CapsNet prediction: " << max_prediction << std::endl;
 	}
 
+	free(images);
 	free(weights);
 }
 

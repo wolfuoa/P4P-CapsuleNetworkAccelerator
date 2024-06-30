@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD 11)
 include_directories(
     ${CMAKE_SOURCE_DIR}/floating
     ${CMAKE_SOURCE_DIR}/util
+    ${CMAKE_SOURCE_DIR}/../src/floating
+    
 )
 
 add_executable(capsNetTest 
@@ -15,4 +17,5 @@ add_executable(capsNetTest
     floating/DigitCaps.cpp
     floating/PrimaryCaps.cpp
     floating/ReLUConv1.cpp
+    ../src/floating/CapsuleLayer.cpp
 )

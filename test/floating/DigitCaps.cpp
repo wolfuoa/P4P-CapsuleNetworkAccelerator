@@ -72,6 +72,13 @@ void dynamic_routing(float *input, float *weights, float *prediction)
 		}
 	}
 	memcpy(prediction, (const float *)squashed_v, DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
+	free(primary_caps);
+	free(output_agreement);
+	free(squashed_v);
+	free(coupling_b);
+	free(coupling_c);
+	free(sum_of_products_s);
+	free(weighted_input_u);
 }
 
 static void apply_weights(float *input_mat, float *weights, float *weighted_input)

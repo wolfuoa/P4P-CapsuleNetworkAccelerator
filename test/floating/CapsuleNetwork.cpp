@@ -10,6 +10,7 @@
 
 #include <string>
 
+#include "CapsuleLayer.h"
 #include "DigitCaps.h"
 #include "PrimaryCaps.h"
 #include "ReLUConv1.h"
@@ -56,6 +57,6 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 
 	memcpy(digit_weights, (const float *)weights, digit_dim * sizeof(float));
 
-	dynamic_routing(output_prim, digit_weights, prediction);
+	run(output_prim, digit_weights, prediction);
 	// -------------------- Digit Capsule Layer --------------------
 }

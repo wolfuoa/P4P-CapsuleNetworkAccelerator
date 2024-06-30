@@ -81,12 +81,12 @@ clean: CMakeFiles/capsNetTest.dir/clean
 CMakeFiles/capsNetTest.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/capsNetTest.dir/build.make CMakeFiles/capsNetTest.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/capsNetTest.dir/build.make CMakeFiles/capsNetTest.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/bin/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target capsNetTest"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/bin/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target capsNetTest"
 .PHONY : CMakeFiles/capsNetTest.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/capsNetTest.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/bin/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/bin/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/capsNetTest.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/test/bin/CMakeFiles 0
 .PHONY : CMakeFiles/capsNetTest.dir/rule

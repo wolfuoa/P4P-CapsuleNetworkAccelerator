@@ -73,6 +73,7 @@ static void conv_2d(float *image, float *weights, float *biases, float *output)
 
 				// Apply ReLU activation, concatenate the result to the convolutional
 				// output for that kernel
+				// printf("%d, %d, %d, %d\n", current_kernel, r_image, c_image, current_kernel * 20 * 20);
 				output_buffer[current_kernel * OUT_IMG_ROWS * OUT_IMG_COLS + r_image * OUT_IMG_COLS + c_image] = relu(sum + biases_buffer[current_kernel]);
 			}
 		}

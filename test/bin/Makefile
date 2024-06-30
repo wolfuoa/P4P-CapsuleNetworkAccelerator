@@ -153,6 +153,30 @@ CapsuleNetworkTestbench.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/capsNetTest.dir/build.make CMakeFiles/capsNetTest.dir/CapsuleNetworkTestbench.cpp.s
 .PHONY : CapsuleNetworkTestbench.cpp.s
 
+Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.o: Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.o
+.PHONY : Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.o
+
+# target to build an object file
+Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/capsNetTest.dir/build.make CMakeFiles/capsNetTest.dir/Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.o
+.PHONY : Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.o
+
+Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.i: Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.i
+.PHONY : Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.i
+
+# target to preprocess a source file
+Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/capsNetTest.dir/build.make CMakeFiles/capsNetTest.dir/Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.i
+.PHONY : Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.i
+
+Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.s: Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.s
+.PHONY : Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.s
+
+# target to generate assembly for a file
+Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/capsNetTest.dir/build.make CMakeFiles/capsNetTest.dir/Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.s
+.PHONY : Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.cpp.s
+
 floating/CapsuleNetwork.o: floating/CapsuleNetwork.cpp.o
 .PHONY : floating/CapsuleNetwork.o
 
@@ -261,6 +285,9 @@ help:
 	@echo "... CapsuleNetworkTestbench.o"
 	@echo "... CapsuleNetworkTestbench.i"
 	@echo "... CapsuleNetworkTestbench.s"
+	@echo "... Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.o"
+	@echo "... Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.i"
+	@echo "... Users/wolf/Desktop/P4P/2024/P4P-CapsuleNetworkAccelerator/src/floating/CapsuleLayer.s"
 	@echo "... floating/CapsuleNetwork.o"
 	@echo "... floating/CapsuleNetwork.i"
 	@echo "... floating/CapsuleNetwork.s"
