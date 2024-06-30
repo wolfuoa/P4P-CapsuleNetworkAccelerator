@@ -5,8 +5,6 @@
  * Tests the capsule network with MNIST images
  */
 
-#define PRINT_DEBUG 1
-
 #include <math.h>
 
 #include <fstream>
@@ -15,6 +13,7 @@
 
 #include "CapsuleNetwork.h"
 #include "constants.h"
+#include "testing_suite.h"
 
 static errno_t get_data(const std::string& file_name, uint32_t start_index, float* output);
 
