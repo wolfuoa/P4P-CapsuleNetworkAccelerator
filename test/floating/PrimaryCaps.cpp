@@ -44,18 +44,18 @@ static void squash(float *input, float *output);
 
 static void conv_2d(float *input, float *weights, float *biases, float *output)
 {
-	float results[PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH];
-	float input_buffer[CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS];
-	float output_buffer[PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
-	float weight_buffer[PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH];
-	float biases_buffer[PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
+	float *results = (float *)malloc(PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * sizeof(float));
+	float *input_buffer = (float *)malloc(CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS * sizeof(float));
+	float *output_buffer = (float *)malloc(PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
+	float *weight_buffer = (float *)malloc(PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH * sizeof(float));
+	float *biases_buffer = (float *)malloc(PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
 
 	memcpy(input_buffer, (const float *)input, CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS * sizeof(float));
 	memcpy(biases_buffer, (const float *)biases, PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
 
 	uint32_t prim_caps_kernel_dim = PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH;
 	// For all 32 capsules
-	for (uint8_t current_capsule = 0; current_capsule > PRIMARY_CAPS_CAPSULES; ++current_capsule)
+	for (uint8_t current_capsule = 0; current_capsule < PRIMARY_CAPS_CAPSULES; ++current_capsule)
 	{
 		// For all 8 kernels
 		for (uint8_t current_kernel = 0; current_kernel < PRIMARY_CAPS_NUM_CONV_KERNELS; ++current_kernel)
@@ -85,6 +85,7 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 								float operand = input_buffer[d_tensor * CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH + (r_tensor + r_filter) * CONV1_OUTPUT_LENGTH + c_tensor + c_filter];
 								sum += weight * operand;
 							}
+							// printf("sum %f\n", sum);
 						}
 						results[r_tensor * PRIMARY_CAPS_CONV_LENGTH / 2 + c_tensor / 2] += sum;
 					}
@@ -108,8 +109,12 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 			}
 		}
 	}
-
 	memcpy(output, (const float *)output_buffer, PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
+	free(results);
+	free(input_buffer);
+	free(output_buffer);
+	free(weight_buffer);
+	free(biases_buffer);
 }
 
 // @brief process_features Process the output 20x20x256 tensor from the convolutional layer
@@ -118,11 +123,11 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 void process_features(float *input, float *weights, float *biases, float *output)
 {
 	// Apply Conv2d 32 times and concatenate capsules
-
-	float conv_output[PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
-	float reshape_output[PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
+	float *conv_output = (float *)malloc(PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
+	float *reshape_output = (float *)malloc(PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
 	// Conv2d <- 20x20x256
 	conv_2d(input, weights, biases, conv_output);
+
 	// -> 6x6x8 (x32)
 
 	// At reshape we have attained 256 6x6 feature maps containing scalars
@@ -134,14 +139,17 @@ void process_features(float *input, float *weights, float *biases, float *output
 	// Squash <- 1152 x 8
 	squash(reshape_output, output);
 	// -> 1152 x 8
+
+	free(conv_output);
+	free(reshape_output);
 }
 
 static void reshape(float *input, float *output)
 {
 	uint32_t dim = PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_NUM_CONV_KERNELS;
 	uint32_t output_index = 0;
-	float temporary_feature_collection[dim];
-	float output_buffer[dim * PRIMARY_CAPS_CAPSULES];
+	float *temporary_feature_collection = (float *)malloc(dim * sizeof(float));
+	float *output_buffer = (float *)malloc(dim * PRIMARY_CAPS_CAPSULES * sizeof(float));
 	// For each spatial position in the feature map
 	// [i, j]
 	// [k, l]
@@ -173,14 +181,16 @@ static void reshape(float *input, float *output)
 	}
 
 	memcpy(output, (const float *)output_buffer, dim * PRIMARY_CAPS_CAPSULES * sizeof(float));
+	free(temporary_feature_collection);
+	free(output_buffer);
 }
 
 static void squash(float *input, float *output)
 {
 	uint32_t dim = PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_NUM_CONV_KERNELS;
-	float input_buffer[dim];
-	float output_buffer[dim * PRIMARY_CAPS_CAPSULES];
-	float squared_norm = 0.0;
+	float *input_buffer = (float *)malloc(dim * sizeof(float));
+	float *output_buffer = (float *)malloc(dim * PRIMARY_CAPS_CAPSULES * sizeof(float));
+	double squared_norm = 0.0;
 	float scale = 0.0;
 
 	// For all 32 capsules
@@ -188,6 +198,7 @@ static void squash(float *input, float *output)
 	{
 		memcpy(input_buffer, (const float *)input + current_capsule * dim, dim * sizeof(float));
 		// For each 8D vector (there are 6x6 of them for each capsule)
+
 		for (int grid_rows = 0; grid_rows < PRIMARY_CAPS_CONV_WIDTH; ++grid_rows)
 		{
 			for (int grid_cols = 0; grid_cols < PRIMARY_CAPS_CONV_LENGTH; ++grid_cols)
@@ -200,10 +211,13 @@ static void squash(float *input, float *output)
 					float value = input_buffer[grid_rows * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM + grid_cols * PRIMARY_CAPS_CAPSULE_DIM + i];
 
 					squared_norm += value * value;
+					// printf("val: %f\n", value);
+					// printf("norm: %f\n", squared_norm);
 				}
 
 				scale = squared_norm / (1.0 + squared_norm) / sqrt(squared_norm + 1e-7);
 
+				// printf("scale: %f\n", scale);
 				for (int i = 0; i < PRIMARY_CAPS_CAPSULE_DIM; ++i)
 				{
 					output_buffer[current_capsule * dim + grid_rows * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM + grid_cols * PRIMARY_CAPS_CAPSULE_DIM + i] = (input_buffer[grid_rows * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM + grid_cols * PRIMARY_CAPS_CAPSULE_DIM + i] * scale);
@@ -211,6 +225,9 @@ static void squash(float *input, float *output)
 			}
 		}
 	}
+	// printf("kel: %f\n", output_buffer[4]);
 
 	memcpy(output, (const float *)output_buffer, dim * PRIMARY_CAPS_CAPSULES * sizeof(float));
+	free(input_buffer);
+	free(output_buffer);
 }

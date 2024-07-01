@@ -1,0 +1,7 @@
+#ifndef TESTING_SUITE_H
+#define TESTING_SUITE_H
+
+#define PRINT_DEBUG		   1
+#define NUM_IMAGES_TO_TEST 5
+
+#endif	// TESTING_SUITE_H
