@@ -1,8 +1,8 @@
 // CapsuleNetwork.h
 // author: nicholas wolf
 
-#ifndef CAPSULE_NETORK_H
-#define CAPSULE_NETORK_H
+#ifndef CAPSULE_NETWORK_TEST_H
+#define CAPSULE_NETWORK_TEST_H
 
 #include "constants.h"
 

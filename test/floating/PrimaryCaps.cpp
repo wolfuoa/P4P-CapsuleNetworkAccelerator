@@ -37,6 +37,7 @@
 #include <math.h>
 
 #include <string>
+#include <cstring>
 
 static void conv_2d(float *input, float *weights, float *biases, float *output);
 static void reshape(float *input, float *output);
