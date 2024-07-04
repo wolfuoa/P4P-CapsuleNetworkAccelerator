@@ -14,10 +14,10 @@
 #include <iostream>
 #include <string>
 
-#include "CapsuleLayer.h"
 #include "DigitCaps.h"
 #include "PrimaryCaps.h"
 #include "ReLUConv1.h"
+#include "testing_suite.h"
 
 void get_prediction(float *image, float *weights, float *biases, float *prediction)
 {
@@ -37,15 +37,16 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 
 	printf("Made out of conv2d\n");
 
-	std::ofstream output;
-	output.open("../dump/output_conv_1.txt");
+#if DUMP_LAYERS
+	FILE *fp;
+	fp = fopen("../dump/output_conv_1.txt", "w");
 
-	for (int i = 0; i < CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS; i++)
+	for (int i = 0; i < CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS; ++i)
 	{
-		output << std::setprecision(10) << *(output_conv + i) << std::endl;
+		fprintf(fp, "%.10f\n", output_conv[i]);
 	}
-
-	output.close();
+	fclose(fp);
+#endif
 
 	// ------------------- Primary Capsule Layer -------------------
 	uint32_t prim_dim = PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES;
@@ -63,14 +64,15 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 
 	printf("Made out of Primcaps\n");
 
-	output.open("../dump/output_prim_caps.txt");
+#if DUMP_LAYERS
+	fp = fopen("../dump/output_prim_caps.txt", "w");
 
-	for (int i = 0; i < PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH; i++)
+	for (int i = 0; i < PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH; ++i)
 	{
-		output << std::setprecision(10) << *(output_conv + i) << std::endl;
+		fprintf(fp, "%.10f\n", output_prim[i]);
 	}
-
-	output.close();
+	fclose(fp);
+#endif
 
 	// -------------------- Digit Capsule Layer --------------------
 	uint32_t digit_dim = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE;
@@ -78,15 +80,16 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 
 	memcpy(digit_weights, (const float *)weights, digit_dim * sizeof(float));
 
-	run(output_prim, digit_weights, prediction);
-
-	output.open("../dump/output_digit_caps.txt");
-
-	for (int i = 0; i < DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE; i++)
-	{
-		output << std::setprecision(10) << *(output_conv + i) << std::endl;
-	}
-
-	output.close();
+	dynamic_routing(output_prim, digit_weights, prediction);
 	// -------------------- Digit Capsule Layer --------------------
+
+#if DUMP_LAYERS
+	fp = fopen("../dump/output_digit_caps.txt", "w");
+
+	for (int i = 0; i < DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE; ++i)
+	{
+		fprintf(fp, "%.10f\n", prediction[i]);
+	}
+	fclose(fp);
+#endif
 }
