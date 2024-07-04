@@ -29,6 +29,9 @@
 .DS_Store
 
 work/
+dump/
+bin/
+models/accurate/
 
 # ignore Quartus II generated files
 *_generation_script*
