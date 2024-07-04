@@ -6,14 +6,15 @@
  */
 
 #include <math.h>
+#include <time.h>
 
 #include <fstream>
 #include <iostream>
 #include <string>
 
+#include "CapsuleNetworkTest.h"
 #include "constants.h"
 #include "testing_suite.h"
-#include "CapsuleNetworkTest.h"
 
 static errno_t get_data(const std::string& file_name, uint32_t start_index, float* output);
 
@@ -45,15 +46,14 @@ int main(void)
 	// float* label = (float*)malloc(DIGIT_CAPS_NUM_DIGITS * sizeof(float));
 	// float* prediction = (float*)malloc(DIGIT_CAPS_NUM_DIGITS * sizeof(float));
 
-	get_data("../../models/quant_conv1_kernel_float.txt", 0, weights);
-	get_data("../../models/quant_primarycap_conv2d_kernel_float.txt", conv1_num_weights, weights);
-	get_data("../../models/digitcaps_w_float.txt", conv1_num_weights + primary_caps_num_weights, weights);
+	get_data("../../models/conv1_weights.txt", 0, weights);
+	get_data("../../models/primcaps_weights.txt", conv1_num_weights, weights);
+	get_data("../../models/digitcaps_weights.txt", conv1_num_weights + primary_caps_num_weights, weights);
 
-	get_data("../../models/quant_conv1_bias_float.txt", 0, biases);
-	get_data("../../models/quant_primarycap_conv2d_bias_float.txt", CONV1_FILTERS, biases);
+	get_data("../../models/conv1_biases.txt", 0, biases);
+	get_data("../../models/primcaps_biases.txt", CONV1_FILTERS, biases);
 
-	// TODO: Get successive images
-	get_data_n("../../datasets/MNIST/images.txt", IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST, images);
+	get_data_n("../../datasets/MNIST/testimg.txt", IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST, images);
 	get_data_n("../../datasets/MNIST/labels.txt", NUM_IMAGES_TO_TEST, labels);
 
 	for (uint8_t i = 0; i < NUM_IMAGES_TO_TEST; ++i)
@@ -61,7 +61,9 @@ int main(void)
 		// acquire next image to test
 		memcpy(image, (const float*)images + i * IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH, IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
 
+		clock_t t_1 = clock();
 		get_prediction(image, weights, biases, prediction);
+		clock_t t_2 = clock();
 
 		convert_to_magnitude(prediction, magnitudes);
 
@@ -72,6 +74,7 @@ int main(void)
 		uint16_t max_prediction = get_max_prediction(magnitudes);
 		std::cout << "Label: " << labels[i] << std::endl;
 		std::cout << "CapsNet prediction: " << max_prediction << std::endl;
+		printf("Time: %.4fms\n", ((float)(t_2 - t_1) / CLOCKS_PER_SEC) * 1000);
 	}
 
 	free(images);
