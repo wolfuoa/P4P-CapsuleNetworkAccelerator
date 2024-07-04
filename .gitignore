@@ -30,6 +30,7 @@
 
 work/
 dump/
+bin/
 
 # ignore Quartus II generated files
 *_generation_script*
