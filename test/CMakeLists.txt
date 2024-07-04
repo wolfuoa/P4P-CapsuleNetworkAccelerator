@@ -15,5 +15,4 @@ add_executable(capsNetTest
     floating/DigitCaps.cpp
     floating/PrimaryCaps.cpp
     floating/ReLUConv1.cpp
-    floating/CapsuleLayer.cpp
 )

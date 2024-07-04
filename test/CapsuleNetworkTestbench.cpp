@@ -12,7 +12,7 @@
 #include <iostream>
 #include <string>
 
-#include "CapsuleNetworkTest.h"
+#include "CapsuleNetwork.h"
 #include "constants.h"
 #include "testing_suite.h"
 
@@ -34,9 +34,6 @@ int main(void)
 	float biases[CONV1_FILTERS + PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
 	// float images[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST];
 	float image[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH];
-	// float* biases= (float*)malloc((CONV1_FILTERS + PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES) * sizeof(float));
-	// float* image= (float*)malloc(IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
-
 	float labels[NUM_IMAGES_TO_TEST];
 	float prediction[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
 	float magnitudes[DIGIT_CAPS_NUM_DIGITS];
