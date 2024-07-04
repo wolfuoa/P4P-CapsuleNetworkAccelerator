@@ -44,7 +44,7 @@ static void conv_2d(float *image, float *weights, float *biases, float *output)
 	memcpy(image_to_convolve, (const float *)image, IN_IMG_ROWS * IN_IMG_COLS * sizeof(float));
 
 	// Get all the biases
-	memcpy(biases_buffer, (const float *)biases, CONV1_FILTERS);
+	memcpy(biases_buffer, (const float *)biases, CONV1_FILTERS * sizeof(float));
 
 	// For all 256 convolutonal kernels
 	for (uint16_t current_kernel = 0; current_kernel < CONV1_FILTERS; ++current_kernel)
@@ -64,17 +64,14 @@ static void conv_2d(float *image, float *weights, float *biases, float *output)
 					// For all current kernel columns
 					for (int c_filter = 0; c_filter < CONV1_KERNEL_COLS; ++c_filter)
 					{
-						float weight = weights[r_filter * CONV1_KERNEL_COLS + c_filter];
+						float weight = weight_buffer[r_filter * CONV1_KERNEL_COLS + c_filter];
 						uint32_t current_row = r_image + r_filter;
 						float pixel = image_to_convolve[current_row * IN_IMG_COLS + c_image + c_filter];
 						sum += weight * pixel;
 					}
-					// printf("sum: %f\n", sum);
 				}
-
 				// Apply ReLU activation, concatenate the result to the convolutional
 				// output for that kernel
-				// printf("%d, %d, %d, %d\n", current_kernel, r_image, c_image, current_kernel * 20 * 20);
 				output_buffer[current_kernel * OUT_IMG_ROWS * OUT_IMG_COLS + r_image * OUT_IMG_COLS + c_image] = relu(sum + biases_buffer[current_kernel]);
 			}
 		}
@@ -92,6 +89,5 @@ void relu_conv_2d(float *image, float *weights, float *biases, float *output)
 	// Convolution is applied for each filter.
 	// The result is stored in a 256 wide stream of 20x20 matrices.
 	// The matrices represent the convolution of each filter about the input volume.
-	// Pipeline?
 	conv_2d(image, weights, biases, output);
 }
