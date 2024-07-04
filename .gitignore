@@ -29,6 +29,7 @@
 .DS_Store
 
 work/
+dump/
 
 # ignore Quartus II generated files
 *_generation_script*
