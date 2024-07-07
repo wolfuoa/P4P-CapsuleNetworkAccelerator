@@ -29,17 +29,17 @@ static void add(float *input_mat, float *coupling_terms);
 
 void dynamic_routing(float *input, float *weights, float *prediction)
 {
-	float *primary_caps = (float *)malloc(DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float));
-	float *squashed_v = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
+	float primary_caps[DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE];
+	float squashed_v[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
 
 	// burst read input into local array
 	memcpy(primary_caps, (const float *)input, DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float));
 
-	float *weighted_input_u = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
-	float *coupling_b = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * sizeof(float));
-	float *coupling_c = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * sizeof(float));
-	float *sum_of_products_s = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
-	float *output_agreement = (float *)malloc(DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * sizeof(float));
+	float weighted_input_u[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
+	float coupling_b[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
+	float coupling_c[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
+	float sum_of_products_s[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
+	float output_agreement[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
 
 	apply_weights(primary_caps, weights, weighted_input_u);
 
@@ -78,13 +78,6 @@ void dynamic_routing(float *input, float *weights, float *prediction)
 		}
 	}
 	memcpy(prediction, (const float *)squashed_v, DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
-	free(primary_caps);
-	free(output_agreement);
-	free(squashed_v);
-	free(coupling_b);
-	free(coupling_c);
-	free(sum_of_products_s);
-	free(weighted_input_u);
 }
 
 static void apply_weights(float *input_mat, float *weights, float *weighted_input)
