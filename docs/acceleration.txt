@@ -1,0 +1,15 @@
+Iteration: 0 > Latency: 8.077e9ns > Change: NOT APPLICABLE
+"First iteration, simply placed interfaces and synthesized"
+
+Iteration: 1 > Latency: 6.166e9ns > Change: Widened the initiation interval of the pipeline to handle the data dependency
+"As seen, we have a bunch of memory dependencies that cause the pipelines to turn sequential, slowing down the system"
+
+Iteration: 2 > Latency: 0 > Change: 0
+
+
+
+
+Iteration: 0 > Latency: 0 > Change: 0
+
+
+

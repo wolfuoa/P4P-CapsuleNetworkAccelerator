@@ -52,11 +52,19 @@ static void squash(float *input, float *output);
 
 static void conv_2d(float *input, float *weights, float *biases, float *output)
 {
-	float results[PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH];
 	float input_buffer[CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS];
+    #pragma HLS BIND_STORAGE variable=input_buffer impl=auto
+    #pragma HLS ARRAY_PARTITION variable=input_buffer dim=1 type=cyclic
+
 	float output_buffer[PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
+    #pragma HLS BIND_STORAGE variable=output_buffer impl=auto
+
 	float weight_buffer[PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH];
+    #pragma HLS BIND_STORAGE variable=weight_buffer type=ram_1wnr impl=auto
+
 	float biases_buffer[PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
+    #pragma HLS BIND_STORAGE variable=biases_buffer type=ram_1wnr impl=auto
+
 
 	memcpy(input_buffer, (const float *)input, CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS * sizeof(float));
 	memcpy(biases_buffer, (const float *)biases, PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
@@ -87,6 +95,8 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 					{
 						for (uint32_t kernel_col = 0; kernel_col < PRIMARY_CAPS_KERNEL_COLS; ++kernel_col)
 						{
+                            #pragma HLS PIPELINE II=3
+                            #pragma HLS BIND_OP variable=sum op=fmul impl=fabric
 							float operand = input_buffer[(kernel_depth * CONV1_OUTPUT_LENGTH * CONV1_OUTPUT_WIDTH) + ((stride_index_lengthwise + kernel_row) * CONV1_OUTPUT_WIDTH) + (stride_index_widthwise + kernel_col)];
 							float weight = weight_buffer[(kernel_depth * PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS) + (kernel_row * PRIMARY_CAPS_KERNEL_COLS) + kernel_col];
 							sum += operand * weight;
@@ -109,7 +119,10 @@ void process_features(float *input, float *weights, float *biases, float *output
 	// Apply Conv2d 32 times and concatenate capsules
 
 	float conv_output[PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
+    #pragma HLS BIND_STORAGE variable=conv_output type=ram_1wnr impl=auto
+
 	float reshape_output[PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
+    #pragma HLS BIND_STORAGE variable=reshape_output type=ram_1wnr impl=auto
 
 	// Conv2d <- 20x20x256
 	conv_2d(input, weights, biases, conv_output);
@@ -154,8 +167,8 @@ static void reshape(float *input, float *output)
 				for (uint32_t current_dim = 0; current_dim < PRIMARY_CAPS_CAPSULE_DIM; ++current_dim)
 				{
 					output_buffer[out_vector * PRIMARY_CAPS_CAPSULE_DIM + current_dim] = feature_collection[(current_kernel + current_dim) * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH + grid_rows * PRIMARY_CAPS_CONV_WIDTH + grid_cols];
-				}
-				out_vector++;
+                }
+                out_vector++;
 			}
 		}
 	}

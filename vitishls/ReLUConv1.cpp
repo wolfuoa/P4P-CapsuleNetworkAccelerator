@@ -72,6 +72,7 @@ static void conv_2d(float *image, float *weights, float *biases, float *output)
 					// For all current kernel columns
 					for (uint32_t c_filter = 0; c_filter < CONV1_KERNEL_COLS; ++c_filter)
 					{
+                        #pragma HLS PIPELINE II=3
 						float weight = weight_buffer[r_filter * CONV1_KERNEL_COLS + c_filter];
 						uint32_t current_row = r_image + r_filter;
 						float pixel = image_to_convolve[current_row * IN_IMG_COLS + c_image + c_filter];
