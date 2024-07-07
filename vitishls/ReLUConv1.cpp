@@ -43,10 +43,10 @@ static float relu(float x)
 // Before moving along in the image?
 static void conv_2d(float *image, float *weights, float *biases, float *output)
 {
-	float *image_to_convolve = (float *)malloc(IN_IMG_ROWS * IN_IMG_COLS * sizeof(float));
-	float *output_buffer = (float *)malloc(OUT_IMG_ROWS * OUT_IMG_COLS * CONV1_FILTERS * sizeof(float));
-	float *weight_buffer = (float *)malloc(CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS * sizeof(float));
-	float *biases_buffer = (float *)malloc(CONV1_FILTERS * sizeof(float));
+	float image_to_convolve[IN_IMG_ROWS * IN_IMG_COLS];
+	float output_buffer[OUT_IMG_ROWS * OUT_IMG_COLS * CONV1_FILTERS];
+	float weight_buffer[CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS];
+	float biases_buffer[CONV1_FILTERS];
 
 	// Burst read entire image input (its small)
 	memcpy(image_to_convolve, (const float *)image, IN_IMG_ROWS * IN_IMG_COLS * sizeof(float));
@@ -84,12 +84,7 @@ static void conv_2d(float *image, float *weights, float *biases, float *output)
 			}
 		}
 	}
-
 	memcpy(output, (const float *)output_buffer, OUT_IMG_ROWS * OUT_IMG_COLS * CONV1_FILTERS * sizeof(float));
-	free(image_to_convolve);
-	free(output_buffer);
-	free(weight_buffer);
-	free(biases_buffer);
 }
 
 void relu_conv_2d(float *image, float *weights, float *biases, float *output)
