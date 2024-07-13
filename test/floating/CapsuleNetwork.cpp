@@ -9,6 +9,7 @@
 #include "CapsuleNetwork.h"
 
 #include <stdint.h>
+#include <time.h>
 
 #include <fstream>
 #include <iostream>
@@ -32,10 +33,15 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 	weights += CONV1_KERNEL_ROWS * CONV1_KERNEL_COLS * CONV1_FILTERS;
 	biases += CONV1_FILTERS;
 
+	clock_t t_1;
+	clock_t t_2;
+
+	t_1 = clock();
 	relu_conv_2d(image, conv_weights, conv_biases, output_conv);
+	t_2 = clock();
 	// ---------------- ReLU Convolutional 2D Layer ----------------
 
-	printf("Made out of conv2d\n");
+	printf("Conv 1: %.4fms\n", ((float)(t_2 - t_1) / CLOCKS_PER_SEC) * 1000);
 
 #if DUMP_LAYERS
 	FILE *fp;
@@ -59,10 +65,12 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 
 	weights += prim_dim;
 
+	t_1 = clock();
 	process_features(output_conv, prim_weights, prim_biases, output_prim);
+	t_2 = clock();
 	// ------------------- Primary Capsule Layer -------------------
 
-	printf("Made out of Primcaps\n");
+	printf("Primary Capsules: %.4fms\n", ((float)(t_2 - t_1) / CLOCKS_PER_SEC) * 1000);
 
 #if DUMP_LAYERS
 	fp = fopen("../dump/output_prim_caps.txt", "w");
@@ -80,8 +88,12 @@ void get_prediction(float *image, float *weights, float *biases, float *predicti
 
 	memcpy(digit_weights, (const float *)weights, digit_dim * sizeof(float));
 
+	t_1 = clock();
 	dynamic_routing(output_prim, digit_weights, prediction);
+	t_2 = clock();
 	// -------------------- Digit Capsule Layer --------------------
+
+	printf("Digit Capsules: %.4fms\n", ((float)(t_2 - t_1) / CLOCKS_PER_SEC) * 1000);
 
 #if DUMP_LAYERS
 	fp = fopen("../dump/output_digit_caps.txt", "w");
