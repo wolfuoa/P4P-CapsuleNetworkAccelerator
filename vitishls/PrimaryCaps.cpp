@@ -74,7 +74,7 @@ static void conv_2d(fixed_t *input, hls::stream<fixed_t> &weights, fixed_t *bias
     #pragma HLS BIND_STORAGE variable=output_buffer impl=auto type=ram_1wnr
 
         // PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH]
-    fixed_t weight_buffer[10368];
+    fixed_t weight_buffer[5184];
     #pragma HLS BIND_STORAGE variable=weight_buffer type=ram_1wnr impl=auto
     #pragma HLS ARRAY_RESHAPE variable=weight_buffer type=cyclic factor=81
     //    #pragma HLS ARRAY_PARTITION variable=weight_buffer factor=64 dim=1 type=block
@@ -100,8 +100,8 @@ static void conv_2d(fixed_t *input, hls::stream<fixed_t> &weights, fixed_t *bias
     {
     //    memcpy(weight_buffer, (const fixed_t *)weights + output_depth * prim_caps_kernel_dim, prim_caps_kernel_dim * sizeof(fixed_t));
     // prim_caps_kernel_dim
-        // Initially, 20736
-        conv_weights:for (uint32_t i = 0; i < 10368; ++i)
+        // Initially, 20736 - 210ms, 10368 - 183ms, 5184 - 170ms
+        conv_weights:for (uint32_t i = 0; i < 5184; ++i)
         {
             #pragma HLS PIPELINE
             weight_buffer[i] = weights.read();
@@ -281,6 +281,7 @@ static void squash(fixed_t *input, fixed_t *output)
        {
            squared_norm[grid_rows] += squared_input[grid_rows * PRIMARY_CAPS_CAPSULE_DIM + grid_cols];
        }
+       // WARNING: [SYNCHK 200-23] variable-indexed range selection may cause suboptimal QoR
        scale[grid_rows] = (squared_norm[grid_rows] / (1 + squared_norm[grid_rows])) / (fixed_t)(sqrtf(squared_norm[grid_rows] + (fixed_t)1e-07));
    }
 
