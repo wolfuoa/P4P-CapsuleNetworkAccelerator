@@ -30,20 +30,25 @@ static void sum_of_products(fixed_t *input_mat, fixed_t *coupling_terms, fixed_t
 static void squash(fixed_t *input_mat, fixed_t *squash_mat);
 static void agreement(fixed_t *input_mat, fixed_t *squashed_mat, fixed_t *output_mat);
 static void add(fixed_t *input_mat, fixed_t *coupling_terms);
+static void coalesce_partial_sums(fixed_t *input, fixed_t *output);
 // ---------------- FUNCTION DECLARATIONS ----------------
 
 void dynamic_routing(fixed_t *input, fixed_t *weights, fixed_t *prediction)
 {
 	fixed_t primary_caps[DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE];
 	fixed_t squashed_v[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
+    #pragma HLS ARRAY_PARTITION variable=squashed_v dim=1 type=complete
 
 	// burst read input into local array
 	memcpy(primary_caps, (const fixed_t *)input, DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(fixed_t));
 
 	fixed_t weighted_input_u[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
+    // #pragma HLS ARRAY_PARTITION variable=weighted_input_u dim=1 type=cyclic factor=8
+
 	fixed_t coupling_b[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
 	fixed_t coupling_c[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
 	fixed_t sum_of_products_s[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
+    // #pragma HLS ARRAY_PARTITION variable=weighted_input_u dim=1 type=cyclic factor=8
 	fixed_t output_agreement[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
 
 	apply_weights(primary_caps, weights, weighted_input_u);
@@ -71,6 +76,7 @@ void dynamic_routing(fixed_t *input, fixed_t *weights, fixed_t *prediction)
 		squash(sum_of_products_s, squashed_v);
 		if (i < DIGIT_CAPS_ROUTING_ITERATIONS - 1)
 		{
+            agreement(weighted_input_u, squashed_v, output_agreement);
 			// The initial coupling coefficients are then iteratively refined by measuring the
 			// agreement between the current outHLS stream capsule i to higher level capsules.
 			add(output_agreement, coupling_b);
@@ -103,14 +109,14 @@ static void apply_weights(fixed_t *input_mat, fixed_t *weights, fixed_t *weighte
 
 			for (uint32_t k = 0; k < DIGIT_CAPS_DIM_CAPSULE; ++k)
 			{
-                #pragma HLS PIPELINE
+                // #pragma HLS PIPELINE II=1
 				// dot product between rows of matA and cols of matB
 
                 fixed_t product = 0.0;
                 fixed_t sum = 0.0;
 
-                #pragma HLS BIND_OP variable=sum op=add
-                #pragma HLS BIND_OP variable=product op=mul
+                #pragma HLS BIND_OP variable=sum op=fadd
+                #pragma HLS BIND_OP variable=product op=fmul
 
 				uint32_t capsule_index = DIGIT_CAPS_INPUT_DIM_CAPSULE * k;
 
@@ -216,18 +222,39 @@ static void sum_of_products(fixed_t *input_mat, fixed_t *coupling_terms, fixed_t
 	// Combine into one loop?
 	for (uint32_t sum_i = 0; sum_i < DIGIT_CAPS_NUM_DIGITS; ++sum_i)
 	{
+        // #pragma HLS PIPELINE II=1
         //#pragma HLS LOOP_MERGE force
+
 		for (uint32_t sum_j = 0; sum_j < DIGIT_CAPS_DIM_CAPSULE; ++sum_j)
 		{
-			fixed_t sum = 0.0;
-			for (uint32_t sum_k = 0; sum_k < DIGIT_CAPS_INPUT_CAPSULES; sum_k = sum_k)
+            #pragma HLS PIPELINE II=1
+            
+            fixed_t partial_sums[DIGIT_CAPS_INPUT_CAPSULES] = {0.0};
+            #pragma HLS ARRAY_PARTITION variable=partial_sums type=complete
+			for (uint32_t sum_k = 0; sum_k < DIGIT_CAPS_INPUT_CAPSULES; ++sum_k)
 			{
-                #pragma HLS PIPELINE II=3
-				sum += output_mat[sum_i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + sum_j + sum_k * DIGIT_CAPS_DIM_CAPSULE];
+                // #pragma HLS UNROLL
+				partial_sums[sum_k] += output_mat[sum_i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + sum_j + sum_k * DIGIT_CAPS_DIM_CAPSULE];
 			}
+            fixed_t sum;
+            coalesce_partial_sums(partial_sums, &sum);
             output_mat[sum_i * DIGIT_CAPS_DIM_CAPSULE + sum_j] = sum;
 		}
 	}
+}
+
+static void coalesce_partial_sums(fixed_t *input, fixed_t *output)
+{
+    fixed_t result;
+	for (int i = 0; i < PRIMARY_CAPS_KERNEL_ROWS; ++i)
+	{
+        #pragma HLS DEPENDENCE variable=result type=intra direction=RAW true
+        #pragma HLS PIPELINE II=3
+
+		result += input[i];
+        #pragma HLS BIND_OP variable=result op=add impl=dsp latency=2
+	}
+    *output = result;
 }
 
 static void squash(fixed_t *input_mat, fixed_t *squash_mat)
@@ -257,8 +284,10 @@ static void squash(fixed_t *input_mat, fixed_t *squash_mat)
 
 static void agreement(fixed_t *input_mat, fixed_t *squashed_mat, fixed_t *output_mat)
 {
+    // Infer Systolic Array
 	for (int i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
 	{
+        // #pragma HLS PIPELINE II=1
 		for (int j = 0; j < DIGIT_CAPS_INPUT_CAPSULES; ++j)
 		{
 			fixed_t sum = 0.0;
