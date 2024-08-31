@@ -45,7 +45,7 @@
 #include "constants.h"
 
 #include <hls_stream.h>
-#include <ap_fixed.h>
+#include <ap_fixed.h>    #pragma HLS INLINE
 
 
 #ifndef __SYNTHESIS__
@@ -68,13 +68,13 @@ static void conv_2d(fixed_t *input, hls::stream<fixed_t> &weights, fixed_t *bias
 {
     fixed_t input_buffer[CONV1_OUTPUT_WIDTH * CONV1_OUTPUT_LENGTH * CONV1_FILTERS];
     #pragma HLS BIND_STORAGE variable=input_buffer impl=auto type=ram_1wnr
-    #pragma HLS ARRAY_PARTITION variable=input_buffer type=cyclic factor=64
+    #pragma HLS ARRAY_PARTITION variable=input_buffer type=cyclic factor=32
 
     fixed_t output_buffer[PRIMARY_CAPS_CONV_WIDTH * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
     #pragma HLS BIND_STORAGE variable=output_buffer impl=auto type=ram_1wnr
 
         // PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH]
-    fixed_t weight_buffer[5184];
+    fixed_t weight_buffer[PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH];
     #pragma HLS BIND_STORAGE variable=weight_buffer type=ram_1wnr impl=auto
     #pragma HLS ARRAY_RESHAPE variable=weight_buffer type=cyclic factor=81
     //    #pragma HLS ARRAY_PARTITION variable=weight_buffer factor=64 dim=1 type=block
@@ -101,7 +101,7 @@ static void conv_2d(fixed_t *input, hls::stream<fixed_t> &weights, fixed_t *bias
     //    memcpy(weight_buffer, (const fixed_t *)weights + output_depth * prim_caps_kernel_dim, prim_caps_kernel_dim * sizeof(fixed_t));
     // prim_caps_kernel_dim
         // Initially, 20736 - 210ms, 10368 - 183ms, 5184 - 170ms
-        conv_weights:for (uint32_t i = 0; i < 5184; ++i)
+        conv_weights:for (uint32_t i = 0; i < PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS * PRIMARY_CAPS_KERNEL_DEPTH; ++i)
         {
             #pragma HLS PIPELINE
             weight_buffer[i] = weights.read();
@@ -122,21 +122,25 @@ static void conv_2d(fixed_t *input, hls::stream<fixed_t> &weights, fixed_t *bias
 
 static inline void calculate_single_value(fixed_t *input_a, fixed_t *input_b, uint32_t output_length, uint32_t output_width, fixed_t *output)
 {
+    #pragma HLS PIPELINE II=1
     fixed_t partial_sums[PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS] = {0.0};
+    #pragma HLS ARRAY_PARTITION variable=partial_sums type=complete
     conv_kernel_depth_256:for (uint32_t kernel_depth = 0; kernel_depth < PRIMARY_CAPS_CAPSULES * PRIMARY_CAPS_CAPSULE_DIM; ++kernel_depth)
     {
-        #pragma HLS PIPELINE II=3
         uint32_t stride_index_lengthwise = output_length * PRIMARY_CAPS_STRIDE;
         uint32_t stride_index_widthwise = output_width * PRIMARY_CAPS_STRIDE;
         conv_kernel_row_9:for (uint32_t kernel_row = 0; kernel_row < PRIMARY_CAPS_KERNEL_ROWS; ++kernel_row)
         {
-            // #pragma HLS UNROLL
+            #pragma HLS UNROLL
             conv_kernel_col_9:for (uint32_t kernel_col = 0; kernel_col < PRIMARY_CAPS_KERNEL_COLS; ++kernel_col)
             {
-                // #pragma HLS UNROLL
+                #pragma HLS UNROLL
                 fixed_t operand = input_a[(kernel_depth * CONV1_OUTPUT_LENGTH * CONV1_OUTPUT_WIDTH) + ((stride_index_lengthwise + kernel_row) * CONV1_OUTPUT_WIDTH) + (stride_index_widthwise + kernel_col)];
                 fixed_t weight = input_b[(kernel_depth * PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS) + (kernel_row * PRIMARY_CAPS_KERNEL_COLS) + kernel_col];
                 partial_sums[kernel_row * PRIMARY_CAPS_KERNEL_COLS + kernel_col] += operand * weight;
+                #pragma HLS BIND_OP variable=operand op=fmul impl=dsp latency=1
+                #pragma HLS BIND_OP variable=weight op=fmul impl=dsp latency=1
+                #pragma HLS BIND_OP variable=partial_sums op=fadd impl=dsp latency=1
             }
         }
     }
@@ -298,4 +302,3 @@ static void squash(fixed_t *input, fixed_t *output)
 
    memcpy(output, (const fixed_t *)output_buffer, dim_1 * sizeof(fixed_t));
 }
-
