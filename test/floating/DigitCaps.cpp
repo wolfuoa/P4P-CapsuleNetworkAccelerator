@@ -19,6 +19,7 @@ static void sum_of_products(float *input_mat, float *coupling_terms, float *outp
 static void squash(float *input_mat, float *squash_mat);
 static void agreement(float *input_mat, float *squashed_mat, float *output_mat);
 static void add(float *input_mat, float *coupling_terms);
+static void coalesce_partial_sums(float *input, float *output);
 // ---------------- FUNCTION DECLARATIONS ----------------
 
 void dynamic_routing(float *input, float *weights, float *prediction)
@@ -86,34 +87,34 @@ static void apply_weights(float *input_mat, float *weights, float *weighted_inpu
 	uint32_t iterator_a = 0;
 	uint32_t iterator_b = 0;
 
-	uint32_t dimA1 = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE;	 // 3rd dim
-	uint32_t dimA2 = DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE;								 // 2nd dim
-
-	uint32_t dimC1 = DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_CAPSULES;  // 2nd dim
+	uint32_t weights_per_class = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE;
+	uint32_t num_outputs = DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE;
 
 	for (uint32_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; i++)
 	{
 		for (uint32_t j = 0; j < DIGIT_CAPS_INPUT_CAPSULES; j++)
 		{
 			// burst read weight array in small chunks
-			float weightsC[DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE];
+			float weight_buffer[DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE];
 
-			memcpy(weightsC, (const float *)weights + dimA1 * i + dimA2 * j, DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float));
+			memcpy(weight_buffer, (const float *)weights + weights_per_class * i + num_outputs * j, DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float));
 
 			iterator_a = DIGIT_CAPS_INPUT_DIM_CAPSULE * j;
-			iterator_b = dimC1 * i + DIGIT_CAPS_DIM_CAPSULE * j;
+			iterator_b = DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_CAPSULES * i + DIGIT_CAPS_DIM_CAPSULE * j;
 
 			for (uint32_t k = 0; k < DIGIT_CAPS_DIM_CAPSULE; ++k)
 			{
 				// dot product between rows of matA and cols of matB
 
+				float product = 0.0;
 				float sum = 0.0;
 
 				uint32_t capsule_index = DIGIT_CAPS_INPUT_DIM_CAPSULE * k;
 
+			dot_product:
 				for (uint32_t l = 0; l < DIGIT_CAPS_INPUT_DIM_CAPSULE; ++l)
 				{
-					float product = weightsC[capsule_index + l] * input_mat[iterator_a + l];
+					product = weight_buffer[capsule_index + l] * input_mat[iterator_a + l];
 
 					sum += product;
 				}
@@ -169,19 +170,30 @@ static void sum_of_products(float *input_mat, float *coupling_terms, float *outp
 		}
 	}
 
-	// Combine into one loop?
 	for (uint32_t sum_i = 0; sum_i < DIGIT_CAPS_NUM_DIGITS; ++sum_i)
 	{
 		for (uint32_t sum_j = 0; sum_j < DIGIT_CAPS_DIM_CAPSULE; ++sum_j)
 		{
-			float sum = 0.0;
+			float partial_sums[DIGIT_CAPS_INPUT_CAPSULES] = {0.0};
 			for (uint32_t sum_k = 0; sum_k < DIGIT_CAPS_INPUT_CAPSULES; ++sum_k)
 			{
-				sum += output_mat[sum_i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + sum_j + sum_k * DIGIT_CAPS_DIM_CAPSULE];
+				partial_sums[sum_k] += output_mat[sum_i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + sum_j + sum_k * DIGIT_CAPS_DIM_CAPSULE];
 			}
+			float sum;
+			coalesce_partial_sums(partial_sums, &sum);
 			output_mat[sum_i * DIGIT_CAPS_DIM_CAPSULE + sum_j] = sum;
 		}
 	}
+}
+
+static void coalesce_partial_sums(float *input, float *output)
+{
+	float result = 0.0;
+	for (int i = 0; i < DIGIT_CAPS_INPUT_CAPSULES; ++i)
+	{
+		result += input[i];
+	}
+	*output = result;
 }
 
 static void squash(float *input_mat, float *squash_mat)

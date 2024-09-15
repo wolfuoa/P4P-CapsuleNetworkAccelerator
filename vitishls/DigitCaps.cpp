@@ -12,34 +12,44 @@
 #include <string.h>
 
 #include "constants.h"
+#include <ap_fixed.h>
 
 #ifndef __SYNTHESIS__
 #include <math.h>
 #else
 #include <hls_math.h>
 #endif
+// ------------------- PRIVATE TYPEDEF -------------------
+typedef ap_fixed<32, 16> fixed_t;
+// ------------------- PRIVATE TYPEDEF -------------------
+
 // ---------------- FUNCTION DECLARATIONS ----------------
-static void apply_weights(float *input_mat, float *weights, float *weighted_input);
-static void softmax(float *mat_b, float *mat_c);
-static void sum_of_products(float *input_mat, float *coupling_terms, float *output_mat);
-static void squash(float *input_mat, float *squash_mat);
-static void agreement(float *input_mat, float *squashed_mat, float *output_mat);
-static void add(float *input_mat, float *coupling_terms);
+static void apply_weights(fixed_t *input_mat, fixed_t *weights, fixed_t *weighted_input);
+static void softmax(fixed_t *mat_b, fixed_t *mat_c);
+static void sum_of_products(fixed_t *input_mat, fixed_t *coupling_terms, fixed_t *output_mat);
+static void squash(fixed_t *input_mat, fixed_t *squash_mat);
+static void agreement(fixed_t *input_mat, fixed_t *squashed_mat, fixed_t *output_mat);
+static void add(fixed_t *input_mat, fixed_t *coupling_terms);
+static void coalesce_partial_sums(fixed_t *input, fixed_t *output);
 // ---------------- FUNCTION DECLARATIONS ----------------
 
-void dynamic_routing(float *input, float *weights, float *prediction)
+void dynamic_routing(fixed_t *input, fixed_t *weights, fixed_t *prediction)
 {
-	float primary_caps[DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE];
-	float squashed_v[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
+	fixed_t primary_caps[DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE];
+	fixed_t squashed_v[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
+    #pragma HLS ARRAY_PARTITION variable=squashed_v dim=1 type=complete
 
 	// burst read input into local array
-	memcpy(primary_caps, (const float *)input, DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float));
+	memcpy(primary_caps, (const fixed_t *)input, DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(fixed_t));
 
-	float weighted_input_u[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
-	float coupling_b[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
-	float coupling_c[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
-	float sum_of_products_s[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
-	float output_agreement[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
+	fixed_t weighted_input_u[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
+    // #pragma HLS ARRAY_PARTITION variable=weighted_input_u dim=1 type=cyclic factor=8
+
+	fixed_t coupling_b[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
+	fixed_t coupling_c[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
+	fixed_t sum_of_products_s[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
+    // #pragma HLS ARRAY_PARTITION variable=weighted_input_u dim=1 type=cyclic factor=8
+	fixed_t output_agreement[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
 
 	apply_weights(primary_caps, weights, weighted_input_u);
 
@@ -66,53 +76,54 @@ void dynamic_routing(float *input, float *weights, float *prediction)
 		squash(sum_of_products_s, squashed_v);
 		if (i < DIGIT_CAPS_ROUTING_ITERATIONS - 1)
 		{
+            agreement(weighted_input_u, squashed_v, output_agreement);
 			// The initial coupling coefficients are then iteratively refined by measuring the
-			// agreement between the current output vj of each capsule, j, in the layer above
-			// and the prediction uˆj|i made by capsule i. The agreement is simply the scalar
-			// product aij = vj.uˆj|i.
-			agreement(weighted_input_u, squashed_v, output_agreement);
-			// This agreement is treated as if it was a log likelihood
-			// and is added to the initial logit, bij before computing the new values for all
-			// the coupling coefficients linking capsule i to higher level capsules.
+			// agreement between the current outHLS stream capsule i to higher level capsules.
 			add(output_agreement, coupling_b);
 		}
 	}
-	memcpy(prediction, (const float *)squashed_v, DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
+	memcpy(prediction, (const fixed_t *)squashed_v, DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * sizeof(fixed_t));
 }
 
-static void apply_weights(float *input_mat, float *weights, float *weighted_input)
+static void apply_weights(fixed_t *input_mat, fixed_t *weights, fixed_t *weighted_input)
 {
 	uint32_t iterator_a = 0;
 	uint32_t iterator_b = 0;
 
-	uint32_t dimA1 = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE;	 // 3rd dim
-	uint32_t dimA2 = DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE;								 // 2nd dim
-
-	uint32_t dimC1 = DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_CAPSULES;  // 2nd dim
+	uint32_t weights_per_class = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE;
+	uint32_t num_outputs = DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE;
 
 	for (uint32_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; i++)
 	{
 		for (uint32_t j = 0; j < DIGIT_CAPS_INPUT_CAPSULES; j++)
 		{
+            #pragma HLS PIPELINE II=8
 			// burst read weight array in small chunks
-			float weightsC[DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE];
+			fixed_t weight_buffer[DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE];
+            #pragma HLS ARRAY_PARTITION variable=weight_buffer dim=1 type=complete
 
-			memcpy(weightsC, (const float *)weights + dimA1 * i + dimA2 * j, DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float));
+			memcpy(weight_buffer, (const fixed_t *)weights + weights_per_class * i + num_outputs * j, DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(fixed_t));
 
 			iterator_a = DIGIT_CAPS_INPUT_DIM_CAPSULE * j;
-			iterator_b = dimC1 * i + DIGIT_CAPS_DIM_CAPSULE * j;
+			iterator_b = DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_CAPSULES * i + DIGIT_CAPS_DIM_CAPSULE * j;
 
 			for (uint32_t k = 0; k < DIGIT_CAPS_DIM_CAPSULE; ++k)
 			{
+                // #pragma HLS PIPELINE II=1
 				// dot product between rows of matA and cols of matB
 
-				float sum = 0.0;
+                fixed_t product = 0.0;
+                fixed_t sum = 0.0;
+
+                #pragma HLS BIND_OP variable=sum op=fadd
+                #pragma HLS BIND_OP variable=product op=fmul
 
 				uint32_t capsule_index = DIGIT_CAPS_INPUT_DIM_CAPSULE * k;
 
-				for (uint32_t l = 0; l < DIGIT_CAPS_INPUT_DIM_CAPSULE; ++l)
+				dot_product:for (uint32_t l = 0; l < DIGIT_CAPS_INPUT_DIM_CAPSULE; ++l)
 				{
-					float product = weightsC[capsule_index + l] * input_mat[iterator_a + l];
+                    #pragma HLS UNROLL
+					product = weight_buffer[capsule_index + l] * input_mat[iterator_a + l];
 
 					sum += product;
 				}
@@ -121,20 +132,60 @@ static void apply_weights(float *input_mat, float *weights, float *weighted_inpu
 			}
 		}
 	}
+
+// for (uint32_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; i++)
+// 	{
+// 		for (uint32_t j = 0; j < DIGIT_CAPS_INPUT_CAPSULES; j++)
+// 		{
+// 			// burst read weight array in small chunks
+// 			fixed_t weight_buffer[DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE];
+//             #pragma HLS ARRAY_PARTITION variable=weight_buffer factor=8 dim=1 type=cyclic
+
+// 			memcpy(weight_buffer, (const fixed_t *)weights + weights_per_class * i + num_outputs * j, DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(fixed_t));
+
+// 			iterator_a = DIGIT_CAPS_INPUT_DIM_CAPSULE * j;
+// 			iterator_b = DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_CAPSULES * i + DIGIT_CAPS_DIM_CAPSULE * j;
+
+// 			for (uint32_t k = 0; k < DIGIT_CAPS_DIM_CAPSULE; ++k)
+// 			{
+// 				// dot product between rows of matA and cols of matB
+//                 fixed_t a[DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE];
+//                 #pragma HLS ARRAY_PARTITION variable=a dim=1 type=complete
+
+//                 fixed_t product = 0.0;
+//                 #pragma HLS BIND_OP variable=product op=mul
+
+//                 for(uint8_t i = 0; i < DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE; ++i)
+//                 {
+//                     #pragma HLS PIPELINE
+//                     a[i] = input_mat[iterator_a + i];
+//                 }
+
+//                 for(uint8_t i = 0; i < DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE; ++i)
+//                 {
+//                     #pragma HLS UNROLL
+//                     product += weight_buffer[i] * a[i];
+//                 }
+
+// 				weighted_input[iterator_b + k] = product;
+// 			}
+// 		}
+// 	}
+
 }
 
-static void softmax(float *mat_b, float *mat_c)
+static void softmax(fixed_t *mat_b, fixed_t *mat_c)
 {
 	// For all input capsules i in layer l
 	for (uint32_t i = 0; i < DIGIT_CAPS_INPUT_CAPSULES; ++i)
 	{
 		// Compute the exponential sum of log prior probability logits
 		// $sum_{k}^{DIGITS} exp(b(i,k))
-		float sum = 0.0;
+		fixed_t sum = 0.0;
 		// For all possible routings
 		for (uint32_t j = 0; j < DIGIT_CAPS_NUM_DIGITS; ++j)
 		{
-			float entry = exp(mat_b[i + j * DIGIT_CAPS_INPUT_CAPSULES]);
+			fixed_t entry = exp(mat_b[i + j * DIGIT_CAPS_INPUT_CAPSULES]);
 			// c (i,j) = sum(exp(probability that capsule goes to each digit))
 			// Store the numerator temporarily
 			mat_c[i + j * DIGIT_CAPS_INPUT_CAPSULES] = entry;
@@ -145,12 +196,12 @@ static void softmax(float *mat_b, float *mat_c)
 		for (uint32_t j = 0; j < DIGIT_CAPS_NUM_DIGITS; ++j)
 		{
 			// Divide the numerator by the denominator
-			mat_c[i + j * DIGIT_CAPS_INPUT_CAPSULES] /= (sum + 1e-7);
+			mat_c[i + j * DIGIT_CAPS_INPUT_CAPSULES] /= (sum + (fixed_t)1e-7);
 		}
 	}
 }
 
-static void sum_of_products(float *input_mat, float *coupling_terms, float *output_mat)
+static void sum_of_products(fixed_t *input_mat, fixed_t *coupling_terms, fixed_t *output_mat)
 {
 	// For all capsules j in layer (l + 1)
 	for (uint32_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
@@ -158,7 +209,7 @@ static void sum_of_products(float *input_mat, float *coupling_terms, float *outp
 		// For all capsules i in layer l
 		for (uint32_t j = 0; j < DIGIT_CAPS_INPUT_CAPSULES; ++j)
 		{
-			float operand = coupling_terms[i * DIGIT_CAPS_INPUT_CAPSULES + j];
+			fixed_t operand = coupling_terms[i * DIGIT_CAPS_INPUT_CAPSULES + j];
 			uint32_t lin_index = (i * DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_CAPSULES) + (j * DIGIT_CAPS_DIM_CAPSULE);
 			// For all capsule output dimensions
 			for (uint32_t k = 0; k < DIGIT_CAPS_DIM_CAPSULE; ++k)
@@ -171,24 +222,48 @@ static void sum_of_products(float *input_mat, float *coupling_terms, float *outp
 	// Combine into one loop?
 	for (uint32_t sum_i = 0; sum_i < DIGIT_CAPS_NUM_DIGITS; ++sum_i)
 	{
+        // #pragma HLS PIPELINE II=1
+        //#pragma HLS LOOP_MERGE force
+
 		for (uint32_t sum_j = 0; sum_j < DIGIT_CAPS_DIM_CAPSULE; ++sum_j)
 		{
-			float sum = 0.0;
+            #pragma HLS PIPELINE II=1
+            
+            fixed_t partial_sums[DIGIT_CAPS_INPUT_CAPSULES] = {0.0};
+            #pragma HLS ARRAY_PARTITION variable=partial_sums type=complete
 			for (uint32_t sum_k = 0; sum_k < DIGIT_CAPS_INPUT_CAPSULES; ++sum_k)
 			{
-				sum += output_mat[sum_i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + sum_j + sum_k * DIGIT_CAPS_DIM_CAPSULE];
+                // #pragma HLS UNROLL
+				partial_sums[sum_k] += output_mat[sum_i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + sum_j + sum_k * DIGIT_CAPS_DIM_CAPSULE];
 			}
-			output_mat[sum_i * DIGIT_CAPS_DIM_CAPSULE + sum_j] = sum;
+            fixed_t sum;
+            coalesce_partial_sums(partial_sums, &sum);
+            output_mat[sum_i * DIGIT_CAPS_DIM_CAPSULE + sum_j] = sum;
 		}
 	}
 }
 
-static void squash(float *input_mat, float *squash_mat)
+static void coalesce_partial_sums(fixed_t *input, fixed_t *output)
 {
-	float squared_norm = 0.0;
-	float scale = 0.0;
+    fixed_t result;
+	for (int i = 0; i < PRIMARY_CAPS_KERNEL_ROWS; ++i)
+	{
+        #pragma HLS DEPENDENCE variable=result type=intra direction=RAW true
+        #pragma HLS PIPELINE II=3
+
+		result += input[i];
+        #pragma HLS BIND_OP variable=result op=add impl=dsp latency=2
+	}
+    *output = result;
+}
+
+static void squash(fixed_t *input_mat, fixed_t *squash_mat)
+{
+	fixed_t squared_norm = 0.0;
+	fixed_t scale = 0.0;
 
 	// For all capsule j in layer l + 1
+    #pragma HLS loop_merge force
 	for (uint32_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
 	{
 		squared_norm = 0.0;
@@ -198,7 +273,7 @@ static void squash(float *input_mat, float *squash_mat)
 			squared_norm += input_mat[i * DIGIT_CAPS_DIM_CAPSULE + dim] * input_mat[i * DIGIT_CAPS_DIM_CAPSULE + dim];
 		}
 
-		scale = squared_norm / (1.0 + squared_norm) / sqrt(squared_norm + 1e-7);
+		scale = squared_norm / ((fixed_t)1.0 + squared_norm) / (fixed_t)sqrt(squared_norm + (fixed_t)1e-7);
 
 		for (uint32_t dim = 0; dim < DIGIT_CAPS_DIM_CAPSULE; ++dim)
 		{
@@ -207,13 +282,15 @@ static void squash(float *input_mat, float *squash_mat)
 	}
 }
 
-static void agreement(float *input_mat, float *squashed_mat, float *output_mat)
+static void agreement(fixed_t *input_mat, fixed_t *squashed_mat, fixed_t *output_mat)
 {
+    // Infer Systolic Array
 	for (int i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
 	{
+        // #pragma HLS PIPELINE II=1
 		for (int j = 0; j < DIGIT_CAPS_INPUT_CAPSULES; ++j)
 		{
-			float sum = 0.0;
+			fixed_t sum = 0.0;
 			for (int k = 0; k < DIGIT_CAPS_DIM_CAPSULE; ++k)
 			{
 				sum += input_mat[i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + j * DIGIT_CAPS_DIM_CAPSULE + k] * squashed_mat[i * DIGIT_CAPS_DIM_CAPSULE + k];
@@ -223,10 +300,11 @@ static void agreement(float *input_mat, float *squashed_mat, float *output_mat)
 	}
 }
 
-static void add(float *input_mat, float *coupling_terms)
+static void add(fixed_t *input_mat, fixed_t *coupling_terms)
 {
 	for (int i = 0; i < DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES; ++i)
 	{
+        #pragma HLS PIPELINE II=2
 		// Update coupling terms
 		coupling_terms[i] += input_mat[i];
 	}

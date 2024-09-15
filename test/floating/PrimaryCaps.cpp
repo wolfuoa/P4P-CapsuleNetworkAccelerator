@@ -43,6 +43,7 @@
 static void conv_2d(float *input, float *weights, float *biases, float *output);
 static void reshape(float *input, float *output);
 static void squash(float *input, float *output);
+static void coalesce_partial_sums(float *input, float *output);
 
 static void conv_2d(float *input, float *weights, float *biases, float *output)
 {
@@ -71,7 +72,8 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 		{
 			for (uint32_t output_width = 0; output_width < PRIMARY_CAPS_CONV_WIDTH; ++output_width)
 			{
-				float sum = 0.0;
+				float partial_sums[PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS] = {0};
+
 				for (uint32_t kernel_depth = 0; kernel_depth < PRIMARY_CAPS_CAPSULES * PRIMARY_CAPS_CAPSULE_DIM; ++kernel_depth)
 				{
 					uint32_t stride_index_lengthwise = output_length * PRIMARY_CAPS_STRIDE;
@@ -83,12 +85,13 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 						{
 							float operand = input_buffer[(kernel_depth * CONV1_OUTPUT_LENGTH * CONV1_OUTPUT_WIDTH) + ((stride_index_lengthwise + kernel_row) * CONV1_OUTPUT_WIDTH) + (stride_index_widthwise + kernel_col)];
 							float weight = weight_buffer[(kernel_depth * PRIMARY_CAPS_KERNEL_ROWS * PRIMARY_CAPS_KERNEL_COLS) + (kernel_row * PRIMARY_CAPS_KERNEL_COLS) + kernel_col];
-							sum += operand * weight;
+							partial_sums[kernel_row * PRIMARY_CAPS_KERNEL_COLS + kernel_col] += operand * weight;
 						}
 					}
 				}
-				sum += biases_buffer[output_depth];
-				output_buffer[(output_depth * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH) + (output_length * PRIMARY_CAPS_CONV_WIDTH) + output_width] = sum;
+				float sum = 0.0;
+				coalesce_partial_sums(partial_sums, &sum);
+				output_buffer[(output_depth * PRIMARY_CAPS_CONV_LENGTH * PRIMARY_CAPS_CONV_WIDTH) + (output_length * PRIMARY_CAPS_CONV_WIDTH) + output_width] = biases_buffer[output_depth] + sum;
 			}
 		}
 	}
@@ -98,6 +101,19 @@ static void conv_2d(float *input, float *weights, float *biases, float *output)
 	free(output_buffer);
 	free(weight_buffer);
 	free(biases_buffer);
+}
+
+static void coalesce_partial_sums(float *input, float *output)
+{
+	float result = 0.0;
+	for (int i = 0; i < PRIMARY_CAPS_KERNEL_ROWS; ++i)
+	{
+		for (int j = 0; j < PRIMARY_CAPS_KERNEL_COLS; ++j)
+		{
+			result += input[i * PRIMARY_CAPS_KERNEL_COLS + j];
+		}
+	}
+	*output = result;
 }
 
 // @brief process_features Process the output 20x20x256 tensor from the convolutional layer
