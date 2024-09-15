@@ -94,10 +94,8 @@ static void apply_weights(float *input_mat, float *weights, float *weighted_inpu
 	{
 		for (uint32_t j = 0; j < DIGIT_CAPS_INPUT_CAPSULES; j++)
 		{
-#pragma HLS PIPELINE II = 8
 			// burst read weight array in small chunks
 			float weight_buffer[DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE];
-#pragma HLS ARRAY_PARTITION variable = weight_buffer dim = 1 type = complete
 
 			memcpy(weight_buffer, (const float *)weights + weights_per_class * i + num_outputs * j, DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float));
 
@@ -106,21 +104,16 @@ static void apply_weights(float *input_mat, float *weights, float *weighted_inpu
 
 			for (uint32_t k = 0; k < DIGIT_CAPS_DIM_CAPSULE; ++k)
 			{
-				// #pragma HLS PIPELINE II=1
 				// dot product between rows of matA and cols of matB
 
 				float product = 0.0;
 				float sum = 0.0;
-
-#pragma HLS BIND_OP variable = sum op = fadd
-#pragma HLS BIND_OP variable = product op = fmul
 
 				uint32_t capsule_index = DIGIT_CAPS_INPUT_DIM_CAPSULE * k;
 
 			dot_product:
 				for (uint32_t l = 0; l < DIGIT_CAPS_INPUT_DIM_CAPSULE; ++l)
 				{
-#pragma HLS UNROLL
 					product = weight_buffer[capsule_index + l] * input_mat[iterator_a + l];
 
 					sum += product;
@@ -177,21 +170,13 @@ static void sum_of_products(float *input_mat, float *coupling_terms, float *outp
 		}
 	}
 
-	// Combine into one loop?
 	for (uint32_t sum_i = 0; sum_i < DIGIT_CAPS_NUM_DIGITS; ++sum_i)
 	{
-		// #pragma HLS PIPELINE II=1
-		// #pragma HLS LOOP_MERGE force
-
 		for (uint32_t sum_j = 0; sum_j < DIGIT_CAPS_DIM_CAPSULE; ++sum_j)
 		{
-#pragma HLS PIPELINE II = 1
-
 			float partial_sums[DIGIT_CAPS_INPUT_CAPSULES] = {0.0};
-#pragma HLS ARRAY_PARTITION variable = partial_sums type = complete
 			for (uint32_t sum_k = 0; sum_k < DIGIT_CAPS_INPUT_CAPSULES; ++sum_k)
 			{
-				// #pragma HLS UNROLL
 				partial_sums[sum_k] += output_mat[sum_i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + sum_j + sum_k * DIGIT_CAPS_DIM_CAPSULE];
 			}
 			float sum;
@@ -206,11 +191,7 @@ static void coalesce_partial_sums(float *input, float *output)
 	float result = 0.0;
 	for (int i = 0; i < DIGIT_CAPS_INPUT_CAPSULES; ++i)
 	{
-#pragma HLS DEPENDENCE variable = result type = intra direction = RAW true
-#pragma HLS PIPELINE II = 3
-
 		result += input[i];
-#pragma HLS BIND_OP variable = result op = add impl = dsp latency = 2
 	}
 	*output = result;
 }
