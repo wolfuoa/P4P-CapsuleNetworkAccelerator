@@ -1,0 +1,24 @@
+From 4cf01288a3103b45f68f6e6016ebb055078069db Mon Sep 17 00:00:00 2001
+From: OpenEmbedded <oe.patch@oe>
+Date: Thu, 28 Apr 2022 18:34:48 +0800
+Subject: [PATCH] add_dpu_compatibale with dpuczdx8g-4.0
+
+---
+ drivers/misc/xlnx_dpu.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/misc/xlnx_dpu.c b/drivers/misc/xlnx_dpu.c
+index 5c6cacffb888..75ffb63db3cb 100644
+--- a/drivers/misc/xlnx_dpu.c
++++ b/drivers/misc/xlnx_dpu.c
+@@ -915,6 +915,7 @@ static int xlnx_dpu_remove(struct platform_device *pdev)
+ 
+ static const struct of_device_id dpu_of_match[] = {
+ 	{ .compatible = "xlnx,dpuczdx8g-3.4" },
++	{ .compatible = "xlnx,dpuczdx8g-4.0" },
+ 	{ /* end of table */ }
+ };
+ MODULE_DEVICE_TABLE(of, dpu_of_match);
+-- 
+2.17.1
+

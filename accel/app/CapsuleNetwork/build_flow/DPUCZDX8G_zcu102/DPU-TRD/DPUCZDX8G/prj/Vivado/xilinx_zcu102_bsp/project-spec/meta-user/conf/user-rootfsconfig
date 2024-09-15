@@ -1,0 +1,13 @@
+#Note: Mention Each package in individual line
+#These packages will get added into rootfs menu entry
+
+CONFIG_gpio-demo
+CONFIG_peekpoke
+CONFIG_dpu-sw-optimize
+CONFIG_vitis-ai-library
+CONFIG_vitis-ai-library-dev
+CONFIG_vitis-ai-library-dbg
+CONFIG_resnet50
+CONFIG_tree
+CONFIG_opencv-staticdev
+CONFIG_cmake

@@ -155,3 +155,4 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+._.DS_Store
