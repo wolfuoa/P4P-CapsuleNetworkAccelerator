@@ -41,7 +41,7 @@ $CXX -O2 -w\
   -I/opt/xilinx/xrt/include/ \
   -o ./bin/$name \
   -std=c++17 \
-  src/CapsuleNetwork.cpp \
+  src/capsule_network.cpp \
   src/common.cpp \
   -L/opt/xilinx/xrt/lib \
   -luuid \
