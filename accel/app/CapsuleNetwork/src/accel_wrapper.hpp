@@ -26,7 +26,7 @@
 #include "xrt/xrt_device.h"
 #include "xrt/xrt_kernel.h"
 
-typedef struct AcceleratorHandle_t
+typedef struct DigitcapsAcceleratorType_t
 {
 	xrt::kernel kernel;
 	xrt::device device;
@@ -37,7 +37,7 @@ typedef struct AcceleratorHandle_t
 	void *input_m;
 	void *weights_m;
 	void *prediction_m;
-} AcceleratorHandle;
+} DigitcapsAcceleratorType;
 
 static std::vector<std::string> get_xclbins_in_dir(std::string path)
 {
@@ -62,46 +62,41 @@ static std::vector<std::string> get_xclbins_in_dir(std::string path)
 	return xclbinPaths;
 }
 
-int run_digitcaps_accelerator(
-	AcceleratorHandle *accelerator, unsigned char *in_image_data,
-	int img_ht, int img_wt, int out_ht, int out_wt, uint64_t dpu_input_buf_addr, int no_zcpy)
+int run_digitcaps_accelerator(DigitcapsAcceleratorType *a, float *input_volume, uint64_t dpu_input_buf_addr, int no_zcpy)
 {
 	// Input size to transfer
-	const int imageToDevice_size = img_wt * img_ht * 3 * sizeof(char);
-	// Copy to input BO
+	const int volume_size = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE;
 
-	std::memcpy(accelerator->input_m, in_image_data, imageToDevice_size);
+	// Copy to input buffer
+	std::memcpy(a->input_m, input_volume, volume_size);
 
-	// Send the input imageToDevice data to the device memory
-	accelerator->input.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_TO_DEVICE, imageToDevice_size, 0);
+	// Send the input volume data to the device memory
+	a->input.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_TO_DEVICE, volume_size, 0);
 
 	// Invoke accelerator
 	if (!no_zcpy)
-		accelerator->runner(accelerator->input, accelerator->dummy1, accelerator->dummy2, dpu_input_buf_addr, accelerator->params, img_wt, img_ht, img_wt, out_wt, out_ht, out_wt, out_ht, out_wt, 0, 0);
+		a->runner(a->input, a->weights, dpu_input_buf_addr);
 	else
-		accelerator->runner(accelerator->input, accelerator->dummy1, accelerator->dummy2, accelerator->output, accelerator->params, img_wt, img_ht, img_wt, out_wt, out_ht, out_wt, out_ht, out_wt, 0, 0);
+		a->runner(a->input, a->weights, a->output);
 
-	//// Wait for execution to finish
-	accelerator->runner.wait();
+	// Wait for accelerator to finish processing
+	a->runner.wait();
 
 	if (no_zcpy)
 	{
 		// Copy the output data from device to host memory
-		const int output_size = out_ht * out_wt * 3 * sizeof(char);
-		int8_t *out_data = (int8_t *)dpu_input_buf_addr;
-		accelerator->output.sync(
-			xclBOSyncDirection::XCL_BO_SYNC_BO_FROM_DEVICE);
+		const int prediction_size = DIGIT_CAPS_NUM_DIGITS * sizeof(float);
+		float *prediction_data = (float *)dpu_input_buf_addr;
+		a->output.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_FROM_DEVICE);
 		// Copy to output buffer
-		std::memcpy(out_data, accelerator->output_m, output_size);
+		std::memcpy(prediction_data, a->output_m, prediction_size);
 	}
 
+	// Return success
 	return 0;
 }
 
-AcceleratorHandle *
-init_digitcaps_accelerator(
-	float *weights_array, int no_zcpy)
-
+DigitcapsAcceleratorType *init_digitcaps_accelerator(float *weights_array, int no_zcpy)
 {
 	// get xclbin dir path and acquire handle
 	const char *xclbinPath = std::getenv("XLNX_VART_FIRMWARE");
@@ -160,7 +155,7 @@ init_digitcaps_accelerator(
 	// Send the weight data to device memory
 	weights.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_TO_DEVICE);
 
-	auto accel_handle = new AcceleratorHandle();
+	auto a = new DigitcapsAcceleratorType();
 
 	if (no_zcpy)
 	{
@@ -172,18 +167,18 @@ init_digitcaps_accelerator(
 		if (prediction_m == nullptr)
 			throw std::runtime_error("[ERRR] Prediction pointer is invalid\n");
 
-		accel_handle->prediction = std::move(prediction);
-		accel_handle->prediction_m = prediction_m;
+		a->prediction = std::move(prediction);
+		a->prediction_m = prediction_m;
 	}
 
-	accel_handle->kernel = std::move(preproc_accelerator);
-	accel_handle->device = std::move(device);
-	accel_handle->runner = std::move(runner);
-	accel_handle->input = std::move(input);
-	accel_handle->weights = std::move(weights);
-	accel_handle->input_m = input_m;
-	accel_handle->weights_m = weights_m;
+	a->kernel = std::move(digitcaps_accelerator);
+	a->device = std::move(device);
+	a->runner = std::move(runner);
+	a->input = std::move(input);
+	a->weights = std::move(weights);
+	a->input_m = input_m;
+	a->weights_m = weights_m;
 
-	// Return accelerator handle
-	return accel_handle;
+	// Return accelerator
+	return a;
 }
