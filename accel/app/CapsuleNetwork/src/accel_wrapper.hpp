@@ -21,6 +21,7 @@
 #include <numeric>
 #include <vector>
 
+#include "constants.h"
 #include "xrt/xrt_bo.h"
 #include "xrt/xrt_device.h"
 #include "xrt/xrt_kernel.h"
@@ -34,8 +35,8 @@ typedef struct AcceleratorHandle_t
 	xrt::bo weights;
 	xrt::bo prediction;
 	void *input_m;
-	void *weights;
-	void *prediction;
+	void *weights_m;
+	void *prediction_m;
 } AcceleratorHandle;
 
 static std::vector<std::string> get_xclbins_in_dir(std::string path)
@@ -61,7 +62,7 @@ static std::vector<std::string> get_xclbins_in_dir(std::string path)
 	return xclbinPaths;
 }
 
-int preprocess(
+int run_digitcaps_accelerator(
 	AcceleratorHandle *accelerator, unsigned char *in_image_data,
 	int img_ht, int img_wt, int out_ht, int out_wt, uint64_t dpu_input_buf_addr, int no_zcpy)
 {
@@ -98,8 +99,8 @@ int preprocess(
 }
 
 AcceleratorHandle *
-pp_kernel_init(
-	float *mean, float input_scale, int out_ht, int out_wt, int no_zcpy)
+init_digitcaps_accelerator(
+	float *weights_array, int no_zcpy)
 
 {
 	// get xclbin dir path and acquire handle
@@ -135,10 +136,10 @@ pp_kernel_init(
 
 	auto input_mem_grp = digitcaps_accelerator.group_id(0);
 	auto weights_mem_grp = digitcaps_accelerator.group_id(1);
-	auto output_mem_grp = digitcaps_accelerator.group_id(2);
+	auto prediction_mem_grp = digitcaps_accelerator.group_id(2);
 
 	// Create memory for input volume
-	const int input_size = 9216 * sizeof(float);
+	const int input_size = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float);
 
 	auto input = xrt::bo(device, input_size, input_mem_grp);
 
@@ -147,65 +148,41 @@ pp_kernel_init(
 		throw std::runtime_error("[ERRR] Input pointer is invalid\n");
 
 	// Create memory for weights
-	const int weights_size = 1474560 * sizeof(float);
+	const int weights_size = DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(float);
 
 	auto weights = xrt::bo(device, weights_size, weights_mem_grp);
 	void *weights_m = weights.map();
 	if (weights_m == nullptr)
 		throw std::runtime_error("[ERRR] Weights pointer is invalid\n");
 
-	float params_local[6];
-	// # Mean params
-	params_local[0] = mean[0];
-	params_local[1] = mean[1];
-	params_local[2] = mean[2];
-	// # Input scale
-	params_local[3] = params_local[4] = params_local[5] = input_scale;
-	// # Set to default zero
-	//  params_local[6] = params_local[7] = params_local[8] = 0.0;
+	// Copy weights into device
+	std::memcpy(weights_m, weights_array, weights_size);
+	// Send the weight data to device memory
+	weights.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_TO_DEVICE);
 
-	// Copy to params BO
-	std::memcpy(params_m, params_local, params_size);
-	// Send the params data to device memory
-	params.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_TO_DEVICE);
-
-	float xx = 1;
-	float *yy = &xx;
-
-	std::memcpy(dummy1_m, yy, sizeof(float));
-	std::memcpy(dummy2_m, yy, sizeof(float));
-
-	dummy1.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_TO_DEVICE, sizeof(float), 0);
-	dummy2.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_TO_DEVICE, sizeof(float), 0);
-
-	// Return accelerator handle
 	auto accel_handle = new AcceleratorHandle();
 
 	if (no_zcpy)
 	{
-		// Create memory for output image
-		const int out_image_size = out_ht * out_wt * 3 * sizeof(char);
+		// Create memory for output vector
+		const int prediction_size = DIGIT_CAPS_NUM_DIGITS * sizeof(float);
 
-		auto output = xrt::bo(device, out_image_size, output_mem_grp);
-		void *output_m = output.map();
-		if (output_m == nullptr)
-			throw std::runtime_error("[ERRR] Output pointer is invalid\n");
+		auto prediction = xrt::bo(device, prediction, prediction_mem_grp);
+		void *prediction_m = prediction.map();
+		if (prediction_m == nullptr)
+			throw std::runtime_error("[ERRR] Prediction pointer is invalid\n");
 
-		accel_handle->output = std::move(output);
-		accel_handle->output_m = output_m;
+		accel_handle->prediction = std::move(prediction);
+		accel_handle->prediction_m = prediction_m;
 	}
 
 	accel_handle->kernel = std::move(preproc_accelerator);
 	accel_handle->device = std::move(device);
 	accel_handle->runner = std::move(runner);
 	accel_handle->input = std::move(input);
-	accel_handle->dummy1 = std::move(dummy1);
-	accel_handle->dummy2 = std::move(dummy2);
-	accel_handle->params = std::move(params);
+	accel_handle->weights = std::move(weights);
 	accel_handle->input_m = input_m;
-	accel_handle->dummy1_m = dummy1_m;
-	accel_handle->dummy2_m = dummy2_m;
-	accel_handle->params_m = params_m;
+	accel_handle->weights_m = weights_m;
 
 	// Return accelerator handle
 	return accel_handle;
