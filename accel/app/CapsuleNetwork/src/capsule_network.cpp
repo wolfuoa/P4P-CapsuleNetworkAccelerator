@@ -54,6 +54,7 @@ const string wordsPath = "./";
 void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string image_path, const string label_path, int verbose);
 static void load_mnist_images(string const &image_path, uint32_t batch_size, vector<vector<float>> *images);
 static void load_mnist_labels(string const &label_path, uint32_t batch_size, vector<uint8_t> *labels);
+static void get_data(string const &file_name, uint32_t start_index, vector<float> *output);
 static void convert_to_magnitude(float *vector, float *output);
 int32_t bytes_to_int(const unsigned char *bytes);
 // ---------------------------------------------------------------
@@ -69,7 +70,7 @@ int32_t bytes_to_int(const unsigned char *bytes);
  */
 static void load_mnist_images(string const &image_path, uint32_t batch_size, vector<vector<float>> *images)
 {
-	std::ifstream img_file(image_path, std::ios::binary);
+	ifstream img_file(image_path, std::ios::binary);
 
 	// Read headers
 	unsigned char header[16];
@@ -82,14 +83,14 @@ static void load_mnist_images(string const &image_path, uint32_t batch_size, vec
 
 	if (batch_size > num_images)
 	{
-		throw std::runtime_error("Too large of a batch " + image_path);
+		throw runtime_error("Too large of a batch " + image_path);
 	}
 
 	images->resize(batch_size);
 
 	for (int i = 0; i < batch_size; ++i)
 	{
-		std::vector<uint8_t> temp_image(num_rows * num_cols);
+		vector<uint8_t> temp_image(num_rows * num_cols);
 		img_file.read(reinterpret_cast<char *>(temp_image.data()), num_rows * num_cols);
 
 		(*images)[i].resize(num_rows * num_cols);
@@ -114,7 +115,7 @@ static void load_mnist_images(string const &image_path, uint32_t batch_size, vec
  */
 static void load_mnist_labels(string const &label_path, uint32_t batch_size, vector<uint8_t> *labels)
 {
-	std::ifstream label_file(label_path, std::ios::binary);
+	ifstream label_file(label_path, std::ios::binary);
 
 	// // Read headers
 	unsigned char header[8];
@@ -124,7 +125,7 @@ static void load_mnist_labels(string const &label_path, uint32_t batch_size, vec
 
 	if (batch_size > num_labels)
 	{
-		throw std::runtime_error("Too large of a batch " + label_path);
+		throw runtime_error("Too large of a batch " + label_path);
 	}
 
 	labels->resize(batch_size);
@@ -137,6 +138,22 @@ static void load_mnist_labels(string const &label_path, uint32_t batch_size, vec
 	}
 
 	label_file.close();
+}
+
+static void get_data(string const &file_name, uint32_t start_index, vector<float> *output)
+{
+	ifstream file(file_name);
+	float entry;
+
+	output->resize(DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE * DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE);
+
+	uint32_t i = 0;
+	while (file >> entry)
+	{
+		(*output)[start_index + i++] = entry;
+	}
+	file.close();
+	return 0;
 }
 
 /**
@@ -192,10 +209,14 @@ int32_t bytes_to_int(const unsigned char *bytes)
 void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string image_path, const string label_path, int verbose)
 {
 	vector<vector<float>> images;
-	vector<int> labels;
+	vector<uint8_t> labels;
+	vector<float> weights;
 
 	// Load MNIST images and labels
-	load_mnist(baseImagePath, label_path, batch_size, &images, &labels);
+	load_mnist_images(image_path, batch_size, &images);
+	load_mnist_labels(label_path, batch_size, &labels);
+
+	// cout << (int)labels[0] << endl;
 
 	if (images.size() == 0)
 	{
@@ -251,9 +272,9 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 		std::tie(dpu_output_phy_addr[batch_idx], dpu_output_size) = output_tensor_buffers[1]->data_phy({batch_idx, 0, 0, 0});
 	}
 
-	// TODO: Implement weights grab function
+	get_data()
 
-	DigitcapsAcceleratorType *digitcaps_accelerator = nullptr;
+		DigitcapsAcceleratorType *digitcaps_accelerator = nullptr;
 	if (!digitcaps_sw_imp)
 		digitcaps_accelerator = init_digitcaps_accelerator(weights, no_zcpy);
 
@@ -367,13 +388,6 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 	delete[] softmax;
 }
 
-/**
- * @brief Entry for runing ResNet50 neural network
- *
- * @note Runner APIs prefixed with "dpu" are used to easily program &
- *       deploy ResNet50 on DPU platform.
- *
- */
 int main(int argc, char *argv[])
 {
 	if (argc < 6 || argc > 7)
@@ -383,7 +397,7 @@ int main(int argc, char *argv[])
 	}
 
 	auto graph = xir::Graph::deserialize(argv[1]);
-	string baseImagePath = argv[2];
+	string image_path = argv[2];
 	int digitcaps_sw_imp = atoi(argv[3]);
 	int no_zcpy = atoi(argv[4]);
 	auto attrs = xir::Attrs::create();
@@ -401,14 +415,12 @@ int main(int argc, char *argv[])
 	if (!no_zcpy)
 		attrs->set_attr<bool>("zero_copy", true);
 
-	CHECK_EQ(subgraph.size(), 1u)
-		<< "resnet50 should have one and only one dpu subgraph.";
 	LOG(INFO) << "create running for subgraph: " << subgraph[0]->get_name();
 
 	/*create runner*/
 	std::unique_ptr<vart::RunnerExt> runner = vart::RunnerExt::create_runner(subgraph[0], attrs.get());
 
 	/*run with batch*/
-	runCapsuleNetwork(runner.get(), subgraph[0], digitcaps_sw_imp, no_zcpy, baseImagePath, label_path, verbose);
+	runCapsuleNetwork(runner.get(), subgraph[0], digitcaps_sw_imp, no_zcpy, image_path, label_path, verbose);
 	return 0;
 }
