@@ -20,18 +20,20 @@
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>
-#include "experimental/xrt_xclbin.h"
+
 #include <cassert>
 #include <cmath>
 #include <cstdio>
+#include <filesystem>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <queue>
 #include <string>
 #include <vector>
-#include <filesystem>
+
 #include "common.h"
+#include "experimental/xrt_xclbin.h"
 #include "vart/runner.hpp"
 #include "vart/runner_ext.hpp"
 /* header file OpenCV for image processing */
@@ -43,7 +45,6 @@
 using namespace std;
 using namespace cv;
 using namespace std::chrono;
-
 
 int correct_classification = 0;
 int total_images = 0;
@@ -84,8 +85,7 @@ void ListImages(string const &path, vector<string> &images)
 		{
 			string name = entry->d_name;
 			string ext = name.substr(name.find_last_of(".") + 1);
-			if ((ext == "JPEG") || (ext == "jpeg") || (ext == "JPG") ||
-					(ext == "jpg") || (ext == "PNG") || (ext == "png"))
+			if ((ext == "txt"))
 			{
 				images.push_back(name);
 			}
@@ -103,25 +103,25 @@ void ListImages(string const &path, vector<string> &images)
  *
  * @return none
  */
-void LoadWords(string const &path, vector<string> &kinds)
-{
-	kinds.clear();
-	ifstream fkinds(path);
-	if (fkinds.fail())
-	{
-		fprintf(stderr, "Error : Open %s failed.\n", path.c_str());
-		exit(1);
-	}
-	string kind;
-	while (getline(fkinds, kind))
-	{
-		kinds.push_back(kind);
-	}
+// void LoadWords(string const &path, vector<string> &kinds)
+// {
+// 	kinds.clear();
+// 	ifstream fkinds(path);
+// 	if (fkinds.fail())
+// 	{
+// 		fprintf(stderr, "Error : Open %s failed.\n", path.c_str());
+// 		exit(1);
+// 	}
+// 	string kind;
+// 	while (getline(fkinds, kind))
+// 	{
+// 		kinds.push_back(kind);
+// 	}
 
-	fkinds.close();
-}
+// 	fkinds.close();
+// }
 
-void LoadLabels(string const &path, vector<string> &images,vector<int> &labels)
+void LoadLabels(string const &path, vector<string> &images, vector<int> &labels)
 {
 	images.clear();
 	labels.clear();
@@ -142,6 +142,17 @@ void LoadLabels(string const &path, vector<string> &images,vector<int> &labels)
 	file.close();
 }
 
+void get_data(string const &path, float *output)
+{
+	ifstream file(path);
+	float entry;
+	uint32_t i = 0;
+	while (file >> entry)
+	{
+		output[i++] = entry;
+	}
+	file.close();
+}
 
 /**
  * @brief calculate softmax
@@ -152,18 +163,18 @@ void LoadLabels(string const &path, vector<string> &images,vector<int> &labels)
  *
  * @return none
  */
-void CPUCalcSoftmax(signed char *data, size_t size, float *result, float scale)
-{
-	assert(data && result);
-	double sum = 0.0f;
-	for (size_t i = 0; i < size; i++)
-	{
-		result[i] = exp((float)data[i] * scale);
-		sum += result[i];
-	}
-	for (size_t i = 0; i < size; i++)
-		result[i] /= sum;
-}
+// void CPUCalcSoftmax(signed char *data, size_t size, float *result, float scale)
+// {
+// 	assert(data && result);
+// 	double sum = 0.0f;
+// 	for (size_t i = 0; i < size; i++)
+// 	{
+// 		result[i] = exp((float)data[i] * scale);
+// 		sum += result[i];
+// 	}
+// 	for (size_t i = 0; i < size; i++)
+// 		result[i] /= sum;
+// }
 
 /**
  * @brief Get top k results according to its probability
@@ -175,7 +186,7 @@ void CPUCalcSoftmax(signed char *data, size_t size, float *result, float scale)
  *
  * @return none
  */
-void TopK(const float *d, int size, int k, vector<string> &vkinds,vector<string> &images,vector<int> &labels,int idx,int verbose)
+void TopK(const float *d, int size, int k, vector<string> &vkinds, vector<string> &images, vector<int> &labels, int idx, int verbose)
 {
 	assert(d && size > 0 && k > 0);
 	priority_queue<pair<float, int>> q;
@@ -183,133 +194,116 @@ void TopK(const float *d, int size, int k, vector<string> &vkinds,vector<string>
 	for (auto i = 0; i < size; ++i)
 		q.push(pair<float, int>(d[i], i));
 
-	if(labels.size()!=0)
+	if (labels.size() != 0)
 	{
-		pair<float,int>most_probable = q.top();	
-		if(labels[idx] == most_probable.second)
+		pair<float, int> most_probable = q.top();
+		if (labels[idx] == most_probable.second)
 			correct_classification++;
 	}
-	if(verbose==1)
+	if (verbose == 1)
 	{
 		for (auto i = 0; i < k; ++i)
 		{
 			pair<float, int> ki = q.top();
 			printf("top[%d] prob = %-8f  name = %s\n", i, d[ki.second],
-					vkinds[ki.second].c_str());
+				   vkinds[ki.second].c_str());
 			q.pop();
 		}
 	}
 }
 
 /**
- * @brief Run DPU Task for ResNet50
+ * @brief Run DPU Task for CapsuleNetwork
  *
  * @param taskResnet50 - pointer to ResNet50 Task
  *
  * @return none
  */
-void runResnet50(vart::RunnerExt *runner, const xir::Subgraph *subgraph, int sw_pp_flag, int no_zcpy,const string baseImagePath,string label_path,int verbose)
+void runCapsuleNetwork(vart::RunnerExt *runner, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string baseImagePath, string label_path, int verbose)
 {
 	/* Mean value for ResNet50 specified in Caffe prototxt */
 	vector<string> kinds, images;
-	vector<int>labels;
+	vector<int> labels;
 
 	/* Load all image names.*/
 
-	if(label_path != "")
+	if (label_path != "")
 	{
-		LoadLabels(label_path,images,labels);
-		cout<<"Number of images in the label file is: "<<images.size()<<endl;
-		
+		LoadLabels(label_path, images, labels);
+		cout << "Number of images in the label file is: " << images.size() << endl;
+
 		if (labels.size() == 0)
 		{
 			cerr << "\nError: No labels existing under " << label_path << endl;
 			return;
 		}
-
 	}
 	else
-	{ 
+	{
 		ListImages(baseImagePath, images);
-		
-		cout<<"Number of images in the image directory is: "<<images.size()<<endl;
+
+		cout << "Number of images in the image directory is: " << images.size() << endl;
 	}
-	
+
 	if (images.size() == 0)
 	{
 		cerr << "\nError: No images existing under " << baseImagePath << endl;
 		return;
 	}
 
-	/* Load all kinds words.*/
-	LoadWords(wordsPath + "words.txt", kinds);
-	
-	if (kinds.size() == 0)
-	{
-		cerr << "\nError: No words exist in file words.txt." << endl;
-		return;
-	}
-
-	
-	float mean[3] = {104, 107, 123};
-
 	auto input_tensor_buffers = runner->get_inputs();
 	auto output_tensor_buffers = runner->get_outputs();
-	
-	CHECK_EQ(input_tensor_buffers.size(), 1u) << "only support resnet50 model";
-	CHECK_EQ(output_tensor_buffers.size(), 1u) << "only support resnet50 model";
+	CHECK_EQ(input_tensor_buffers.size(), 1u) << "only supports 1 input";
 
 	auto input_tensor = input_tensor_buffers[0]->get_tensor();
-	auto output_tensor = output_tensor_buffers[0]->get_tensor();
-
 	auto batch = input_tensor->get_shape().at(0);
-	auto height = input_tensor->get_shape().at(1);
-	auto width = input_tensor->get_shape().at(2);
-	auto channels = input_tensor->get_shape().at(3);
-	auto inSize = height * width * channels;
 
-	vector<Mat> imageList;
-	
-	int outSize;
-	
-	auto dim_num = output_tensor->get_shape().size();
-	if (dim_num == 2)
-		outSize = output_tensor->get_shape().at(1);
-	else
-		outSize = output_tensor->get_shape().at(3);
-    
+	int height = input_tensor->get_shape().at(1);
+	int width = input_tensor->get_shape().at(2);
+	auto channels = input_tensor->get_shape().at(3);
 	auto input_scale = vart::get_input_scale(input_tensor);
+	auto inSize = height * width * channels;
+	vector<Mat> imageList;
+
+	auto output_tensor = output_tensor_buffers[1]->get_tensor();
+	auto out_height = output_tensor->get_shape().at(1);
+	auto out_width = output_tensor->get_shape().at(2);
 	auto output_scale = vart::get_output_scale(output_tensor);
 
-	float *softmax = new float[outSize];
-	
-	long imread_time = 0, pre_time = 0, exec_time = 0, post_time = 0;
-
+	auto osize = out_height * out_width;
 	vector<uint64_t> dpu_input_phy_addr(batch, 0u);
-	vector<uint64_t> data_in_addr(batch, 0u);
 	uint64_t dpu_input_size = 0u;
-
+	vector<int8_t *> inptr_v;
 	auto in_dims = input_tensor->get_shape();
-	for (auto batch_idx = 0; batch_idx < batch; ++batch_idx) 
-	{
-		std::tie(data_in_addr[batch_idx], dpu_input_size) = input_tensor_buffers[0]->data({batch_idx, 0, 0, 0});
-	    std::tie(dpu_input_phy_addr[batch_idx], dpu_input_size) = input_tensor_buffers[0]->data_phy({batch_idx, 0, 0, 0});
-	}
 
-	vector<int8_t *> outptr_v;
-	auto out_dims = output_tensor->get_shape();
+	vector<uint64_t> data_in_addr(batch, 0u);
+
 	for (auto batch_idx = 0; batch_idx < batch; ++batch_idx)
 	{
-		auto idx = std::vector<int32_t>(out_dims.size());
-		idx[0] = batch_idx;
-		auto data = output_tensor_buffers[0]->data(idx);
-		int8_t *data_out = (int8_t *)data.first;
-		outptr_v.push_back(data_out);
+		std::tie(data_in_addr[batch_idx], dpu_input_size) = input_tensor_buffers[0]->data({batch_idx, 0, 0, 0});
+		std::tie(dpu_input_phy_addr[batch_idx], dpu_input_size) = input_tensor_buffers[0]->data_phy({batch_idx, 0, 0, 0});
 	}
 
-	AcceleratorHandle* preprocessor = nullptr;
-	if (!sw_pp_flag)
-		preprocessor = pp_kernel_init(mean, input_scale, height, width, no_zcpy);
+	vector<uint64_t> dpu_output_phy_addr(batch, 0u);
+	uint64_t dpu_output_size = 0u;
+	vector<int8_t *> outptr_v;
+
+	auto dims = output_tensor->get_shape();
+	for (auto batch_idx = 0; batch_idx < batch; ++batch_idx)
+	{
+		auto idx = std::vector<int32_t>(dims.size());
+		idx[0] = batch_idx;
+		auto data = output_tensor_buffers[1]->data(idx);
+		int8_t *data_out = (int8_t *)data.first;
+		outptr_v.push_back(data_out);
+		std::tie(dpu_output_phy_addr[batch_idx], dpu_output_size) = output_tensor_buffers[1]->data_phy({batch_idx, 0, 0, 0});
+	}
+
+	// TODO: Implement weights grab function
+
+	DigitcapsAcceleratorType *digitcaps_accelerator = nullptr;
+	if (!digitcaps_sw_imp)
+		digitcaps_accelerator = init_digitcaps_accelerator(weights, no_zcpy);
 
 	int count = images.size();
 
@@ -319,84 +313,48 @@ void runResnet50(vart::RunnerExt *runner, const xir::Subgraph *subgraph, int sw_
 	for (unsigned int n = 0; n < images.size(); n += batch)
 	{
 		unsigned int runSize = (images.size() < (n + batch)) ? (images.size() - n) : batch;
-		
+
 		for (unsigned int i = 0; i < runSize; i++)
 		{
 			auto t1 = std::chrono::system_clock::now();
 
-			if(labels.size() != 0&& !filesystem::exists(baseImagePath + "/" + images[n + i]))
+			if (labels.size() != 0 && !filesystem::exists(baseImagePath + "/" + images[n + i]))
 			{
-				cout<<"The image file "<<baseImagePath + "/" + images[n + i]<<" doesnot exist in the image directory "<<baseImagePath<<" (SKIPPING)"<<endl;  
-				continue;
-			} 
-			
-			Mat image = imread(baseImagePath + "/" + images[n + i]);
-			
-			if(image.rows>1080 && image.cols>1920)
-			{
-				cout<<"The image file "<<baseImagePath + "/" + images[n + i]<<" exceeds maximum resolution supported"<<" (SKIPPING)"<<endl;
+				cout << "The image file " << baseImagePath + "/" + images[n + i] << " doesnot exist in the image directory " << baseImagePath << " (SKIPPING)" << endl;
 				continue;
 			}
 
-			auto t2 = std::chrono::system_clock::now();
-			auto value_t1 = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1);
-			imread_time += value_t1.count();
+			// Mat image = imread(baseImagePath + "/" + images[n + i]);
+			float image;
+			get_data(baseImagePath + "/" + images[n + i], image);
 
-			auto pre_t1 = std::chrono::system_clock::now();
-			
-			if (!sw_pp_flag)	
+			if (!no_zcpy)
 			{
-				//# Hardware preproces
-				if(!no_zcpy)					
-					preprocess(preprocessor, image.data, image.rows, image.cols, height, width, dpu_input_phy_addr[i], no_zcpy);
-				else
-					preprocess(preprocessor, image.data, image.rows, image.cols, height, width, data_in_addr[i], no_zcpy);	
-
+				std::memcpy(dpu_input_phy_addr[i], image, IN_IMG_ROWS * IN_IMG_COLS * sizeof(float));
 			}
 			else
 			{
-				//# Software Preprocess
-				Mat image2 = cv::Mat(height, width, CV_8SC3);
-				resize(image, image2, Size(height,width), 0, 0); //, INTER_NEAREST);
+				std::memcpy(dpu_in_addr[i], image, IN_IMG_ROWS * IN_IMG_COLS * sizeof(float));
+			}
 
-				for (int h = 0; h < height; h++)
-				{
-					for (int w = 0; w < width; w++)
-					{
-						for (int c = 0; c < 3; c++)
-						{
-							float img_data = (float)image2.at<Vec3b>(h, w)[c];
-							auto var = (img_data - mean[c]) * input_scale;
-							int8_t *data_ptr = (int8_t *)data_in_addr[i];
-							data_ptr[h * width * 3 + w * 3 + c] = (signed char)var;
-						}
-					}
-				}
-			} 
-
-			auto pre_t2 = std::chrono::system_clock::now();
-			auto prevalue_t1 = std::chrono::duration_cast<std::chrono::microseconds>(pre_t2 - pre_t1);
-			pre_time += prevalue_t1.count();
 			imageList.push_back(image);
 		}
 
 		total_images += imageList.size();
 		auto exec_t1 = std::chrono::system_clock::now();
 
-		if (no_zcpy) 
+		if (no_zcpy)
 			for (auto &input : input_tensor_buffers)
 				input->sync_for_write(0, input->get_tensor()->get_data_size() /
-						input->get_tensor()->get_shape()[0]);
+											 input->get_tensor()->get_shape()[0]);
 
-				
 		/*run*/
 		auto job_id = runner->execute_async(input_tensor_buffers, output_tensor_buffers);
 		runner->wait(job_id.first, -1);
 
 		for (auto output : output_tensor_buffers)
 			output->sync_for_read(0, output->get_tensor()->get_data_size() /
-					output->get_tensor()->get_shape()[0]);
-		
+										 output->get_tensor()->get_shape()[0]);
 
 		auto exec_t2 = std::chrono::system_clock::now();
 		auto execvalue_t1 = std::chrono::duration_cast<std::chrono::microseconds>(exec_t2 - exec_t1);
@@ -407,11 +365,11 @@ void runResnet50(vart::RunnerExt *runner, const xir::Subgraph *subgraph, int sw_
 			/* Calculate softmax on CPU and display TOP-5 classification results */
 			CPUCalcSoftmax(outptr_v[i], outSize, softmax, output_scale);
 
-			TopK(softmax, outSize, 5, kinds,images,labels,n+i,verbose);
+			TopK(softmax, outSize, 5, kinds, images, labels, n + i, verbose);
 
 			/* Display the impage */
-			//cv::imshow("Classification of ResNet50", imageList[i]);
-			//cv::waitKey(10000);
+			// cv::imshow("Classification of ResNet50", imageList[i]);
+			// cv::waitKey(10000);
 		}
 		auto post_t2 = std::chrono::system_clock::now();
 		auto postvalue_t1 = std::chrono::duration_cast<std::chrono::microseconds>(post_t2 - exec_t2);
@@ -424,37 +382,37 @@ void runResnet50(vart::RunnerExt *runner, const xir::Subgraph *subgraph, int sw_
 	auto value_t1 = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
 	long e2e_time = value_t1.count();
 
-	if(!verbose)
+	if (!verbose)
 	{
-		if(sw_pp_flag)
-			cout<< "Profiling result with software preprocessing: "<<endl;
-		else if(no_zcpy)
-			cout<< "Profiling result with hardware preprocessing without zero copy: "<<endl;
+		if (digitcaps_sw_imp)
+			cout << "Profiling result with software preprocessing: " << endl;
+		else if (no_zcpy)
+			cout << "Profiling result with hardware preprocessing without zero copy: " << endl;
 		else
-			cout<< "Profiling result with hardware preprocessing with zero copy: "<<endl;
+			cout << "Profiling result with hardware preprocessing with zero copy: " << endl;
 		std::cout << "   E2E Performance: " << 1000000.0 / ((float)((e2e_time - imread_time) / count)) << " fps\n";
 		std::cout << "   Pre-process Latency: " << (float)(pre_time / count) / 1000 << " ms\n";
 		std::cout << "   Execution Latency: " << (float)(exec_time / count) / 1000 << " ms\n";
 		std::cout << "   Post-process Latency: " << (float)(post_time / count) / 1000 << " ms\n";
-	}    
+	}
 #if EN_BRKP
 	std::cout << "imread latency: " << (float)(imread_time / count) / 1000 << "ms\n";
 #endif
-	
-	if(labels.size()!=0)
+
+	if (labels.size() != 0)
 	{
-		if(total_images == 0)
+		if (total_images == 0)
 		{
-			cout<<"There are no images to calculate accuracy"<<endl;
-		}  	
+			cout << "There are no images to calculate accuracy" << endl;
+		}
 		else
 		{
-			cout<<correct_classification<< " out of "<<total_images<<" images have been classified correctly"<<endl;
-			float accuracy = float(correct_classification)/float(total_images)*100;
-			cout<< "The accuracy of the network is "<< accuracy<< " %"<<endl;
+			cout << correct_classification << " out of " << total_images << " images have been classified correctly" << endl;
+			float accuracy = float(correct_classification) / float(total_images) * 100;
+			cout << "The accuracy of the network is " << accuracy << " %" << endl;
 		}
 	}
-    delete[] softmax;
+	delete[] softmax;
 }
 
 /**
@@ -468,37 +426,37 @@ int main(int argc, char *argv[])
 {
 	if (argc < 6 || argc > 7)
 	{
-		cout << "Usage of ResNet50: ./resnet50.exe <model>  <image directory> <use_sw_pre_proc (1 for sw pre / 0 for hw pre)> <no_zero_copy (1 for no zero copy / 1 for zero copy)> <verbose (1 for printing the detection coordinates else 0)> <label_file <path> (OPTIONAL)>" << endl;
+		cout << "Usage: ./CapsuleNetwork.exe <model (-t to just test hardware accelerator)> <image directory> <sw/hw dynamic routing (1 for sw imp / 0 for hw imp)> <no_zero_copy (1 for no zero copy / 1 for zero copy)> <verbose> <label_file <path> (OPTIONAL)>" << endl;
 		return -1;
 	}
-    
+
 	auto graph = xir::Graph::deserialize(argv[1]);
 	string baseImagePath = argv[2];
-	int sw_pp_flag = atoi(argv[3]);
+	int digitcaps_sw_imp = atoi(argv[3]);
 	int no_zcpy = atoi(argv[4]);
 	auto attrs = xir::Attrs::create();
 	int verbose = atoi(argv[5]);
-	
+
 	string label_path = "";
-	if(argv[6])
+	if (argv[6])
 		label_path = argv[6];
-    
-	if(sw_pp_flag)
+
+	if (digitcaps_sw_imp)
 		no_zcpy = 1;
 
 	auto subgraph = get_dpu_subgraph(graph.get());
-    
-	if(!no_zcpy)
-		attrs->set_attr<bool>("zero_copy",true);
-	
+
+	if (!no_zcpy)
+		attrs->set_attr<bool>("zero_copy", true);
+
 	CHECK_EQ(subgraph.size(), 1u)
 		<< "resnet50 should have one and only one dpu subgraph.";
 	LOG(INFO) << "create running for subgraph: " << subgraph[0]->get_name();
-	
+
 	/*create runner*/
 	std::unique_ptr<vart::RunnerExt> runner = vart::RunnerExt::create_runner(subgraph[0], attrs.get());
 
 	/*run with batch*/
-	runResnet50(runner.get(), subgraph[0], sw_pp_flag, no_zcpy, baseImagePath, label_path, verbose);
+	runCapsuleNetwork(runner.get(), subgraph[0], digitcaps_sw_imp, no_zcpy, baseImagePath, label_path, verbose);
 	return 0;
 }

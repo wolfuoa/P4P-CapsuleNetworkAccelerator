@@ -77,7 +77,7 @@ int run_digitcaps_accelerator(DigitcapsAcceleratorType *a, float *input_volume, 
 	if (!no_zcpy)
 		a->runner(a->input, a->weights, dpu_input_buf_addr);
 	else
-		a->runner(a->input, a->weights, a->output);
+		a->runner(a->input, a->weights, a->prediction);
 
 	// Wait for accelerator to finish processing
 	a->runner.wait();
@@ -87,9 +87,9 @@ int run_digitcaps_accelerator(DigitcapsAcceleratorType *a, float *input_volume, 
 		// Copy the output data from device to host memory
 		const int prediction_size = DIGIT_CAPS_NUM_DIGITS * sizeof(float);
 		float *prediction_data = (float *)dpu_input_buf_addr;
-		a->output.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_FROM_DEVICE);
+		a->prediction.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_FROM_DEVICE);
 		// Copy to output buffer
-		std::memcpy(prediction_data, a->output_m, prediction_size);
+		std::memcpy(prediction_data, a->prediction_m, prediction_size);
 	}
 
 	// Return success
