@@ -23,7 +23,9 @@ static errno_t get_data(const std::string& file_name, uint32_t start_index, floa
 
 static errno_t get_data_n(const char* file_name, uint32_t data_amount, float* output);
 
-static errno_t mnist_data(const std::string& file_name, uint32_t batch_size, std::vector<std::vector<float>>* output);
+static errno_t load_mnist_images(const std::string& image_path, uint32_t batch_size, std::vector<std::vector<float>>* images);
+
+static errno_t load_mnist_labels(const std::string& label_path, uint32_t batch_size, std::vector<uint8_t>* labels);
 
 static uint16_t get_max_prediction(float* prediction);
 
@@ -40,13 +42,13 @@ int main(void)
 	// float images[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST];
 	float prediction[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE] = {0.0};
 	float image[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH];
-	float labels[NUM_IMAGES_TO_TEST];
 	float magnitudes[DIGIT_CAPS_NUM_DIGITS];
 	std::vector<std::vector<float>> mnist;
+	std::vector<uint8_t> labels;
 
-	mnist_data("../../datasets/MNIST/t10k-images-idx3-ubyte", NUM_IMAGES_TO_TEST, &mnist);
-	get_data_n("../../datasets/MNIST/labels.txt", NUM_IMAGES_TO_TEST, labels);
-	// ADD LABELS TO MNIST
+	// Load MNIST data
+	load_mnist_images("../../datasets/MNIST/t10k-images-idx3-ubyte", NUM_IMAGES_TO_TEST, &mnist);
+	load_mnist_labels("../../datasets/MNIST/t10k-labels-idx1-ubyte", NUM_IMAGES_TO_TEST, &labels);
 
 	for (uint8_t i = 0; i < NUM_IMAGES_TO_TEST; ++i)
 	{
@@ -71,7 +73,7 @@ int main(void)
 			std::cout << "pred: " << magnitudes[i] << std::endl;
 		}
 		uint16_t max_prediction = get_max_prediction(magnitudes);
-		std::cout << "Label: " << labels[i] << std::endl;
+		std::cout << "Label: " << (int)labels[i] << std::endl;
 		std::cout << "CapsNet prediction: " << max_prediction << std::endl;
 		printf("Time: %.4fms\n", ((float)(t_2 - t_1) / CLOCKS_PER_SEC) * 1000);
 	}
@@ -84,13 +86,41 @@ int32_t bytes_to_int(const unsigned char* bytes)
 	return (int32_t)(((uint32_t)bytes[0] << 24) | ((uint32_t)bytes[1] << 16) | ((uint32_t)bytes[2] << 8) | ((uint32_t)bytes[3]));
 }
 
-static errno_t mnist_data(const std::string& file_name, uint32_t batch_size, std::vector<std::vector<float>>* output)
+static errno_t load_mnist_labels(const std::string& label_path, uint32_t batch_size, std::vector<uint8_t>* labels)
 {
-	std::ifstream file(file_name, std::ios::binary);
+	std::ifstream label_file(label_path, std::ios::binary);
 
-	// Read header
+	// // Read headers
+	unsigned char header[8];
+	label_file.read(reinterpret_cast<char*>(header), 8);
+
+	int32_t num_labels = bytes_to_int(header + 4);
+
+	if (batch_size > num_labels)
+	{
+		throw std::runtime_error("Too large of a batch " + label_path);
+	}
+
+	labels->resize(batch_size);
+
+	for (int i = 0; i < batch_size; ++i)
+	{
+		uint8_t label_entry;
+		label_file.read(reinterpret_cast<char*>(&label_entry), 1);
+		(*labels)[i] = static_cast<uint8_t>(label_entry);
+	}
+
+	label_file.close();
+	return 0;
+}
+
+static errno_t load_mnist_images(const std::string& image_path, uint32_t batch_size, std::vector<std::vector<float>>* images)
+{
+	std::ifstream img_file(image_path, std::ios::binary);
+
+	// Read headers
 	unsigned char header[16];
-	file.read(reinterpret_cast<char*>(header), 16);
+	img_file.read(reinterpret_cast<char*>(header), 16);
 
 	// Read number of images, rows, and columns
 	int32_t num_images = bytes_to_int(header + 4);
@@ -99,24 +129,24 @@ static errno_t mnist_data(const std::string& file_name, uint32_t batch_size, std
 
 	if (batch_size > num_images)
 	{
-		throw std::runtime_error("Too large of a batch " + file_name);
+		throw std::runtime_error("Too large of a batch " + image_path);
 	}
 
-	output->resize(batch_size);
+	images->resize(batch_size);
 
 	for (int i = 0; i < batch_size; ++i)
 	{
 		std::vector<uint8_t> temp_image(num_rows * num_cols);
-		file.read(reinterpret_cast<char*>(temp_image.data()), num_rows * num_cols);
+		img_file.read(reinterpret_cast<char*>(temp_image.data()), num_rows * num_cols);
 
-		(*output)[i].resize(num_rows * num_cols);
+		(*images)[i].resize(num_rows * num_cols);
 		for (int j = 0; j < num_rows * num_cols; ++j)
 		{
-			(*output)[i][j] = static_cast<float>(temp_image[j]) / 255.0f;
+			(*images)[i][j] = static_cast<float>(temp_image[j]) / 255.0f;
 		}
 	}
 
-	file.close();
+	img_file.close();
 	return 0;
 }
 

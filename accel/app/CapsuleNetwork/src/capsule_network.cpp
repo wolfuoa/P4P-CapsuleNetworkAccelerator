@@ -50,131 +50,76 @@ int correct_classification = 0;
 int total_images = 0;
 const string wordsPath = "./";
 
-/**
- * @brief put image names to a vector
- *
- * @param path - path of the image direcotry
- * @param images - the vector of image name
- *
- * @return none
- */
-void ListImages(string const &path, vector<string> &images)
+// ---------------- PRIVATE FUNCTION DECLARATIONS ----------------
+void runCapsuleNetwork(vart::RunnerExt *runner, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string baseImagePath, string label_path, int verbose);
+static void load_mnist_images(string const &image_path, uint32_t batch_size, vector<vector<float>> *images);
+static void load_mnist_labels(string const &label_path, uint32_t batch_size, vector<uint8_t> *labels);
+static void convert_to_magnitude(float *vector, float *output);
+int32_t bytes_to_int(const unsigned char *bytes);
+// ---------------------------------------------------------------
+
+static void load_mnist_images(string const &image_path, uint32_t batch_size, vector<vector<float>> *images)
 {
-	images.clear();
-	struct dirent *entry;
+	std::ifstream img_file(image_path, std::ios::binary);
 
-	/*Check if path is a valid directory path. */
-	struct stat s;
-	lstat(path.c_str(), &s);
-	if (!S_ISDIR(s.st_mode))
+	// Read headers
+	unsigned char header[16];
+	img_file.read(reinterpret_cast<char *>(header), 16);
+
+	// Read number of images, rows, and columns
+	int32_t num_images = bytes_to_int(header + 4);
+	int32_t num_rows = bytes_to_int(header + 8);
+	int32_t num_cols = bytes_to_int(header + 12);
+
+	if (batch_size > num_images)
 	{
-		fprintf(stderr, "Error: %s is not a valid directory!\n", path.c_str());
-		exit(1);
+		throw std::runtime_error("Too large of a batch " + image_path);
 	}
 
-	DIR *dir = opendir(path.c_str());
-	if (dir == nullptr)
-	{
-		fprintf(stderr, "Error: Open %s path failed.\n", path.c_str());
-		exit(1);
-	}
+	images->resize(batch_size);
 
-	while ((entry = readdir(dir)) != nullptr)
+	for (int i = 0; i < batch_size; ++i)
 	{
-		if (entry->d_type == DT_REG || entry->d_type == DT_UNKNOWN)
+		std::vector<uint8_t> temp_image(num_rows * num_cols);
+		img_file.read(reinterpret_cast<char *>(temp_image.data()), num_rows * num_cols);
+
+		(*images)[i].resize(num_rows * num_cols);
+		for (int j = 0; j < num_rows * num_cols; ++j)
 		{
-			string name = entry->d_name;
-			string ext = name.substr(name.find_last_of(".") + 1);
-			if ((ext == "txt"))
-			{
-				images.push_back(name);
-			}
+			(*images)[i][j] = static_cast<float>(temp_image[j]) / 255.0f;
 		}
 	}
 
-	closedir(dir);
+	img_file.close();
+	return 0;
 }
 
-/**
- * @brief load kinds from file to a vector
- *
- * @param path - path of the kinds file
- * @param kinds - the vector of kinds string
- *
- * @return none
- */
-// void LoadWords(string const &path, vector<string> &kinds)
-// {
-// 	kinds.clear();
-// 	ifstream fkinds(path);
-// 	if (fkinds.fail())
-// 	{
-// 		fprintf(stderr, "Error : Open %s failed.\n", path.c_str());
-// 		exit(1);
-// 	}
-// 	string kind;
-// 	while (getline(fkinds, kind))
-// 	{
-// 		kinds.push_back(kind);
-// 	}
-
-// 	fkinds.close();
-// }
-
-void LoadLabels(string const &path, vector<string> &images, vector<int> &labels)
+static void load_mnist_labels(string const &label_path, uint32_t batch_size, vector<uint8_t> *labels)
 {
-	images.clear();
-	labels.clear();
-	ifstream file(path);
-	if (file.fail())
+	std::ifstream label_file(label_path, std::ios::binary);
+
+	// // Read headers
+	unsigned char header[8];
+	label_file.read(reinterpret_cast<char *>(header), 8);
+
+	int32_t num_labels = bytes_to_int(header + 4);
+
+	if (batch_size > num_labels)
 	{
-		fprintf(stderr, "Error : Open %s failed.\n", path.c_str());
-		exit(1);
-	}
-	string img_name;
-	int label;
-	while (file >> img_name >> label)
-	{
-		images.push_back(img_name);
-		labels.push_back(label);
+		throw std::runtime_error("Too large of a batch " + label_path);
 	}
 
-	file.close();
+	labels->resize(batch_size);
+
+	for (int i = 0; i < batch_size; ++i)
+	{
+		uint8_t label_entry;
+		label_file.read(reinterpret_cast<char *>(&label_entry), 1);
+		(*labels)[i] = static_cast<uint8_t>(label_entry);
+	}
+
+	label_file.close();
 }
-
-void get_data(string const &path, float *output)
-{
-	ifstream file(path);
-	float entry;
-	uint32_t i = 0;
-	while (file >> entry)
-	{
-		output[i++] = entry;
-	}
-	file.close();
-}
-
-/**
- * @brief calculate softmax
- *
- * @param data - pointer to input buffer
- * @param size - size of input buffer
- * @param result - calculation result
- *
- * @return none
- */
-// void CPUCalcSoftmax(signed char *data, size_t size, float *result, float scale)
-// {
-// 	assert(data && result);
-// 	double sum = 0.0f;
-// 	for (size_t i = 0; i < size; i++)
-// 	{
-// 		result[i] = exp((float)data[i] * scale);
-// 		sum += result[i];
-// 	}
-// 	for (size_t i = 0; i < size; i++)
-// 		result[i] /= sum;
-// }
 
 /**
  * @brief Get top k results according to its probability
@@ -186,30 +131,35 @@ void get_data(string const &path, float *output)
  *
  * @return none
  */
-void TopK(const float *d, int size, int k, vector<string> &vkinds, vector<string> &images, vector<int> &labels, int idx, int verbose)
+static void convert_to_magnitude(float *vector, float *output)
 {
-	assert(d && size > 0 && k > 0);
-	priority_queue<pair<float, int>> q;
+	float sum = 0.0;
 
-	for (auto i = 0; i < size; ++i)
-		q.push(pair<float, int>(d[i], i));
-
-	if (labels.size() != 0)
+	for (uint8_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
 	{
-		pair<float, int> most_probable = q.top();
-		if (labels[idx] == most_probable.second)
-			correct_classification++;
-	}
-	if (verbose == 1)
-	{
-		for (auto i = 0; i < k; ++i)
+		sum = 0.0;
+		for (uint8_t j = 0; j < DIGIT_CAPS_DIM_CAPSULE; ++j)
 		{
-			pair<float, int> ki = q.top();
-			printf("top[%d] prob = %-8f  name = %s\n", i, d[ki.second],
-				   vkinds[ki.second].c_str());
-			q.pop();
+			float value = vector[i * DIGIT_CAPS_DIM_CAPSULE + j];
+			sum += value * value;
 		}
+		output[i] = sqrt(sum);
 	}
+}
+
+/**
+ * @brief Get top k results according to its probability
+ *
+ * @param d - pointer to input data
+ * @param size - size of input data
+ * @param k - calculation result
+ * @param vkinds - vector of kinds
+ *
+ * @return none
+ */
+int32_t bytes_to_int(const unsigned char *bytes)
+{
+	return (int32_t)(((uint32_t)bytes[0] << 24) | ((uint32_t)bytes[1] << 16) | ((uint32_t)bytes[2] << 8) | ((uint32_t)bytes[3]));
 }
 
 /**
@@ -219,35 +169,17 @@ void TopK(const float *d, int size, int k, vector<string> &vkinds, vector<string
  *
  * @return none
  */
-void runCapsuleNetwork(vart::RunnerExt *runner, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string baseImagePath, string label_path, int verbose)
+void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string baseImagePath, string label_path, int verbose)
 {
-	/* Mean value for ResNet50 specified in Caffe prototxt */
-	vector<string> kinds, images;
+	vector<vector<float>> images;
 	vector<int> labels;
 
-	/* Load all image names.*/
-
-	if (label_path != "")
-	{
-		LoadLabels(label_path, images, labels);
-		cout << "Number of images in the label file is: " << images.size() << endl;
-
-		if (labels.size() == 0)
-		{
-			cerr << "\nError: No labels existing under " << label_path << endl;
-			return;
-		}
-	}
-	else
-	{
-		ListImages(baseImagePath, images);
-
-		cout << "Number of images in the image directory is: " << images.size() << endl;
-	}
+	// Load MNIST images and labels
+	load_mnist(baseImagePath, label_path, batch_size, &images, &labels);
 
 	if (images.size() == 0)
 	{
-		cerr << "\nError: No images existing under " << baseImagePath << endl;
+		cerr << "\nError: No images loaded" << endl;
 		return;
 	}
 
