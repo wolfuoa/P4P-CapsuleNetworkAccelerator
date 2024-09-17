@@ -140,6 +140,15 @@ static void load_mnist_labels(string const &label_path, uint32_t batch_size, vec
 	label_file.close();
 }
 
+/**
+ * @brief Get general txt file data for weights
+ *
+ * @param file_name - path to the file
+ * @param start_index - at what point in the array to start placing data
+ * @param output - output weight vector
+ *
+ * @return none
+ */
 static void get_data(string const &file_name, uint32_t start_index, vector<float> *output)
 {
 	ifstream file(file_name);
@@ -272,9 +281,10 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 		std::tie(dpu_output_phy_addr[batch_idx], dpu_output_size) = output_tensor_buffers[1]->data_phy({batch_idx, 0, 0, 0});
 	}
 
-	get_data()
+	// TODO: weights_path
+	get_data(weights_path, 0, weights);
 
-		DigitcapsAcceleratorType *digitcaps_accelerator = nullptr;
+	DigitcapsAcceleratorType *digitcaps_accelerator = nullptr;
 	if (!digitcaps_sw_imp)
 		digitcaps_accelerator = init_digitcaps_accelerator(weights, no_zcpy);
 
