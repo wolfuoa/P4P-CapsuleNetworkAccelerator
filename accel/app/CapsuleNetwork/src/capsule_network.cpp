@@ -51,13 +51,22 @@ int total_images = 0;
 const string wordsPath = "./";
 
 // ---------------- PRIVATE FUNCTION DECLARATIONS ----------------
-void runCapsuleNetwork(vart::RunnerExt *runner, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string baseImagePath, string label_path, int verbose);
+void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string image_path, const string label_path, int verbose);
 static void load_mnist_images(string const &image_path, uint32_t batch_size, vector<vector<float>> *images);
 static void load_mnist_labels(string const &label_path, uint32_t batch_size, vector<uint8_t> *labels);
 static void convert_to_magnitude(float *vector, float *output);
 int32_t bytes_to_int(const unsigned char *bytes);
 // ---------------------------------------------------------------
 
+/**
+ * @brief Load MNIST images
+ *
+ * @param image_path - const string to image ubyte file
+ * @param batch_size - num images to extract
+ * @param images - output image vector<vector> (2d)
+ *
+ * @return none
+ */
 static void load_mnist_images(string const &image_path, uint32_t batch_size, vector<vector<float>> *images)
 {
 	std::ifstream img_file(image_path, std::ios::binary);
@@ -94,6 +103,15 @@ static void load_mnist_images(string const &image_path, uint32_t batch_size, vec
 	return 0;
 }
 
+/**
+ * @brief Load MNIST labels
+ *
+ * @param label_path - const string to ubyte label file
+ * @param batch_size - num labels to extract
+ * @param labels - output vector
+ *
+ * @return none
+ */
 static void load_mnist_labels(string const &label_path, uint32_t batch_size, vector<uint8_t> *labels)
 {
 	std::ifstream label_file(label_path, std::ios::binary);
@@ -122,12 +140,10 @@ static void load_mnist_labels(string const &label_path, uint32_t batch_size, vec
 }
 
 /**
- * @brief Get top k results according to its probability
+ * @brief Get prediction magnitudes
  *
- * @param d - pointer to input data
- * @param size - size of input data
- * @param k - calculation result
- * @param vkinds - vector of kinds
+ * @param vector - pointer to prediction data (10x16 vector)
+ * @param output - prediction vector magnitudes (0-9)
  *
  * @return none
  */
@@ -148,12 +164,9 @@ static void convert_to_magnitude(float *vector, float *output)
 }
 
 /**
- * @brief Get top k results according to its probability
+ * @brief Convert bytes into integer form
  *
- * @param d - pointer to input data
- * @param size - size of input data
- * @param k - calculation result
- * @param vkinds - vector of kinds
+ * @param bytes - an array of separate bytes
  *
  * @return none
  */
@@ -165,11 +178,18 @@ int32_t bytes_to_int(const unsigned char *bytes)
 /**
  * @brief Run DPU Task for CapsuleNetwork
  *
- * @param taskResnet50 - pointer to ResNet50 Task
+ * @param runner - pointer to partial capsule network task
+ * @param batch_size - number of images to test
+ * @param subgraph - dpu model ctx
+ * @param digitcaps_sw_imp - if 0, run the hardware accelerator
+ * @param no_zcpy - if 0, avoid zero copying (cpu driven device data transfer)
+ * @param image_path - path to the MNIST images
+ * @param label_path - path to the MNIST labels
+ * @param verbose - output predictions
  *
  * @return none
  */
-void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string baseImagePath, string label_path, int verbose)
+void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string image_path, const string label_path, int verbose)
 {
 	vector<vector<float>> images;
 	vector<int> labels;
