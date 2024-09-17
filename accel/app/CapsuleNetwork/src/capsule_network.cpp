@@ -301,16 +301,6 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 		{
 			auto t1 = std::chrono::system_clock::now();
 
-			if (labels.size() != 0 && !filesystem::exists(baseImagePath + "/" + images[n + i]))
-			{
-				cout << "The image file " << baseImagePath + "/" + images[n + i] << " doesnot exist in the image directory " << baseImagePath << " (SKIPPING)" << endl;
-				continue;
-			}
-
-			// Mat image = imread(baseImagePath + "/" + images[n + i]);
-			float image;
-			get_data(baseImagePath + "/" + images[n + i], image);
-
 			if (!no_zcpy)
 			{
 				std::memcpy(dpu_input_phy_addr[i], image, IN_IMG_ROWS * IN_IMG_COLS * sizeof(float));

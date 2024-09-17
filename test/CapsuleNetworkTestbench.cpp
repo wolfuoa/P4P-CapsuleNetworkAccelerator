@@ -53,7 +53,7 @@ int main(void)
 	for (uint8_t i = 0; i < NUM_IMAGES_TO_TEST; ++i)
 	{
 		// acquire next image to test
-		memcpy(image, (const float*)mnist[i].data() + i * IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH, IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
+		memcpy(image, (const float*)mnist[i].data(), IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
 
 		get_data("../../models/conv1_weights.txt", 0, weights);
 		get_data("../../models/primcaps_weights.txt", conv1_num_weights, weights);
