@@ -52,7 +52,7 @@ int total_images = 0;
 const string wordsPath = "./";
 
 // ---------------- PRIVATE FUNCTION DECLARATIONS ----------------
-void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, const string image_path, const string label_path, int verbose);
+void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, const string image_path, string label_path, const string weight_path, int verbose);
 static void load_mnist_images(string const &image_path, uint32_t batch_size, vector<vector<float>> *images);
 static void load_mnist_labels(string const &label_path, uint32_t batch_size, vector<uint8_t> *labels);
 static void get_data(string const &file_name, uint32_t start_index, vector<float> *output);
@@ -238,7 +238,7 @@ int32_t bytes_to_int(const unsigned char *bytes)
  *
  * @return none
  */
-void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, const string image_path, const string label_path, const string weight_path, int verbose)
+void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, const string image_path, string label_path, const string weight_path, int verbose)
 {
 	vector<vector<float>> images;
 	vector<uint8_t> labels;
@@ -246,9 +246,8 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 
 	// Load MNIST images and labels
 	load_mnist_images(image_path, batch_size, &images);
-	load_mnist_labels(label_path, batch_size, &labels);
-
-	// cout << (int)labels[0] << endl;
+	if (label_path != "")
+		load_mnist_labels(label_path, batch_size, &labels);
 
 	if (images.size() == 0)
 	{
@@ -268,7 +267,7 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 	auto channels = input_tensor->get_shape().at(3);
 	auto input_scale = vart::get_input_scale(input_tensor);
 	auto inSize = height * width * channels;
-	vector<Mat> imageList;
+	vector<float *> imageList;
 
 	auto output_tensor = output_tensor_buffers[1]->get_tensor();
 	auto out_height = output_tensor->get_shape().at(1);
@@ -278,7 +277,7 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 	auto osize = out_height * out_width;
 	vector<uint64_t> dpu_input_phy_addr(batch, 0u);
 	uint64_t dpu_input_size = 0u;
-	vector<int8_t *> inptr_v;
+	vector<float *> inptr_v;
 	auto in_dims = input_tensor->get_shape();
 
 	vector<uint64_t> data_in_addr(batch, 0u);
@@ -291,7 +290,7 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 
 	vector<uint64_t> dpu_output_phy_addr(batch, 0u);
 	uint64_t dpu_output_size = 0u;
-	vector<int8_t *> outptr_v;
+	vector<float *> outptr_v;
 
 	auto dims = output_tensor->get_shape();
 	for (auto batch_idx = 0; batch_idx < batch; ++batch_idx)
@@ -299,7 +298,7 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 		auto idx = std::vector<int32_t>(dims.size());
 		idx[0] = batch_idx;
 		auto data = output_tensor_buffers[1]->data(idx);
-		int8_t *data_out = (int8_t *)data.first;
+		float *data_out = (float *)data.first;
 		outptr_v.push_back(data_out);
 		std::tie(dpu_output_phy_addr[batch_idx], dpu_output_size) = output_tensor_buffers[1]->data_phy({batch_idx, 0, 0, 0});
 	}
@@ -372,7 +371,7 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 
 			convert_to_magnitude(prediction_data, prediction_magnitude);
 			uint16_t final_answer = get_max_prediction(prediction_magnitude);
-			if (final_answer == labels[i])
+			if (final_answer == (uint16_t)labels[i])
 				correct_classification++;
 		}
 
@@ -416,9 +415,9 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 
 int main(int argc, char *argv[])
 {
-	if (argc < 6 || argc > 7)
+	if (argc < 7 || argc > 8)
 	{
-		cout << "Usage: ./CapsuleNetwork.exe <model> <image directory> <sw/hw dynamic routing (1 for sw imp / 0 for hw imp)> <weight_path> <verbose> <label_file <path> (OPTIONAL)>" << endl;
+		cout << "Usage: ./CapsuleNetwork.exe <model> <image directory> <sw/hw dynamic routing (1 for sw imp / 0 for hw imp)> <weight_path> <verbose> <batch size> <label_file <path> (OPTIONAL)>" << endl;
 		return -1;
 	}
 
@@ -428,19 +427,19 @@ int main(int argc, char *argv[])
 	string weight_path = argv[4];
 	auto attrs = xir::Attrs::create();
 	int verbose = atoi(argv[5]);
+	uint32_t batch_size = atoi(argv[6]);
 
 	string label_path = "";
-	if (argv[6])
-		label_path = argv[6];
+	if (argv[7])
+		label_path = argv[7];
 
 	auto subgraph = get_dpu_subgraph(graph.get());
 
 	LOG(INFO) << "create running for subgraph: " << subgraph[0]->get_name();
 
-	/*create runner*/
+	// create DPU task
 	std::unique_ptr<vart::RunnerExt> runner = vart::RunnerExt::create_runner(subgraph[0], attrs.get());
 
-	/*run with batch*/
-	runCapsuleNetwork(runner.get(), subgraph[0], digitcaps_sw_imp, image_path, label_path, weight_path, verbose);
+	runCapsuleNetwork(runner.get(), batch_size, subgraph[0], digitcaps_sw_imp, image_path, label_path, weight_path, verbose);
 	return 0;
 }
