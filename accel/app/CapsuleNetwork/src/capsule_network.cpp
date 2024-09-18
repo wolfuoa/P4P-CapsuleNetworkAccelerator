@@ -57,6 +57,7 @@ static void load_mnist_images(string const &image_path, uint32_t batch_size, vec
 static void load_mnist_labels(string const &label_path, uint32_t batch_size, vector<uint8_t> *labels);
 static void get_data(string const &file_name, uint32_t start_index, vector<float> *output);
 static void convert_to_magnitude(float *vector, float *output);
+static uint16_t get_max_prediction(float *prediction);
 int32_t bytes_to_int(const unsigned char *bytes);
 // ---------------------------------------------------------------
 
@@ -188,6 +189,28 @@ static void convert_to_magnitude(float *vector, float *output)
 		}
 		output[i] = sqrt(sum);
 	}
+}
+
+/**
+ * @brief Returns the max prediction vector
+ *
+ * @param prediction - the output of digitcaps
+ *
+ * @return the max prediction
+ */
+static uint16_t get_max_prediction(float *prediction)
+{
+	uint16_t digit;
+	float currentLargest = 0.0;
+	for (uint16_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
+	{
+		if (prediction[i] > currentLargest)
+		{
+			digit = i;
+			currentLargest = prediction[i];
+		}
+	}
+	return digit;
 }
 
 /**
@@ -330,6 +353,7 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 		exec_time += execvalue_t1.count();
 
 		float prediction_data[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
+		float prediction_magnitude[DIGIT_CAPS_NUM_DIGITS];
 
 		for (unsigned int i = 0; i < imageList.size(); i++)
 		{
@@ -346,6 +370,11 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 				float *out_prediction = (float *)digitcaps_accelerator->prediction_m;
 				std::memcpy(prediction_data, out_prediction, DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
 			}
+
+			convert_to_magnitude(prediction_data, prediction_magnitude);
+			uint16_t final_answer = get_max_prediction(prediction_magnitude);
+			if (final_answer == labels[i])
+				correct_classification++;
 		}
 
 		auto post_t2 = std::chrono::system_clock::now();
