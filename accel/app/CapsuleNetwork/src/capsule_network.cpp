@@ -238,7 +238,7 @@ int32_t bytes_to_int(const unsigned char *bytes)
  *
  * @return none
  */
-void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, const string image_path, const string label_path, int verbose)
+void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, const string image_path, const string label_path, const string weight_path, int verbose)
 {
 	vector<vector<float>> images;
 	vector<uint8_t> labels;
@@ -304,12 +304,11 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 		std::tie(dpu_output_phy_addr[batch_idx], dpu_output_size) = output_tensor_buffers[1]->data_phy({batch_idx, 0, 0, 0});
 	}
 
-	// TODO: weights_path
-	get_data(weights_path, 0, weights);
+	get_data(weight_path, 0, weights);
 
 	DigitcapsAcceleratorType *digitcaps_accelerator = nullptr;
 	if (!digitcaps_sw_imp)
-		digitcaps_accelerator = init_digitcaps_accelerator(weights, no_zcpy);
+		digitcaps_accelerator = init_digitcaps_accelerator(weights.data(), no_zcpy);
 
 	int count = images.size();
 
@@ -361,7 +360,7 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 			if (digitcaps_sw_imp)
 			{
 				auto *out_data_sw = (float *)outptr_v[i];
-				dynamic_routing(out_data_sw, weights, prediction_data);
+				dynamic_routing(out_data_sw, weights.data(), prediction_data);
 			}
 			// Hardware DigitCaps using zero copy
 			else
@@ -394,14 +393,11 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 			cout << "Profiling result with software digit caps: " << endl;
 		else
 			cout << "Profiling result with hardware digit caps " << endl;
-		std::cout << "   E2E Performance: " << 1000000.0 / ((float)((e2e_time - imread_time) / count)) << " fps\n";
+		std::cout << "   E2E Performance: " << 1000000.0 / ((float)((e2e_time) / count)) << " fps\n";
 		std::cout << "   Pre-process Latency: " << (float)(pre_time / count) / 1000 << " ms\n";
 		std::cout << "   DPU Latency: " << (float)(exec_time / count) / 1000 << " ms\n";
 		std::cout << "   DigitCaps Latency: " << (float)(post_time / count) / 1000 << " ms\n";
 	}
-#if EN_BRKP
-	std::cout << "imread latency: " << (float)(imread_time / count) / 1000 << "ms\n";
-#endif
 
 	if (labels.size() != 0)
 	{
@@ -422,14 +418,14 @@ int main(int argc, char *argv[])
 {
 	if (argc < 6 || argc > 7)
 	{
-		cout << "Usage: ./CapsuleNetwork.exe <model (-t to just test hardware accelerator)> <image directory> <sw/hw dynamic routing (1 for sw imp / 0 for hw imp)> <no_zero_copy (1 for no zero copy / 1 for zero copy)> <verbose> <label_file <path> (OPTIONAL)>" << endl;
+		cout << "Usage: ./CapsuleNetwork.exe <model> <image directory> <sw/hw dynamic routing (1 for sw imp / 0 for hw imp)> <weight_path> <verbose> <label_file <path> (OPTIONAL)>" << endl;
 		return -1;
 	}
 
 	auto graph = xir::Graph::deserialize(argv[1]);
 	string image_path = argv[2];
 	int digitcaps_sw_imp = atoi(argv[3]);
-	int no_zcpy = atoi(argv[4]);
+	string weight_path = argv[4];
 	auto attrs = xir::Attrs::create();
 	int verbose = atoi(argv[5]);
 
@@ -437,13 +433,7 @@ int main(int argc, char *argv[])
 	if (argv[6])
 		label_path = argv[6];
 
-	if (digitcaps_sw_imp)
-		no_zcpy = 1;
-
 	auto subgraph = get_dpu_subgraph(graph.get());
-
-	if (!no_zcpy)
-		attrs->set_attr<bool>("zero_copy", true);
 
 	LOG(INFO) << "create running for subgraph: " << subgraph[0]->get_name();
 
@@ -451,6 +441,6 @@ int main(int argc, char *argv[])
 	std::unique_ptr<vart::RunnerExt> runner = vart::RunnerExt::create_runner(subgraph[0], attrs.get());
 
 	/*run with batch*/
-	runCapsuleNetwork(runner.get(), subgraph[0], digitcaps_sw_imp, image_path, label_path, verbose);
+	runCapsuleNetwork(runner.get(), subgraph[0], digitcaps_sw_imp, image_path, label_path, weight_path, verbose);
 	return 0;
 }
