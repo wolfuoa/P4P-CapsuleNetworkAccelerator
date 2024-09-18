@@ -32,6 +32,7 @@
 #include <string>
 #include <vector>
 
+#include "DigitCaps.h"
 #include "common.h"
 #include "experimental/xrt_xclbin.h"
 #include "vart/runner.hpp"
@@ -51,7 +52,7 @@ int total_images = 0;
 const string wordsPath = "./";
 
 // ---------------- PRIVATE FUNCTION DECLARATIONS ----------------
-void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string image_path, const string label_path, int verbose);
+void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, const string image_path, const string label_path, int verbose);
 static void load_mnist_images(string const &image_path, uint32_t batch_size, vector<vector<float>> *images);
 static void load_mnist_labels(string const &label_path, uint32_t batch_size, vector<uint8_t> *labels);
 static void get_data(string const &file_name, uint32_t start_index, vector<float> *output);
@@ -208,14 +209,13 @@ int32_t bytes_to_int(const unsigned char *bytes)
  * @param batch_size - number of images to test
  * @param subgraph - dpu model ctx
  * @param digitcaps_sw_imp - if 0, run the hardware accelerator
- * @param no_zcpy - if 0, avoid zero copying (cpu driven device data transfer)
  * @param image_path - path to the MNIST images
  * @param label_path - path to the MNIST labels
  * @param verbose - output predictions
  *
  * @return none
  */
-void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, int no_zcpy, const string image_path, const string label_path, int verbose)
+void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::Subgraph *subgraph, int digitcaps_sw_imp, const string image_path, const string label_path, int verbose)
 {
 	vector<vector<float>> images;
 	vector<uint8_t> labels;
@@ -301,49 +301,53 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 		{
 			auto t1 = std::chrono::system_clock::now();
 
-			if (!no_zcpy)
-			{
-				std::memcpy(dpu_input_phy_addr[i], image, IN_IMG_ROWS * IN_IMG_COLS * sizeof(float));
-			}
-			else
-			{
-				std::memcpy(dpu_in_addr[i], image, IN_IMG_ROWS * IN_IMG_COLS * sizeof(float));
-			}
+			// Potential Future: Hardware Preprocessing (float multiplication)
 
-			imageList.push_back(image);
+			std::memcpy(data_in_addr[i], (const float *)images[i].data(), IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
+
+			imageList.push_back(images[i].data());
 		}
 
 		total_images += imageList.size();
 		auto exec_t1 = std::chrono::system_clock::now();
 
-		if (no_zcpy)
-			for (auto &input : input_tensor_buffers)
-				input->sync_for_write(0, input->get_tensor()->get_data_size() /
-											 input->get_tensor()->get_shape()[0]);
+		// Potential Future: Hardware Preprocessing (float multiplication)
+		for (auto &input : input_tensor_buffers)
+			input->sync_for_write(0, input->get_tensor()->get_data_size() /
+										 input->get_tensor()->get_shape()[0]);
 
-		/*run*/
+		// Run DPU
 		auto job_id = runner->execute_async(input_tensor_buffers, output_tensor_buffers);
 		runner->wait(job_id.first, -1);
 
-		for (auto output : output_tensor_buffers)
-			output->sync_for_read(0, output->get_tensor()->get_data_size() /
-										 output->get_tensor()->get_shape()[0]);
+		if (digitcaps_sw_imp)
+			for (auto output : output_tensor_buffers)
+				output->sync_for_read(0, output->get_tensor()->get_data_size() /
+											 output->get_tensor()->get_shape()[0]);
 
 		auto exec_t2 = std::chrono::system_clock::now();
 		auto execvalue_t1 = std::chrono::duration_cast<std::chrono::microseconds>(exec_t2 - exec_t1);
 		exec_time += execvalue_t1.count();
 
+		float prediction_data[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
+
 		for (unsigned int i = 0; i < imageList.size(); i++)
 		{
-			/* Calculate softmax on CPU and display TOP-5 classification results */
-			CPUCalcSoftmax(outptr_v[i], outSize, softmax, output_scale);
-
-			TopK(softmax, outSize, 5, kinds, images, labels, n + i, verbose);
-
-			/* Display the impage */
-			// cv::imshow("Classification of ResNet50", imageList[i]);
-			// cv::waitKey(10000);
+			// Software DigitCaps
+			if (digitcaps_sw_imp)
+			{
+				auto *out_data_sw = (float *)outptr_v[i];
+				dynamic_routing(out_data_sw, weights, prediction_data);
+			}
+			// Hardware DigitCaps using zero copy
+			else
+			{
+				run_digitcaps_accelerator(digitcaps_accelerator, dpu_output_phy_addr[i]);
+				float *out_prediction = (float *)digitcaps_accelerator->prediction_m;
+				std::memcpy(prediction_data, out_prediction, DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * sizeof(float));
+			}
 		}
+
 		auto post_t2 = std::chrono::system_clock::now();
 		auto postvalue_t1 = std::chrono::duration_cast<std::chrono::microseconds>(post_t2 - exec_t2);
 		post_time += postvalue_t1.count();
@@ -358,15 +362,13 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 	if (!verbose)
 	{
 		if (digitcaps_sw_imp)
-			cout << "Profiling result with software preprocessing: " << endl;
-		else if (no_zcpy)
-			cout << "Profiling result with hardware preprocessing without zero copy: " << endl;
+			cout << "Profiling result with software digit caps: " << endl;
 		else
-			cout << "Profiling result with hardware preprocessing with zero copy: " << endl;
+			cout << "Profiling result with hardware digit caps " << endl;
 		std::cout << "   E2E Performance: " << 1000000.0 / ((float)((e2e_time - imread_time) / count)) << " fps\n";
 		std::cout << "   Pre-process Latency: " << (float)(pre_time / count) / 1000 << " ms\n";
-		std::cout << "   Execution Latency: " << (float)(exec_time / count) / 1000 << " ms\n";
-		std::cout << "   Post-process Latency: " << (float)(post_time / count) / 1000 << " ms\n";
+		std::cout << "   DPU Latency: " << (float)(exec_time / count) / 1000 << " ms\n";
+		std::cout << "   DigitCaps Latency: " << (float)(post_time / count) / 1000 << " ms\n";
 	}
 #if EN_BRKP
 	std::cout << "imread latency: " << (float)(imread_time / count) / 1000 << "ms\n";
@@ -385,7 +387,6 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t batch_size, const xir::
 			cout << "The accuracy of the network is " << accuracy << " %" << endl;
 		}
 	}
-	delete[] softmax;
 }
 
 int main(int argc, char *argv[])
@@ -421,6 +422,6 @@ int main(int argc, char *argv[])
 	std::unique_ptr<vart::RunnerExt> runner = vart::RunnerExt::create_runner(subgraph[0], attrs.get());
 
 	/*run with batch*/
-	runCapsuleNetwork(runner.get(), subgraph[0], digitcaps_sw_imp, no_zcpy, image_path, label_path, verbose);
+	runCapsuleNetwork(runner.get(), subgraph[0], digitcaps_sw_imp, image_path, label_path, verbose);
 	return 0;
 }

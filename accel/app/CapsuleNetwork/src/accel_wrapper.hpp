@@ -62,41 +62,31 @@ static std::vector<std::string> get_xclbins_in_dir(std::string path)
 	return xclbinPaths;
 }
 
-int run_digitcaps_accelerator(DigitcapsAcceleratorType *a, float *input_volume, uint64_t dpu_input_buf_addr, int no_zcpy)
+int run_digitcaps_accelerator(DigitcapsAcceleratorType *a, uint64_t dpu_output_phy_addr)
 {
 	// Input size to transfer
-	const int volume_size = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE;
+	// const int volume_size = DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE;
 
 	// Copy to input buffer
-	std::memcpy(a->input_m, input_volume, volume_size);
+	// std::memcpy(a->input_m, input_volume, volume_size);
 
 	// Send the input volume data to the device memory
-	a->input.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_TO_DEVICE, volume_size, 0);
+	// a->input.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_TO_DEVICE, volume_size, 0);
 
 	// Invoke accelerator
-	if (!no_zcpy)
-		a->runner(a->input, a->weights, dpu_input_buf_addr);
-	else
-		a->runner(a->input, a->weights, a->prediction);
+	a->runner(dpu_output_phy_addr, a->weights, a->prediction_m);
 
 	// Wait for accelerator to finish processing
 	a->runner.wait();
 
-	if (no_zcpy)
-	{
-		// Copy the output data from device to host memory
-		const int prediction_size = DIGIT_CAPS_NUM_DIGITS * sizeof(float);
-		float *prediction_data = (float *)dpu_input_buf_addr;
-		a->prediction.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_FROM_DEVICE);
-		// Copy to output buffer
-		std::memcpy(prediction_data, a->prediction_m, prediction_size);
-	}
+	// Extraneous probably
+	a->prediction_m.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_FROM_DEVICE);
 
 	// Return success
 	return 0;
 }
 
-DigitcapsAcceleratorType *init_digitcaps_accelerator(float *weights_array, int no_zcpy)
+DigitcapsAcceleratorType *init_digitcaps_accelerator(float *weights_array)
 {
 	// get xclbin dir path and acquire handle
 	const char *xclbinPath = std::getenv("XLNX_VART_FIRMWARE");
@@ -152,32 +142,28 @@ DigitcapsAcceleratorType *init_digitcaps_accelerator(float *weights_array, int n
 
 	// Copy weights into device
 	std::memcpy(weights_m, weights_array, weights_size);
+
 	// Send the weight data to device memory
 	weights.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_TO_DEVICE);
 
 	auto a = new DigitcapsAcceleratorType();
+	// 	// Create memory for output vector
+	const int prediction_size = DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * sizeof(float);
 
-	if (no_zcpy)
-	{
-		// Create memory for output vector
-		const int prediction_size = DIGIT_CAPS_NUM_DIGITS * sizeof(float);
-
-		auto prediction = xrt::bo(device, prediction, prediction_mem_grp);
-		void *prediction_m = prediction.map();
-		if (prediction_m == nullptr)
-			throw std::runtime_error("[ERRR] Prediction pointer is invalid\n");
-
-		a->prediction = std::move(prediction);
-		a->prediction_m = prediction_m;
-	}
+	auto prediction = xrt::bo(device, prediction, prediction_mem_grp);
+	void *prediction_m = prediction.map();
+	if (prediction_m == nullptr)
+		throw std::runtime_error("[ERRR] Prediction pointer is invalid\n");
 
 	a->kernel = std::move(digitcaps_accelerator);
 	a->device = std::move(device);
 	a->runner = std::move(runner);
 	a->input = std::move(input);
 	a->weights = std::move(weights);
+	a->prediction = std::move(prediction);
 	a->input_m = input_m;
 	a->weights_m = weights_m;
+	a->prediction_m = prediction_m;
 
 	// Return accelerator
 	return a;
