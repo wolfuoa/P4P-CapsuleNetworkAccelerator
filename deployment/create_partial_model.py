@@ -36,6 +36,11 @@ def remove_reconstruction(evaluate = False):
     partial_model= Model(inputs=eval_model.input, outputs=eval_model.get_layer(layer_name).output)
     partial_model.summary()
 
+    if evaluate == True: 
+        partial_model.compile(optimizer=optimizers.Adam(0.005),
+                      loss=[margin_loss, 'mse'],
+                      metrics={'primarycap_squash': 'accuracy'})   
+
     return partial_model
 
 

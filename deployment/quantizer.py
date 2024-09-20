@@ -21,7 +21,7 @@ def quantize_model(file_path, save_path):
 
     # dump quantize results
     vitis_quantize.VitisQuantizer.dump_model( model=quantized_model, dataset=x_test[0:1], output_dir="./dump_results", dump_float=True)
-
+    
     # (experimental) inspector code
     # inspector = vitis_inspect.VitisInspector(target="DPUCZDX8G_ISA1_B4096");
     # inspector.inspect_model(model, plot=True, plot_file = "model.svg", dump_results=True, dump_results_file="inspect_results.txt", verbose=1)
