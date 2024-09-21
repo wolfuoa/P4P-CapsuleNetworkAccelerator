@@ -33,7 +33,7 @@ static void add(fixed_t *input_mat, fixed_t *coupling_terms);
 static void coalesce_partial_sums(fixed_t *input, fixed_t *output);
 // ---------------- FUNCTION DECLARATIONS ----------------
 
-void dynamic_routing(fixed_t *input, fixed_t *weights, fixed_t *prediction)
+void digitcaps_accel(fixed_t *input, fixed_t *weights, fixed_t *prediction)
 {
     #pragma HLS INTERFACE mode=m_axi port=input offset=slave bundle=gmem0 max_read_burst_length=256 max_write_burst_length=256 depth=9216
     #pragma HLS INTERFACE mode=m_axi port=weights offset=slave bundle=gmem1 max_read_burst_length=256 max_write_burst_length=256 depth=1474560

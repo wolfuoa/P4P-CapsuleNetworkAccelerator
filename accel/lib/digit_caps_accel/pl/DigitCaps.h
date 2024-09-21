@@ -5,6 +5,6 @@
 
 #include "constants.h"
 
-void dynamic_routing(float *input, float *weights, float *prediction);
+void digitcaps_accel(float *input, float *weights, float *prediction);
 
 #endif	// DIGIT_CAPS_H
