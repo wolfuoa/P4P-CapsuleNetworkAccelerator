@@ -27,6 +27,7 @@
 # *.v
 
 .DS_Store
+._.DS_Store
 
 work/
 dump/
