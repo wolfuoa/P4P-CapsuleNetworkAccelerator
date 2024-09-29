@@ -204,6 +204,7 @@ static uint16_t get_max_prediction(float *prediction)
 	float currentLargest = 0.0;
 	for (uint16_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
 	{
+		cout << i << ": " << prediction[i] << endl;
 		if (prediction[i] > currentLargest)
 		{
 			digit = i;
@@ -246,62 +247,11 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t num_images, const xir::
 
 	long imread_time = 0, dpu_latency = 0, post_time = 0;
 
-	// auto input_tensor_buffers = runner->get_inputs();
-	// auto output_tensor_buffers = runner->get_outputs();
-	// CHECK_EQ(input_tensor_buffers.size(), 1u) << "only supports 1 input";
-
-	// auto input_tensor = input_tensor_buffers[0]->get_tensor();
-	// auto batch = input_tensor->get_shape().at(0);
-
-	// int height = input_tensor->get_shape().at(1);
-	// int width = input_tensor->get_shape().at(2);
-	// auto channels = input_tensor->get_shape().at(3);
-	// auto input_scale = vart::get_input_scale(input_tensor);
-	// auto inSize = height * width * channels;
-	// vector<float *> imageList;
-
-	// auto output_tensor = output_tensor_buffers[1]->get_tensor();
-	// auto out_height = output_tensor->get_shape().at(1);
-	// auto out_width = output_tensor->get_shape().at(2);
-	// auto output_scale = vart::get_output_scale(output_tensor);
-
-	// auto osize = out_height * out_width;
-	// vector<uint64_t> dpu_input_phy_addr(batch, 0u);
-	// uint64_t dpu_input_size = 0u;
-	// vector<float *> inptr_v;
-	// auto in_dims = input_tensor->get_shape();
-
-	// vector<uint64_t> data_in_addr(batch, 0u);
-
-	// for (auto batch_idx = 0; batch_idx < batch; ++batch_idx)
-	// {
-	// 	std::tie(data_in_addr[batch_idx], dpu_input_size) = input_tensor_buffers[0]->data({batch_idx, 0, 0, 0});
-	// 	std::tie(dpu_input_phy_addr[batch_idx], dpu_input_size) = input_tensor_buffers[0]->data_phy({batch_idx, 0, 0, 0});
-	// }
-
-	// vector<uint64_t> dpu_output_phy_addr(batch, 0u);
-	// uint64_t dpu_output_size = 0u;
-	// vector<float *> outptr_v;
-
-	// auto dims =  output_tensor->get_shape();
-	// for (auto batch_idx = 0; batch_idx < batch; ++batch_idx)
-	// {
-	// 	auto idx = std::vector<int32_t>(dims.size());
-	// 	idx[0] = batch_idx;
-	// 	auto data = output_tensor_buffers[1]->data(idx);
-	// 	float *data_out = (float *)data.first;
-	// 	outptr_v.push_back(data_out);
-	// 	std::tie(dpu_output_phy_addr[batch_idx], dpu_output_size) = output_tensor_buffers[1]->data_phy({batch_idx, 0, 0, 0});
-	// }
-
 	 /* get in/out tensors and dims*/
 	auto outputTensors = runner->get_output_tensors();
 	auto inputTensors = runner->get_input_tensors();
 	auto out_dims = outputTensors[0]->get_shape();
 	auto in_dims = inputTensors[0]->get_shape();
-
-	// auto input_scale = get_input_scale(inputTensors[0]);
-	// auto output_scale = get_output_scale(outputTensors[0]);
 
 	/*get shape info*/
 	int outSize = shapes.outTensorList[0].size;
@@ -346,23 +296,8 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t num_images, const xir::
 	{
 		unsigned int runSize = (num_images < (n + batchSize)) ? (num_images - n) : batchSize;
 
-		// for (unsigned int i = 0; i < runSize; i++)
-		// {
-
-		// 	// Potential Future: Hardware Preprocessing (float multiplication)
-
-		// 	std::memcpy(data_in_addr[i], (const float *)images[i].data(), IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
-
-		// 	imageList.push_back(images[i].data());
-		// }
-
 		total_images += num_images;
 		auto dpu_start = std::chrono::system_clock::now();
-
-		// Potential Future: Hardware Preprocessing (float multiplication)
-		// for (auto &input : input_tensor_buffers)
-		// 	input->sync_for_write(0, input->get_tensor()->get_data_size() /
-		// 								 input->get_tensor()->get_shape()[0]);
 
 		/* in/out tensor refactory for batch inout/output */
 		batchTensors.push_back(std::shared_ptr<xir::Tensor>(
@@ -373,7 +308,7 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t num_images, const xir::
 		inputs.push_back(std::make_unique<CpuFlatTensorBuffer>(
 			imageInputs,
 			batchTensors.back().get()));
-
+`
 		batchTensors.push_back(std::shared_ptr<xir::Tensor>(
 			xir::Tensor::create(outputTensors[0]->get_name(),
 			out_dims,
@@ -390,13 +325,8 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t num_images, const xir::
 		outputsPtr.push_back(outputs[0].get());
 
 		// Run DPU
-		auto job_id = runner->execute_async(inputsPtr, outputsPtr);
-		runner->wait(job_id.first, -1);
-
-		// if (digitcaps_sw_imp)
-		// 	for (auto output : output_tensor_buffers)
-		// 		output->sync_for_read(0, output->get_tensor()->get_data_size() /
-		// 									 output->get_tensor()->get_shape()[0]);
+		// auto job_id = runner->execute_async(inputsPtr, outputsPtr);
+		// runner->wait(job_id.first, -1);
 
 		auto dpu_end = std::chrono::system_clock::now();
 		auto dpu_duration = std::chrono::duration_cast<std::chrono::microseconds>(dpu_end - dpu_start);
@@ -404,14 +334,15 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t num_images, const xir::
 
 		auto post_start = std::chrono::system_clock::now();
 
-		float prediction_data[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
-		float prediction_magnitude[DIGIT_CAPS_NUM_DIGITS];
+		float prediction_data[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE] = {0.0};
+		float prediction_magnitude[DIGIT_CAPS_NUM_DIGITS] = {0.0};
 
 		for (unsigned int i = 0; i < num_images; i++)
 		{
 			// Software DigitCaps
 			if (digitcaps_sw_imp)
 			{
+				cout << (uint16_t)labels[i] << endl;
 				dynamic_routing(&primcaps_output[i * outSize], weights.data(), prediction_data);
 			}
 			// Hardware DigitCaps using zero copy
