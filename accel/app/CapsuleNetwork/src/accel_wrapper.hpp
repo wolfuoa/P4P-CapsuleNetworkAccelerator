@@ -80,7 +80,7 @@ int run_digitcaps_accelerator(DigitcapsAcceleratorType *a, uint64_t dpu_output_p
 	a->runner.wait();
 
 	// Extraneous probably
-	a->prediction_m.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_FROM_DEVICE);
+	a->prediction.sync(xclBOSyncDirection::XCL_BO_SYNC_BO_FROM_DEVICE);
 
 	// Return success
 	return 0;
@@ -150,7 +150,7 @@ DigitcapsAcceleratorType *init_digitcaps_accelerator(float *weights_array)
 	// 	// Create memory for output vector
 	const int prediction_size = DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE * sizeof(float);
 
-	auto prediction = xrt::bo(device, prediction, prediction_mem_grp);
+	auto prediction = xrt::bo(device, prediction_size, prediction_mem_grp);
 	void *prediction_m = prediction.map();
 	if (prediction_m == nullptr)
 		throw std::runtime_error("[ERRR] Prediction pointer is invalid\n");

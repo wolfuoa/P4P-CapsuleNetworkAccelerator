@@ -137,46 +137,6 @@ static void apply_weights(fixed_t *input_mat, fixed_t *weights, fixed_t *weighte
 			}
 		}
 	}
-
-// for (uint32_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; i++)
-// 	{
-// 		for (uint32_t j = 0; j < DIGIT_CAPS_INPUT_CAPSULES; j++)
-// 		{
-// 			// burst read weight array in small chunks
-// 			fixed_t weight_buffer[DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE];
-//             #pragma HLS ARRAY_PARTITION variable=weight_buffer factor=8 dim=1 type=cyclic
-
-// 			memcpy(weight_buffer, (const fixed_t *)weights + weights_per_class * i + num_outputs * j, DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE * sizeof(fixed_t));
-
-// 			iterator_a = DIGIT_CAPS_INPUT_DIM_CAPSULE * j;
-// 			iterator_b = DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_CAPSULES * i + DIGIT_CAPS_DIM_CAPSULE * j;
-
-// 			for (uint32_t k = 0; k < DIGIT_CAPS_DIM_CAPSULE; ++k)
-// 			{
-// 				// dot product between rows of matA and cols of matB
-//                 fixed_t a[DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE];
-//                 #pragma HLS ARRAY_PARTITION variable=a dim=1 type=complete
-
-//                 fixed_t product = 0.0;
-//                 #pragma HLS BIND_OP variable=product op=mul
-
-//                 for(uint8_t i = 0; i < DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE; ++i)
-//                 {
-//                     #pragma HLS PIPELINE
-//                     a[i] = input_mat[iterator_a + i];
-//                 }
-
-//                 for(uint8_t i = 0; i < DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_DIM_CAPSULE; ++i)
-//                 {
-//                     #pragma HLS UNROLL
-//                     product += weight_buffer[i] * a[i];
-//                 }
-
-// 				weighted_input[iterator_b + k] = product;
-// 			}
-// 		}
-// 	}
-
 }
 
 static void softmax(fixed_t *mat_b, fixed_t *mat_c)

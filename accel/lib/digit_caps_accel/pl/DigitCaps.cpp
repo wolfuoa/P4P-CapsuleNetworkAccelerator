@@ -35,12 +35,14 @@ static void coalesce_partial_sums(fixed_t *input, fixed_t *output);
 
 void digitcaps_accel(fixed_t *input, fixed_t *weights, fixed_t *prediction)
 {
-    #pragma HLS INTERFACE mode=m_axi port=input offset=slave bundle=gmem0 max_read_burst_length=256 max_write_burst_length=256 depth=9216
-    #pragma HLS INTERFACE mode=m_axi port=weights offset=slave bundle=gmem1 max_read_burst_length=256 max_write_burst_length=256 depth=1474560
-    #pragma HLS INTERFACE mode=m_axi port=prediction offset=slave bundle=gmem2 max_read_burst_length=256 max_write_burst_length=256
+    #pragma HLS INTERFACE mode=m_axi port=input offset=slave bundle=gmem0 max_read_burst_length=8 max_write_burst_length=8 depth=9216
+    #pragma HLS INTERFACE mode=m_axi port=weights offset=slave bundle=gmem1 max_read_burst_length=8 max_write_burst_length=8 depth=1474560
+    #pragma HLS INTERFACE mode=m_axi port=prediction offset=slave bundle=gmem2 max_read_burst_length=8 max_write_burst_length=8
 
 	fixed_t primary_caps[DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_INPUT_DIM_CAPSULE];
+    #pragma HLS BIND_STORAGE variable=primary_caps type=ram_1wnr impl=lutram
 	fixed_t squashed_v[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
+    #pragma HLS BIND_STORAGE variable=squashed_v type=ram_1wnr impl=lutram
     // #pragma HLS ARRAY_PARTITION variable=squashed_v dim=1 type=complete
 
 	// burst read input into local array
@@ -50,10 +52,16 @@ void digitcaps_accel(fixed_t *input, fixed_t *weights, fixed_t *prediction)
     #pragma HLS ARRAY_PARTITION variable=weighted_input_u dim=1 type=cyclic factor=8
 
 	fixed_t coupling_b[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
+    #pragma HLS BIND_STORAGE variable=coupling_b type=ram_1wnr impl=lutram
 	fixed_t coupling_c[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
-	fixed_t sum_of_products_s[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE];
-    #pragma HLS ARRAY_PARTITION variable=weighted_input_u dim=1 type=cyclic factor=8
+    #pragma HLS BIND_STORAGE variable=coupling_c type=ram_1wnr impl=lutram
+    // softmax partition
+    #pragma HLS ARRAY_PARTITION variable=coupling_c dim=1 type=cyclic factor=20
+	fixed_t sum_of_products_s[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
+    #pragma HLS BIND_STORAGE variable=sum_of_products_s type=ram_1wnr impl=lutram
+    // #pragma HLS ARRAY_PARTITION variable=sum_of_products_s dim=1 type=cyclic factor=16
 	fixed_t output_agreement[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_INPUT_CAPSULES];
+    #pragma HLS BIND_STORAGE variable=output_agreement type=ram_1wnr impl=lutram
 
 	apply_weights(primary_caps, weights, weighted_input_u);
 
@@ -183,6 +191,7 @@ static void softmax(fixed_t *mat_b, fixed_t *mat_c)
 	// For all input capsules i in layer l
 	for (uint32_t i = 0; i < DIGIT_CAPS_INPUT_CAPSULES; ++i)
 	{
+        #pragma HLS PIPELINE II=4
 		// Compute the exponential sum of log prior probability logits
 		// $sum_{k}^{DIGITS} exp(b(i,k))
 		fixed_t sum = 0.0;
@@ -201,6 +210,7 @@ static void softmax(fixed_t *mat_b, fixed_t *mat_c)
 		{
 			// Divide the numerator by the denominator
 			mat_c[i + j * DIGIT_CAPS_INPUT_CAPSULES] /= (sum + (fixed_t)1e-7);
+            #pragma HLS BIND_OP variable=mat_c op=ddiv impl=dsp latency=-1
 		}
 	}
 }
@@ -208,48 +218,31 @@ static void softmax(fixed_t *mat_b, fixed_t *mat_c)
 static void sum_of_products(fixed_t *input_mat, fixed_t *coupling_terms, fixed_t *output_mat)
 {
 	// For all capsules j in layer (l + 1)
-	for (uint32_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
-	{
-		// For all capsules i in layer l
-		for (uint32_t j = 0; j < DIGIT_CAPS_INPUT_CAPSULES; ++j)
-		{
-			fixed_t operand = coupling_terms[i * DIGIT_CAPS_INPUT_CAPSULES + j];
-			uint32_t lin_index = (i * DIGIT_CAPS_DIM_CAPSULE * DIGIT_CAPS_INPUT_CAPSULES) + (j * DIGIT_CAPS_DIM_CAPSULE);
-			// For all capsule output dimensions
-			for (uint32_t k = 0; k < DIGIT_CAPS_DIM_CAPSULE; ++k)
-			{
-				output_mat[lin_index + k] = input_mat[lin_index + k] * operand;
-			}
-		}
-	}
-
-	// Combine into one loop?
 	for (uint32_t sum_i = 0; sum_i < DIGIT_CAPS_NUM_DIGITS; ++sum_i)
 	{
-        // #pragma HLS PIPELINE II=1
-        //#pragma HLS LOOP_MERGE force
-
+		// For each output dimension in the capsule
 		for (uint32_t sum_j = 0; sum_j < DIGIT_CAPS_DIM_CAPSULE; ++sum_j)
 		{
-            #pragma HLS PIPELINE II=1
+			fixed_t sum = 0.0;  // Accumulate the sum
             
-            fixed_t partial_sums[DIGIT_CAPS_INPUT_CAPSULES] = {0.0};
-            #pragma HLS ARRAY_PARTITION variable=partial_sums type=complete
+			// For all capsules i in layer l
 			for (uint32_t sum_k = 0; sum_k < DIGIT_CAPS_INPUT_CAPSULES; ++sum_k)
 			{
-                // #pragma HLS UNROLL
-				partial_sums[sum_k] += output_mat[sum_i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE + sum_j + sum_k * DIGIT_CAPS_DIM_CAPSULE];
+                #pragma HLS PIPELINE II=1
+
+				// Multiply the input by the coupling term and accumulate
+				sum += input_mat[(sum_i * DIGIT_CAPS_INPUT_CAPSULES * DIGIT_CAPS_DIM_CAPSULE) + (sum_k * DIGIT_CAPS_DIM_CAPSULE) + sum_j] * coupling_terms[sum_i * DIGIT_CAPS_INPUT_CAPSULES + sum_k];
 			}
-            fixed_t sum;
-            coalesce_partial_sums(partial_sums, &sum);
-            output_mat[sum_i * DIGIT_CAPS_DIM_CAPSULE + sum_j] = sum;
+
+			// Store the accumulated sum in output_mat
+			output_mat[sum_i * DIGIT_CAPS_DIM_CAPSULE + sum_j] = sum;
 		}
 	}
 }
 
 static void coalesce_partial_sums(fixed_t *input, fixed_t *output)
 {
-    fixed_t result;
+    fixed_t result = (fixed_t)0.0;
 	for (int i = 0; i < DIGIT_CAPS_INPUT_CAPSULES; ++i)
 	{
         #pragma HLS DEPENDENCE variable=result type=intra direction=RAW true
@@ -267,13 +260,14 @@ static void squash(fixed_t *input_mat, fixed_t *squash_mat)
 	fixed_t scale = 0.0;
 
 	// For all capsule j in layer l + 1
-    #pragma HLS loop_merge force
+    // #pragma HLS loop_merge force
 	for (uint32_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
 	{
 		squared_norm = 0.0;
 		// For each corresponding output dimension
 		for (uint32_t dim = 0; dim < DIGIT_CAPS_DIM_CAPSULE; ++dim)
 		{
+            #pragma HLS PIPELINE II=2
 			squared_norm += input_mat[i * DIGIT_CAPS_DIM_CAPSULE + dim] * input_mat[i * DIGIT_CAPS_DIM_CAPSULE + dim];
 		}
 
@@ -282,6 +276,7 @@ static void squash(fixed_t *input_mat, fixed_t *squash_mat)
 		for (uint32_t dim = 0; dim < DIGIT_CAPS_DIM_CAPSULE; ++dim)
 		{
 			squash_mat[i * DIGIT_CAPS_DIM_CAPSULE + dim] = (input_mat[i * DIGIT_CAPS_DIM_CAPSULE + dim] * scale);
+            // #pragma HLS BIND_OP variable=input_mat op=mul impl=dsp latency=-1
 		}
 	}
 }
@@ -310,6 +305,6 @@ static void add(fixed_t *input_mat, fixed_t *coupling_terms)
         #pragma HLS PIPELINE II=2
 		// Update coupling terms
 		coupling_terms[i] += input_mat[i];
-        #pragma HLS BIND_OP variable=coupling_terms op=fadd
+        #pragma HLS BIND_OP variable=coupling_terms op=fadd impl=dsp
 	}
 }
