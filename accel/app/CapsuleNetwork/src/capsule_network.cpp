@@ -37,11 +37,9 @@
 #include "experimental/xrt_xclbin.h"
 #include "vart/runner.hpp"
 #include "vart/runner_ext.hpp"
-/* header file OpenCV for image processing */
-#include <opencv2/opencv.hpp>
 
 // C++ Header
-#include "accel_wrapper.hpp"
+#include "accel_wrapper.hp"
 
 using namespace std;
 using namespace cv;
@@ -308,7 +306,7 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t num_images, const xir::
 		inputs.push_back(std::make_unique<CpuFlatTensorBuffer>(
 			imageInputs,
 			batchTensors.back().get()));
-`
+
 		batchTensors.push_back(std::shared_ptr<xir::Tensor>(
 			xir::Tensor::create(outputTensors[0]->get_name(),
 			out_dims,
