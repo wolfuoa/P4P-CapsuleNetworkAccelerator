@@ -8,7 +8,7 @@ usage() {
   echo "           --image_dir    <image-dir>"
   echo "           --use_sw_digitcaps  (For software DigitCaps)"
   echo "           --weight_file   <weight-file>"
-  echo "           --verbose      (To print Top 5 outputs for each image) "
+  echo "           --verbose      (To skip timing) "
   echo "           --num_images      (How many images to test) "
   echo "           --label_file   <label-file>"
   echo "           --performance_diff    (To compare the Performance of Software and Hardware preprocessing)"
@@ -49,7 +49,7 @@ do
     --use_sw_digitcaps   ) sw_digitcaps=1                  ; shift 1 ;;
     --weight_file        ) weight_file="$2"                ; shift 2 ;;
     --verbose            ) verbose=1                       ; shift 1 ;;
-    --num_images         ) num_images=1                    ; shift 1 ;;
+    --num_images         ) num_images="$2"                 ; shift 2 ;;
     --label_file         ) label_file="$2"                 ; shift 2 ;;
     --performance_diff   ) performance_diff=1              ; shift 1 ;;
     --accuracy_diff      ) accuracy_diff=1                 ; shift 1 ;;

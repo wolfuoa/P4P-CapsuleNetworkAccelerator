@@ -42,6 +42,7 @@ $CXX -O2 -w\
   -o ./bin/$name \
   -std=c++17 \
   src/capsule_network.cpp \
+  src/DigitCaps.cpp \
   src/common.cpp \
   -L/opt/xilinx/xrt/lib \
   -luuid \
@@ -60,4 +61,3 @@ $CXX -O2 -w\
   -lglog \
   -lunilog \
   -lxir 
-

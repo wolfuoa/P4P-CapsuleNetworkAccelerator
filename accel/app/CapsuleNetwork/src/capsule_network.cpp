@@ -39,7 +39,7 @@
 #include "vart/runner_ext.hpp"
 
 // C++ Header
-#include "accel_wrapper.hp"
+#include "accel_wrapper.hpp"
 
 using namespace std;
 using namespace cv;
@@ -202,7 +202,6 @@ static uint16_t get_max_prediction(float *prediction)
 	float currentLargest = 0.0;
 	for (uint16_t i = 0; i < DIGIT_CAPS_NUM_DIGITS; ++i)
 	{
-		cout << i << ": " << prediction[i] << endl;
 		if (prediction[i] > currentLargest)
 		{
 			digit = i;
@@ -323,8 +322,8 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t num_images, const xir::
 		outputsPtr.push_back(outputs[0].get());
 
 		// Run DPU
-		// auto job_id = runner->execute_async(inputsPtr, outputsPtr);
-		// runner->wait(job_id.first, -1);
+		auto job_id = runner->execute_async(inputsPtr, outputsPtr);
+		runner->wait(job_id.first, -1);
 
 		auto dpu_end = std::chrono::system_clock::now();
 		auto dpu_duration = std::chrono::duration_cast<std::chrono::microseconds>(dpu_end - dpu_start);
@@ -340,7 +339,6 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t num_images, const xir::
 			// Software DigitCaps
 			if (digitcaps_sw_imp)
 			{
-				cout << (uint16_t)labels[i] << endl;
 				dynamic_routing(&primcaps_output[i * outSize], weights.data(), prediction_data);
 			}
 			// Hardware DigitCaps using zero copy
@@ -353,6 +351,7 @@ void runCapsuleNetwork(vart::RunnerExt *runner, uint32_t num_images, const xir::
 
 			convert_to_magnitude(prediction_data, prediction_magnitude);
 			uint16_t final_answer = get_max_prediction(prediction_magnitude);
+			cout << "Final Answer -> " << final_answer << ": " << prediction_magnitude[final_answer] << endl;
 			if (final_answer == (uint16_t)labels[i])
 				correct_classification++;
 		}
