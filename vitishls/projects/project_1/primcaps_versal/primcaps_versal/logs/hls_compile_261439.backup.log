@@ -1,0 +1,39 @@
+INFO: [v++ 60-1548] Creating build summary session with primary output /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/primcaps_versal/primcaps_versal.hlscompile_summary, at Thu Aug 29 10:04:06 2024
+INFO: [v++ 82-31] Launching vitis_hls: vitis_hls -nolog -run csynth -work_dir /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/primcaps_versal -config /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/hls_config.cfg -cmdlineconfig /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/primcaps_versal/hls/config.cmdline
+
+****** Vitis HLS - High-Level Synthesis from C, C++ and OpenCL v2024.1 (64-bit)
+  **** SW Build 5069499 on May 21 2024
+  **** IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+  **** SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+  **** Start of session at: Thu Aug 29 10:04:07 2024
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source /home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/scripts/vitis_hls/hls.tcl -notrace
+INFO: [HLS 200-10] For user 'jjos425' on host 'en432999.uoa.auckland.ac.nz' (Linux_x86_64 version 5.15.0-118-generic) on Thu Aug 29 10:04:08 NZST 2024
+INFO: [HLS 200-10] On os Ubuntu 20.04.5 LTS
+INFO: [HLS 200-10] In directory '/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal'
+INFO: [HLS 200-2005] Using work_dir /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/primcaps_versal 
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/constants.h' from /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/hls_config.cfg(7)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/constants.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/PrimaryCaps.cpp' from /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/PrimaryCaps.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/PrimaryCaps.h' from /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/PrimaryCaps.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/testing_suite.h' from /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/testing_suite.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.top=process_features' from /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/hls_config.cfg(11)
+INFO: [HLS 200-1465] Applying ini 'flow_target=vitis' from /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vitis'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_latency=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_alignment_byte_size=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_max_widen_bitwidth=512
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_rtl -register_reset_num=3
+INFO: [HLS 200-1465] Applying ini 'part=xcve1752-nsvg1369-2LP-e-L' from /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/hls_config.cfg(1)
+ERROR: [HLS 200-1023] Part 'xcve1752-nsvg1369-2LP-e-L' is not installed.
+ERROR: [HLS 200-1912] Problem with ini entry 'part=xcve1752-nsvg1369-2LP-e-L' from /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/hls_config.cfg(1): command 'create_platform' returned error code
+ERROR: problem with 'part=xcve1752-nsvg1369-2LP-e-L' from /home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/hls_config.cfg(1): command 'create_platform' returned error code
+INFO: [HLS 200-112] Total CPU user time: 1.27 seconds. Total CPU system time: 0.08 seconds. Total elapsed time: 1.28 seconds; peak allocated memory: 175.438 MB.

@@ -1,0 +1,247 @@
+<ENTRY>
+{
+ "thisFile": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/relu_conv_2d.hlscompile_summary",
+ "connectId": "",
+ "serverToken": "",
+ "timestamp": "0"
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_CmdStep",
+ "dateTimestamp": "Mon Sep 23 10:22:37 2024",
+ "timestampMillis": "1727043757546",
+ "buildStep": {
+  "cmdId": "071c9517-cbf4-4580-a723-6fa6bca77cb2",
+  "name": "v++",
+  "logFile": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/logs/relu_conv_2d.steps.log",
+  "commandLine": "/home/jjos425/Desktop/P4P33-2024/Vitis/2024.1/bin/unwrapped/lnx64.o/v++  -c --mode hls --config /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg --work_dir relu_conv_2d ",
+  "args": [
+   "-c",
+   "--mode",
+   "hls",
+   "--config",
+   "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg",
+   "--work_dir",
+   "relu_conv_2d"
+  ],
+  "iniFiles": [
+   {
+    "path": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg",
+    "content": "part=xczu9eg-ffvb1156-2-e\n\n[hls]\nflow_target=vitis\npackage.output.format=ip_catalog\npackage.output.syn=false\nsyn.top=relu_conv_2d\nsyn.file=/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/ReLUConv1.cpp\nsyn.file=/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/ReLUConv1.h\nsyn.file=/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/constants.h\ncsim.code_analyzer=0\ntb.file=/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/ReLUConv1TestBench.cpp"
+   }
+  ],
+  "cwd": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Mon Sep 23 10:22:37 2024",
+ "timestampMillis": "1727043757546",
+ "status": {
+  "cmdId": "071c9517-cbf4-4580-a723-6fa6bca77cb2",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_FlowMetaData",
+ "dateTimestamp": "Mon Sep 23 10:22:39 2024",
+ "timestampMillis": "1727043759778",
+ "buildSummary": {
+  "hardwarePlatform": "",
+  "hardwareDsa": "",
+  "platformDirectory": "",
+  "runtime": "",
+  "systemConfig": "",
+  "flow": "BF_COMPILE",
+  "target": "TT_HW",
+  "kernels": [
+   {
+    "base": {
+     "type": "KERNEL",
+     "name": "relu_conv_2d",
+     "file": "",
+     "reports": [],
+     "uuid": ""
+    },
+    "sources": [
+     "/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/ReLUConv1.cpp",
+     "/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/ReLUConv1.h",
+     "/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/constants.h"
+    ],
+    "psSources": [],
+    "cuNames": [],
+    "type": "HLS",
+    "frequency": 0,
+    "freqUnits": ""
+   }
+  ],
+  "toolVersion": "2024.1"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_SubCmdStep",
+ "dateTimestamp": "Mon Sep 23 10:22:39 2024",
+ "timestampMillis": "1727043759779",
+ "buildStep": {
+  "cmdId": "c6ff0875-e07c-48ec-91b1-19a1c988b163",
+  "name": "csynth_design",
+  "logFile": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/hls.log",
+  "commandLine": "csynth_design",
+  "args": [],
+  "iniFiles": [],
+  "cwd": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Mon Sep 23 10:22:39 2024",
+ "timestampMillis": "1727043759779",
+ "status": {
+  "cmdId": "c6ff0875-e07c-48ec-91b1-19a1c988b163",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Mon Sep 23 10:22:39 2024",
+ "timestampMillis": "1727043759779",
+ "report": {
+  "path": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/hls_data.json",
+  "name": "",
+  "fileType": "JSON",
+  "reportType": "HLS_SYNTHESIS",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Mon Sep 23 10:22:39 2024",
+ "timestampMillis": "1727043759779",
+ "report": {
+  "path": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth.rpt",
+  "name": "",
+  "fileType": "TEXT",
+  "reportType": "HLS_SYNTHESIS",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Mon Sep 23 10:22:39 2024",
+ "timestampMillis": "1727043759779",
+ "report": {
+  "path": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth.xml",
+  "name": "",
+  "fileType": "XML",
+  "reportType": "HLS_SYNTHESIS",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Mon Sep 23 10:23:36 2024",
+ "timestampMillis": "1727043816332",
+ "report": {
+  "path": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls",
+  "name": "",
+  "fileType": "DIR",
+  "reportType": "HLS_DATAFLOW",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Mon Sep 23 10:23:36 2024",
+ "timestampMillis": "1727043816332",
+ "report": {
+  "path": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls",
+  "name": "",
+  "fileType": "DIR",
+  "reportType": "HLS_FUNCTION_CALL_GRAPH",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Mon Sep 23 10:23:36 2024",
+ "timestampMillis": "1727043816332",
+ "report": {
+  "path": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls",
+  "name": "",
+  "fileType": "DIR",
+  "reportType": "HLS_SCHEDULE",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Mon Sep 23 10:23:36 2024",
+ "timestampMillis": "1727043816332",
+ "status": {
+  "cmdId": "c6ff0875-e07c-48ec-91b1-19a1c988b163",
+  "state": "CS_PASSED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Mon Sep 23 10:23:36 2024",
+ "timestampMillis": "1727043816484",
+ "status": {
+  "cmdId": "071c9517-cbf4-4580-a723-6fa6bca77cb2",
+  "state": "CS_PASSED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Mon Sep 23 10:23:36 2024",
+ "timestampMillis": "1727043816533",
+ "report": {
+  "path": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/reports/v++_compile_relu_conv_2d_guidance.html",
+  "name": "",
+  "fileType": "HTML",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Mon Sep 23 10:23:36 2024",
+ "timestampMillis": "1727043816533",
+ "report": {
+  "path": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/reports/.db/v++_compile_relu_conv_2d_guidance.pb3",
+  "name": "",
+  "fileType": "BINARY_PROTOBUF",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>

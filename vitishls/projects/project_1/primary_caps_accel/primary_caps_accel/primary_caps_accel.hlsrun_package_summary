@@ -1,0 +1,162 @@
+<ENTRY>
+{
+ "thisFile": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/primary_caps_accel.hlsrun_package_summary",
+ "connectId": "",
+ "serverToken": "",
+ "timestamp": "0"
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_CmdStep",
+ "dateTimestamp": "Wed Jul 31 16:51:01 2024",
+ "timestampMillis": "1722401461867",
+ "buildStep": {
+  "cmdId": "9c280ae3-bf14-4093-b97e-504b8cbb9ceb",
+  "name": "vitis-run",
+  "logFile": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/logs/primary_caps_accel.steps.log",
+  "commandLine": "/home/jjos425/Desktop/P4P33-2024/Vitis/2024.1/bin/unwrapped/lnx64.o/vitis-run  --mode hls --package --config /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg --work_dir primary_caps_accel ",
+  "args": [
+   "--mode",
+   "hls",
+   "--package",
+   "--config",
+   "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg",
+   "--work_dir",
+   "primary_caps_accel"
+  ],
+  "iniFiles": [],
+  "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Wed Jul 31 16:51:01 2024",
+ "timestampMillis": "1722401461868",
+ "status": {
+  "cmdId": "9c280ae3-bf14-4093-b97e-504b8cbb9ceb",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_FlowMetaData",
+ "dateTimestamp": "Wed Jul 31 16:51:03 2024",
+ "timestampMillis": "1722401463958",
+ "buildSummary": {
+  "hardwarePlatform": "",
+  "hardwareDsa": "",
+  "platformDirectory": "",
+  "runtime": "",
+  "systemConfig": "",
+  "flow": "BF_RUN",
+  "target": "TT_HLS_XO",
+  "kernels": [
+   {
+    "base": {
+     "type": "KERNEL",
+     "name": "process_features",
+     "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/process_features.xo",
+     "reports": [],
+     "uuid": ""
+    },
+    "sources": [
+     "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/constants.h",
+     "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+     "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.h",
+     "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/testing_suite.h"
+    ],
+    "psSources": [],
+    "cuNames": [],
+    "type": "HLS",
+    "frequency": 0,
+    "freqUnits": ""
+   }
+  ],
+  "toolVersion": "2024.1"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_SubCmdStep",
+ "dateTimestamp": "Wed Jul 31 16:51:03 2024",
+ "timestampMillis": "1722401463959",
+ "buildStep": {
+  "cmdId": "d60210a0-d2b3-45b2-af3e-67abc5139427",
+  "name": "export_design",
+  "logFile": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/hls.log",
+  "commandLine": "export_design -flow none",
+  "args": [
+   "-flow",
+   "none"
+  ],
+  "iniFiles": [],
+  "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Wed Jul 31 16:51:03 2024",
+ "timestampMillis": "1722401463959",
+ "status": {
+  "cmdId": "d60210a0-d2b3-45b2-af3e-67abc5139427",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Wed Jul 31 16:51:03 2024",
+ "timestampMillis": "1722401463962",
+ "status": {
+  "cmdId": "d60210a0-d2b3-45b2-af3e-67abc5139427",
+  "state": "CS_FAILED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Wed Jul 31 16:51:04 2024",
+ "timestampMillis": "1722401464005",
+ "status": {
+  "cmdId": "9c280ae3-bf14-4093-b97e-504b8cbb9ceb",
+  "state": "CS_FAILED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Wed Jul 31 16:51:04 2024",
+ "timestampMillis": "1722401464005",
+ "report": {
+  "path": "",
+  "name": "",
+  "fileType": "HTML",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Wed Jul 31 16:51:04 2024",
+ "timestampMillis": "1722401464005",
+ "report": {
+  "path": "",
+  "name": "",
+  "fileType": "BINARY_PROTOBUF",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>

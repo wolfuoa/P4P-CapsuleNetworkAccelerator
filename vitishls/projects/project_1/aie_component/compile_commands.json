@@ -1,0 +1,15 @@
+[
+  {
+    "directory": "/home/jjos425/Documents/vivado_projects/project_1/aie_component/_ide/_build",
+    "arguments": [
+      "/home/jjos425/Desktop/P4P33-2024/Vitis/2024.1/aietools/tps/lnx64/gcc/bin/g++",
+      "-c",
+      "-I/home/jjos425/Desktop/P4P33-2024/Vitis/2024.1/aietools/include",
+      "-I/home/jjos425/Documents/vivado_projects/project_1/aie_component",
+      "--part",
+      "xcve1752-nsvg1369-2LP-e-L",
+      "/home/jjos425/Documents/vivado_projects/project_1/aie_component/PrimaryCapsTestbench.cpp"
+    ],
+    "file": "/home/jjos425/Documents/vivado_projects/project_1/aie_component/PrimaryCapsTestbench.cpp"
+  }
+]

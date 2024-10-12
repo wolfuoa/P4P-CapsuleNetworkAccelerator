@@ -1,0 +1,3 @@
+XILINX_HLS=/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1
+XILINX_VITIS=/home/jjos425/Desktop/P4P33-2024/Vitis/2024.1
+cmdline: /home/jjos425/Desktop/P4P33-2024/Vitis/2024.1/bin/xcd -p 38381 -t a9517572-5a8b-11ef-99ff-b516ed85bace

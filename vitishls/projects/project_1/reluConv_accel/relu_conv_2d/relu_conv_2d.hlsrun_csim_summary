@@ -1,0 +1,158 @@
+<ENTRY>
+{
+ "thisFile": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/relu_conv_2d.hlsrun_csim_summary",
+ "connectId": "",
+ "serverToken": "",
+ "timestamp": "0"
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_CmdStep",
+ "dateTimestamp": "Mon Jul 15 13:34:43 2024",
+ "timestampMillis": "1721007283789",
+ "buildStep": {
+  "cmdId": "3615db65-f1fb-4778-ad15-1c59aa4addae",
+  "name": "vitis-run",
+  "logFile": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/logs/relu_conv_2d.steps.log",
+  "commandLine": "/home/jjos425/Desktop/P4P33-2024/Vitis/2024.1/bin/unwrapped/lnx64.o/vitis-run  --mode hls --csim --config /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg --work_dir relu_conv_2d ",
+  "args": [
+   "--mode",
+   "hls",
+   "--csim",
+   "--config",
+   "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg",
+   "--work_dir",
+   "relu_conv_2d"
+  ],
+  "iniFiles": [],
+  "cwd": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Mon Jul 15 13:34:43 2024",
+ "timestampMillis": "1721007283789",
+ "status": {
+  "cmdId": "3615db65-f1fb-4778-ad15-1c59aa4addae",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_FlowMetaData",
+ "dateTimestamp": "Mon Jul 15 13:34:45 2024",
+ "timestampMillis": "1721007285874",
+ "buildSummary": {
+  "hardwarePlatform": "",
+  "hardwareDsa": "",
+  "platformDirectory": "",
+  "runtime": "",
+  "systemConfig": "",
+  "flow": "BF_RUN",
+  "target": "TT_HLS_C_SIM",
+  "kernels": [
+   {
+    "base": {
+     "type": "KERNEL",
+     "name": "relu_conv_2d",
+     "file": "",
+     "reports": [],
+     "uuid": ""
+    },
+    "sources": [
+     "/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/ReLUConv1.cpp",
+     "/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/ReLUConv1.h",
+     "/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/constants.h"
+    ],
+    "psSources": [],
+    "cuNames": [],
+    "type": "HLS",
+    "frequency": 0,
+    "freqUnits": ""
+   }
+  ],
+  "toolVersion": "2024.1"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_SubCmdStep",
+ "dateTimestamp": "Mon Jul 15 13:34:45 2024",
+ "timestampMillis": "1721007285874",
+ "buildStep": {
+  "cmdId": "8ac1c08f-f09e-446c-9caf-5a97dfb1096c",
+  "name": "csim_design",
+  "logFile": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/hls.log",
+  "commandLine": "csim_design",
+  "args": [],
+  "iniFiles": [],
+  "cwd": "/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Mon Jul 15 13:34:45 2024",
+ "timestampMillis": "1721007285875",
+ "status": {
+  "cmdId": "8ac1c08f-f09e-446c-9caf-5a97dfb1096c",
+  "state": "CS_RUNNING"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Mon Jul 15 13:34:46 2024",
+ "timestampMillis": "1721007286153",
+ "status": {
+  "cmdId": "8ac1c08f-f09e-446c-9caf-5a97dfb1096c",
+  "state": "CS_PASSED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Status",
+ "dateTimestamp": "Mon Jul 15 13:34:46 2024",
+ "timestampMillis": "1721007286208",
+ "status": {
+  "cmdId": "3615db65-f1fb-4778-ad15-1c59aa4addae",
+  "state": "CS_PASSED"
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Mon Jul 15 13:34:46 2024",
+ "timestampMillis": "1721007286208",
+ "report": {
+  "path": "",
+  "name": "",
+  "fileType": "HTML",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>
+<ENTRY>
+{
+ "type": "ET_Report",
+ "dateTimestamp": "Mon Jul 15 13:34:46 2024",
+ "timestampMillis": "1721007286208",
+ "report": {
+  "path": "",
+  "name": "",
+  "fileType": "BINARY_PROTOBUF",
+  "reportType": "GLOBAL_RULECHECK_GUIDANCE",
+  "cmdId": ""
+ }
+}
+</ENTRY>

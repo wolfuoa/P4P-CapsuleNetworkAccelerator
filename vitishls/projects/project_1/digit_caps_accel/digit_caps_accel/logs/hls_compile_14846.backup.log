@@ -1,0 +1,48 @@
+INFO: [v++ 60-1548] Creating build summary session with primary output /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/digit_caps_accel.hlscompile_summary, at Sun Sep 15 14:17:19 2024
+INFO: [v++ 82-31] Launching vitis_hls: vitis_hls -nolog -run csynth -work_dir /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel -config /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg -cmdlineconfig /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/config.cmdline
+
+****** Vitis HLS - High-Level Synthesis from C, C++ and OpenCL v2024.1 (64-bit)
+  **** SW Build 5069499 on May 21 2024
+  **** IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+  **** SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+  **** Start of session at: Sun Sep 15 14:17:20 2024
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source /home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/scripts/vitis_hls/hls.tcl -notrace
+INFO: [HLS 200-10] For user 'jjos425' on host 'en432999.uoa.auckland.ac.nz' (Linux_x86_64 version 5.15.0-119-generic) on Sun Sep 15 14:17:21 NZST 2024
+INFO: [HLS 200-10] On os Ubuntu 20.04.5 LTS
+INFO: [HLS 200-10] In directory '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel'
+INFO: [HLS 200-2005] Using work_dir /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel 
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/constants.h' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/constants.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.cpp' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.h' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/testing_suite.h' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(11)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/testing_suite.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=DigitTestBench.cpp' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(12)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitTestBench.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'tb.file=DigitTestBench.cpp' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(13)
+INFO: [HLS 200-10] Adding test bench file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitTestBench.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.top=dynamic_routing' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(7)
+INFO: [HLS 200-1465] Applying ini 'flow_target=vitis' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vitis'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_latency=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_alignment_byte_size=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_max_widen_bitwidth=512
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_rtl -register_reset_num=3
+INFO: [HLS 200-1465] Applying ini 'part=xczu9eg-ffvb1156-2-e' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(1)
+INFO: [HLS 200-1611] Setting target device to 'xczu9eg-ffvb1156-2-e'
+INFO: [HLS 200-1465] Applying ini 'package.output.format=xo' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(5)
+INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 1.41 seconds. CPU system time: 0.15 seconds. Elapsed time: 1.47 seconds; current allocated memory: 318.285 MB.
+INFO: [HLS 200-10] Analyzing design file 'DigitTestBench.cpp' ... 
+INFO: [HLS 200-10] Analyzing design file 'DigitCaps.cpp' ... 
+ERROR: [HLS 207-3777] use of undeclared identifier 'sum_of_prodddducts_s'; did you mean 'sum_of_products_s'? (DigitCaps.cpp:80:10)
+INFO: [HLS 207-4436] 'sum_of_products_s' declared here (DigitCaps.cpp:54:10)
+ERROR:  
+INFO: [HLS 200-112] Total CPU user time: 3.02 seconds. Total CPU system time: 0.5 seconds. Total elapsed time: 3.45 seconds; peak allocated memory: 319.879 MB.

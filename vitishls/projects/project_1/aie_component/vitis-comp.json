@@ -1,0 +1,15 @@
+{
+  "name": "aie_component",
+  "type": "AI_ENGINE",
+  "part": "xcve1752-nsvg1369-2LP-e-L",
+  "configuration": {
+    "componentType": "AI_ENGINE",
+    "aieGraphFiles": [
+      "PrimaryCapsTestbench.cpp"
+    ],
+    "aieCompilerConfigurations": [],
+    "configFiles": [
+      "aiecompiler.cfg"
+    ]
+  }
+}

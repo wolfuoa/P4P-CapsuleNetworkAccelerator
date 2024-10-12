@@ -1,0 +1,11 @@
+{
+  "name": "reluConv_accel",
+  "type": "HLS",
+  "configuration": {
+    "componentType": "HLS",
+    "configFiles": [
+      "hls_config.cfg"
+    ],
+    "work_dir": "relu_conv_2d"
+  }
+}
