@@ -231,10 +231,18 @@ linux/setup.sh
 [Target] $ bash setup.sh
 ```
 
-* Run the application
+* Setup the application
+
 ```bash
 [Target] $ cd /run/media/mmcblk0/capsnet
 [Target] $ ./setup.sh
+[Target] $ cd op_registration/cpp
+[Target] $ ./op_registration.sh
+```
+
+* Run the application
+```bash
+[Target] $ cd /run/media/mmcblk0/capsnet
 [Target] $ ./testing.sh
 ```
 
