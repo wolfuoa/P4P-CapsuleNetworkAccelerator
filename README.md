@@ -217,9 +217,19 @@ linux/setup.sh
 [Host] $ sudo putty
 ```
 
-* Insert the SD card into the destination ZCU102 board and plugin the power. Connect serial port of the board to the host system. Wait for the Linux boot to complete. 
+* Insert the SD card into the destination ZCU102 board and plugin the power. Connect serial port of the board to the host system. Wait for the Linux boot to complete.
 
-* Install the Vitis AI Runtime on the board. Execute the following command.
+* Through the serial session, you can run commands on Petalinux. We first need to login as root.
+```bash
+[Target] $ login petalinux
+> create a password:
+[Target] $ root
+[Target] $ sudo -i
+> password
+[Target] $ root
+```
+
+* Install the Vitis AI Runtime on the board. Execute the following commands.
 
 > [!NOTE]
 > Only do this once
