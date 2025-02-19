@@ -1,0 +1,11 @@
+{
+  "name": "primcaps_versal",
+  "type": "HLS",
+  "configuration": {
+    "componentType": "HLS",
+    "configFiles": [
+      "hls_config.cfg"
+    ],
+    "work_dir": "primcaps_versal"
+  }
+}

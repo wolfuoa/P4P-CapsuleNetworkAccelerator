@@ -1,0 +1,14 @@
+[
+  {
+    "directory": "/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal",
+    "arguments": [
+      "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/clang++",
+      "-fhls",
+      "-hls-syn-headers-dir=/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/common/technology/autopilot",
+      "",
+      "-c",
+      "/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/PrimaryCaps.cpp"
+    ],
+    "file": "/home/jjos425/Documents/vivado_projects/project_1/primcaps_versal/PrimaryCaps.cpp"
+  }
+]

@@ -1,0 +1,243 @@
+jjos425@en432999:~/Documents/VitisAI/Vitis-AI$ sudo ./docker_run.sh xilinx/vitis-ai-tensorflow2-cpu:latest
+[sudo] password for jjos425: 
+latest: Pulling from xilinx/vitis-ai-tensorflow2-cpu
+Digest: sha256:9629dbfcfbe773e21377e440fe7700ddd719f2df97d52bc396612ff174dc4304
+Status: Image is up to date for xilinx/vitis-ai-tensorflow2-cpu:latest
+docker.io/xilinx/vitis-ai-tensorflow2-cpu:latest
+Setting up root 's environment in the Docker container...
+ WARNING: You are running Vitis AI Docker container as root. 
+For security reasons, consider running as a regular user:
+    $ sh docker_run.sh 
+
+OR
+
+    $ docker run -e UID=$(id -u) -e GID=$(id -g) args...
+
+You will be running as vitis-ai-user with non-root UID/GID in Vitis AI Docker container. 
+
+
+==========================================
+ 
+__      ___ _   _                   _____
+\ \    / (_) | (_)            /\   |_   _|
+ \ \  / / _| |_ _ ___ ______ /  \    | |
+  \ \/ / | | __| / __|______/ /\ \   | |
+   \  /  | | |_| \__ \     / ____ \ _| |_
+    \/   |_|\__|_|___/    /_/    \_\_____|
+ 
+==========================================
+
+Docker Image Version: ubuntu2004-3.5.0.300   (CPU) 
+Vitis AI Git Hash: 6a9757a 
+Build Date: 2023-06-26
+WorkFlow: tf2
+
+vitis-ai-user@en432999:/workspace$ conda activate vitis-ai-tensorflow2
+(vitis-ai-tensorflow2) vitis-ai-user@en432999:/workspace$ cd capsulenet/
+(vitis-ai-tensorflow2) vitis-ai-user@en432999:/workspace/capsulenet$ l
+CapsNet-Keras-master/  deployment/  Vitis-AI-Tutorials/
+(vitis-ai-tensorflow2) vitis-ai-user@en432999:/workspace/capsulenet$ ls
+CapsNet-Keras-master  deployment  Vitis-AI-Tutorials
+(vitis-ai-tensorflow2) vitis-ai-user@en432999:/workspace/capsulenet$ cd deployment/
+(vitis-ai-tensorflow2) vitis-ai-user@en432999:/workspace/capsulenet/deployment$ ls
+capsulelayers.py  compile.log              dump_results  __pycache__   ZCU102
+capsulenet.py     compile.sh               MNIST         quantizer.py
+compiled_model    create_partial_model.py  models        utils.py
+(vitis-ai-tensorflow2) vitis-ai-user@en432999:/workspace/capsulenet/deployment$ python3 create_partial_model.py
+2024-09-29 20:34:22.383349: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2024-09-29 20:34:22.402065: I tensorflow/core/platform/cpu_feature_guard.cc:186] This TensorFlow binary is optimized with Zen Deep Neural Network Library (ZenDNN) to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Namespace(save_dir='models', test=False)
+Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/mnist.npz
+11490434/11490434 [==============================] - 1s 0us/step
+Model: "model_1"
+__________________________________________________________________________________________________
+ Layer (type)                   Output Shape         Param #     Connected to                     
+==================================================================================================
+ input_1 (InputLayer)           [(None, 28, 28, 1)]  0           []                               
+                                                                                                  
+ conv1 (Conv2D)                 (None, 20, 20, 256)  20992       ['input_1[0][0]']                
+                                                                                                  
+ primarycap_conv2d (Conv2D)     (None, 6, 6, 256)    5308672     ['conv1[0][0]']                  
+                                                                                                  
+ primarycap_reshape (Reshape)   (None, 1152, 8)      0           ['primarycap_conv2d[0][0]']      
+                                                                                                  
+ primarycap_squash (SquashLayer  (None, 1152, 8)     0           ['primarycap_reshape[0][0]']     
+ )                                                                                                
+                                                                                                  
+ digitcaps (CapsuleLayer)       (None, 10, 16)       1474560     ['primarycap_squash[0][0]']      
+                                                                                                  
+ mask_1 (Mask)                  (None, None)         0           ['digitcaps[0][0]']              
+                                                                                                  
+ capsnet (Length)               (None, 10)           0           ['digitcaps[0][0]']              
+                                                                                                  
+ decoder (Sequential)           (None, 28, 28, 1)    1411344     ['mask_1[0][0]']                 
+                                                                                                  
+==================================================================================================
+Total params: 8,215,568
+Trainable params: 8,215,568
+Non-trainable params: 0
+__________________________________________________________________________________________________
+Model: "model_3"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_1 (InputLayer)        [(None, 28, 28, 1)]       0         
+                                                                 
+ conv1 (Conv2D)              (None, 20, 20, 256)       20992     
+                                                                 
+ primarycap_conv2d (Conv2D)  (None, 6, 6, 256)         5308672   
+                                                                 
+ primarycap_reshape (Reshape  (None, 1152, 8)          0         
+ )                                                               
+                                                                 
+ primarycap_squash (SquashLa  (None, 1152, 8)          0         
+ yer)                                                            
+                                                                 
+ digitcaps (CapsuleLayer)    (None, 10, 16)            1474560   
+                                                                 
+ capsnet (Length)            (None, 10)                0         
+                                                                 
+=================================================================
+Total params: 6,804,224
+Trainable params: 6,804,224
+Non-trainable params: 0
+_________________________________________________________________
+Model: "model_4"
+_________________________________________________________________
+ Layer (type)                Output Shape              Param #   
+=================================================================
+ input_1 (InputLayer)        [(None, 28, 28, 1)]       0         
+                                                                 
+ conv1 (Conv2D)              (None, 20, 20, 256)       20992     
+                                                                 
+ primarycap_conv2d (Conv2D)  (None, 6, 6, 256)         5308672   
+                                                                 
+ primarycap_reshape (Reshape  (None, 1152, 8)          0         
+ )                                                               
+                                                                 
+ primarycap_squash (SquashLa  (None, 1152, 8)          0         
+ yer)                                                            
+                                                                 
+=================================================================
+Total params: 5,329,664
+Trainable params: 5,329,664
+Non-trainable params: 0
+_________________________________________________________________
+WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+(vitis-ai-tensorflow2) vitis-ai-user@en432999:/workspace/capsulenet/deployment$ python3 quantizer.py 
+Traceback (most recent call last):
+  File "quantizer.py", line 1, in <module>
+    from torch import quantize_per_channel
+ModuleNotFoundError: No module named 'torch'
+(vitis-ai-tensorflow2) vitis-ai-user@en432999:/workspace/capsulenet/deployment$ pip install torch
+Collecting torch
+  Downloading torch-2.4.1-cp38-cp38-manylinux1_x86_64.whl (797.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 797.1/797.1 MB 8.8 MB/s eta 0:00:00
+Requirement already satisfied: filelock in /opt/vitis_ai/conda/envs/vitis-ai-tensorflow2/lib/python3.8/site-packages (from torch) (3.12.2)
+Collecting typing-extensions>=4.8.0 (from torch)
+  Downloading typing_extensions-4.12.2-py3-none-any.whl (37 kB)
+Collecting sympy (from torch)
+  Downloading sympy-1.13.3-py3-none-any.whl (6.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 6.2/6.2 MB 82.0 MB/s eta 0:00:00
+Requirement already satisfied: networkx in /opt/vitis_ai/conda/envs/vitis-ai-tensorflow2/lib/python3.8/site-packages (from torch) (3.1)
+Requirement already satisfied: jinja2 in /opt/vitis_ai/conda/envs/vitis-ai-tensorflow2/lib/python3.8/site-packages (from torch) (3.1.2)
+Requirement already satisfied: fsspec in /opt/vitis_ai/conda/envs/vitis-ai-tensorflow2/lib/python3.8/site-packages (from torch) (2023.6.0)
+Collecting nvidia-cuda-nvrtc-cu12==12.1.105 (from torch)
+  Downloading nvidia_cuda_nvrtc_cu12-12.1.105-py3-none-manylinux1_x86_64.whl (23.7 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 23.7/23.7 MB 78.8 MB/s eta 0:00:00
+Collecting nvidia-cuda-runtime-cu12==12.1.105 (from torch)
+  Downloading nvidia_cuda_runtime_cu12-12.1.105-py3-none-manylinux1_x86_64.whl (823 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 823.6/823.6 kB 57.1 MB/s eta 0:00:00
+Collecting nvidia-cuda-cupti-cu12==12.1.105 (from torch)
+  Downloading nvidia_cuda_cupti_cu12-12.1.105-py3-none-manylinux1_x86_64.whl (14.1 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 14.1/14.1 MB 86.3 MB/s eta 0:00:00
+Collecting nvidia-cudnn-cu12==9.1.0.70 (from torch)
+  Downloading nvidia_cudnn_cu12-9.1.0.70-py3-none-manylinux2014_x86_64.whl (664.8 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 664.8/664.8 MB 9.0 MB/s eta 0:00:00
+Collecting nvidia-cublas-cu12==12.1.3.1 (from torch)
+  Downloading nvidia_cublas_cu12-12.1.3.1-py3-none-manylinux1_x86_64.whl (410.6 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 410.6/410.6 MB 15.2 MB/s eta 0:00:00
+Collecting nvidia-cufft-cu12==11.0.2.54 (from torch)
+  Downloading nvidia_cufft_cu12-11.0.2.54-py3-none-manylinux1_x86_64.whl (121.6 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 121.6/121.6 MB 36.6 MB/s eta 0:00:00
+Collecting nvidia-curand-cu12==10.3.2.106 (from torch)
+  Downloading nvidia_curand_cu12-10.3.2.106-py3-none-manylinux1_x86_64.whl (56.5 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 56.5/56.5 MB 27.9 MB/s eta 0:00:00
+Collecting nvidia-cusolver-cu12==11.4.5.107 (from torch)
+  Downloading nvidia_cusolver_cu12-11.4.5.107-py3-none-manylinux1_x86_64.whl (124.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 124.2/124.2 MB 38.1 MB/s eta 0:00:00
+Collecting nvidia-cusparse-cu12==12.1.0.106 (from torch)
+  Downloading nvidia_cusparse_cu12-12.1.0.106-py3-none-manylinux1_x86_64.whl (196.0 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 196.0/196.0 MB 27.3 MB/s eta 0:00:00
+Collecting nvidia-nccl-cu12==2.20.5 (from torch)
+  Downloading nvidia_nccl_cu12-2.20.5-py3-none-manylinux2014_x86_64.whl (176.2 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 176.2/176.2 MB 29.6 MB/s eta 0:00:00
+Collecting nvidia-nvtx-cu12==12.1.105 (from torch)
+  Downloading nvidia_nvtx_cu12-12.1.105-py3-none-manylinux1_x86_64.whl (99 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 99.1/99.1 kB 11.1 MB/s eta 0:00:00
+Collecting triton==3.0.0 (from torch)
+  Downloading triton-3.0.0-1-cp38-cp38-manylinux2014_x86_64.manylinux_2_17_x86_64.whl (209.4 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 209.4/209.4 MB 24.0 MB/s eta 0:00:00
+Collecting nvidia-nvjitlink-cu12 (from nvidia-cusolver-cu12==11.4.5.107->torch)
+  Downloading nvidia_nvjitlink_cu12-12.6.68-py3-none-manylinux2014_x86_64.whl (19.7 MB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 19.7/19.7 MB 83.7 MB/s eta 0:00:00
+Requirement already satisfied: MarkupSafe>=2.0 in /opt/vitis_ai/conda/envs/vitis-ai-tensorflow2/lib/python3.8/site-packages (from jinja2->torch) (2.1.3)
+Collecting mpmath<1.4,>=1.1.0 (from sympy->torch)
+  Downloading mpmath-1.3.0-py3-none-any.whl (536 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 536.2/536.2 kB 39.1 MB/s eta 0:00:00
+Installing collected packages: mpmath, typing-extensions, triton, sympy, nvidia-nvtx-cu12, nvidia-nvjitlink-cu12, nvidia-nccl-cu12, nvidia-curand-cu12, nvidia-cufft-cu12, nvidia-cuda-runtime-cu12, nvidia-cuda-nvrtc-cu12, nvidia-cuda-cupti-cu12, nvidia-cublas-cu12, nvidia-cusparse-cu12, nvidia-cudnn-cu12, nvidia-cusolver-cu12, torch
+  Attempting uninstall: typing-extensions
+    Found existing installation: typing_extensions 4.6.3
+    Uninstalling typing_extensions-4.6.3:
+      Successfully uninstalled typing_extensions-4.6.3
+ERROR: pip's dependency resolver does not currently take into account all the packages that are installed. This behaviour is the source of the following dependency conflicts.
+tensorflow 2.12.0 requires gast<=0.4.0,>=0.2.1, but you have gast 0.5.4 which is incompatible.
+tensorflow 2.12.0 requires tensorboard<2.13,>=2.12, but you have tensorboard 2.13.0 which is incompatible.
+tf2onnx 1.13.0 requires flatbuffers<3.0,>=1.12, but you have flatbuffers 23.5.26 which is incompatible.
+Successfully installed mpmath-1.3.0 nvidia-cublas-cu12-12.1.3.1 nvidia-cuda-cupti-cu12-12.1.105 nvidia-cuda-nvrtc-cu12-12.1.105 nvidia-cuda-runtime-cu12-12.1.105 nvidia-cudnn-cu12-9.1.0.70 nvidia-cufft-cu12-11.0.2.54 nvidia-curand-cu12-10.3.2.106 nvidia-cusolver-cu12-11.4.5.107 nvidia-cusparse-cu12-12.1.0.106 nvidia-nccl-cu12-2.20.5 nvidia-nvjitlink-cu12-12.6.68 nvidia-nvtx-cu12-12.1.105 sympy-1.13.3 torch-2.4.1 triton-3.0.0 typing-extensions-4.12.2
+
+[notice] A new release of pip is available: 23.1.2 -> 24.2
+[notice] To update, run: pip install --upgrade pip
+(vitis-ai-tensorflow2) vitis-ai-user@en432999:/workspace/capsulenet/deployment$ python3 quantizer.py 
+2024-09-29 20:36:50.300512: I tensorflow/core/util/port.cc:110] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2024-09-29 20:36:50.318861: I tensorflow/core/platform/cpu_feature_guard.cc:186] This TensorFlow binary is optimized with Zen Deep Neural Network Library (ZenDNN) to use available CPU instructions in performance-critical operations.
+To enable the following instructions: SSE3 SSE4.1 SSE4.2 AVX AVX2 AVX_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+Namespace(file_path='models/partial_model.h5', save_path='models/quant')
+WARNING:tensorflow:No training configuration found in the save file, so the model was *not* compiled. Compile it manually.
+[VAI INFO] Using func format quantizer
+[VAI INFO] Update custom_layer_type: ['SquashLayer']
+[VAI INFO] Update separate_conv_act: False
+[VAI INFO] Quantizing without specific `target`.
+[VAI INFO] Start CrossLayerEqualization...
+10/10 [==============================] - 1s 66ms/step
+[VAI INFO] CrossLayerEqualization Done.
+[VAI INFO] Layer primarycap_squash(<class 'capsulelayers.SquashLayer'>) is not supported by DPU, it will not be quantized and may be mapped to run on CPU or other IPs. Please see User Guide for list of supported operations and APIs of vai_q_tensorflow2.
+[VAI INFO] Start Quantize Calibration...
+313/313 [==============================] - 23s 73ms/step
+[VAI INFO] Quantize Calibration Done.
+[VAI INFO] Start Post-Quant Model Refinement...
+[VAI INFO] Start Quantize Position Ajustment...
+[VAI INFO] Quantize Position Ajustment Done.
+[VAI INFO] Start Getting Shape Information...
+[VAI INFO] Getting model layer shape information
+[VAI INFO] Getting Shape Information Done.
+[VAI INFO] Post-Quant Model Refninement Done.
+[VAI INFO] Start Model Finalization...
+[VAI INFO] Model Finalization Done.
+[VAI INFO] Quantization Finished.
+WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+[VAI INFO] Start Dumping...
+[VAI INFO] Dumping weights/biases...
+[VAI INFO] Dumping (1/4): quant_conv1/kernel
+[VAI INFO] Dumping (2/4): quant_conv1/bias
+[VAI INFO] Dumping (3/4): quant_primarycap_conv2d/kernel
+[VAI INFO] Dumping (4/4): quant_primarycap_conv2d/bias
+[VAI INFO] Dumping activations...
+1/1 [==============================] - 0s 93ms/step
+[VAI INFO] Dumping (1/6): input_1
+[VAI INFO] Dumping (2/6): quant_input_1
+[VAI INFO] Dumping (3/6): quant_conv1
+[VAI INFO] Dumping (4/6): quant_primarycap_conv2d
+[VAI INFO] Dumping (5/6): quant_primarycap_reshape
+[VAI INFO] Dumping (6/6): primarycap_squash

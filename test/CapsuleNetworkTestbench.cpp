@@ -8,9 +8,12 @@
 #include <math.h>
 #include <time.h>
 
+#include <cstdint>
 #include <fstream>
 #include <iostream>
+#include <stdexcept>
 #include <string>
+#include <vector>
 
 #include "CapsuleNetwork.h"
 #include "constants.h"
@@ -19,6 +22,10 @@
 static errno_t get_data(const std::string& file_name, uint32_t start_index, float* output);
 
 static errno_t get_data_n(const char* file_name, uint32_t data_amount, float* output);
+
+static errno_t load_mnist_images(const std::string& image_path, uint32_t batch_size, std::vector<std::vector<float>>* images);
+
+static errno_t load_mnist_labels(const std::string& label_path, uint32_t batch_size, std::vector<uint8_t>* labels);
 
 static uint16_t get_max_prediction(float* prediction);
 
@@ -33,30 +40,27 @@ int main(void)
 	float* weights = (float*)malloc((conv1_num_weights + primary_caps_num_weights + digitcaps_num_weights) * sizeof(float));
 	float biases[CONV1_FILTERS + PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES];
 	// float images[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST];
+	float prediction[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE] = {0.0};
 	float image[IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH];
-	float labels[NUM_IMAGES_TO_TEST];
-	float prediction[DIGIT_CAPS_NUM_DIGITS * DIGIT_CAPS_DIM_CAPSULE];
 	float magnitudes[DIGIT_CAPS_NUM_DIGITS];
+	std::vector<std::vector<float>> mnist;
+	std::vector<uint8_t> labels;
 
-	// float* biases = (float*)malloc(CONV1_FILTERS + PRIMARY_CAPS_CAPSULE_DIM * PRIMARY_CAPS_CAPSULES * sizeof(float));
-	float* images = (float*)malloc(IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST * sizeof(float));
-	// float* label = (float*)malloc(DIGIT_CAPS_NUM_DIGITS * sizeof(float));
-	// float* prediction = (float*)malloc(DIGIT_CAPS_NUM_DIGITS * sizeof(float));
-
-	get_data("../../models/conv1_weights.txt", 0, weights);
-	get_data("../../models/primcaps_weights.txt", conv1_num_weights, weights);
-	get_data("../../models/digitcaps_weights.txt", conv1_num_weights + primary_caps_num_weights, weights);
-
-	get_data("../../models/conv1_biases.txt", 0, biases);
-	get_data("../../models/primcaps_biases.txt", CONV1_FILTERS, biases);
-
-	get_data_n("../../datasets/MNIST/testimg.txt", IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * NUM_IMAGES_TO_TEST, images);
-	get_data_n("../../datasets/MNIST/labels.txt", NUM_IMAGES_TO_TEST, labels);
+	// Load MNIST data
+	load_mnist_images("../../datasets/MNIST/t10k-images-idx3-ubyte", NUM_IMAGES_TO_TEST, &mnist);
+	load_mnist_labels("../../datasets/MNIST/t10k-labels-idx1-ubyte", NUM_IMAGES_TO_TEST, &labels);
 
 	for (uint8_t i = 0; i < NUM_IMAGES_TO_TEST; ++i)
 	{
 		// acquire next image to test
-		memcpy(image, (const float*)images + i * IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH, IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
+		memcpy(image, (const float*)mnist[i].data(), IN_IMG_ROWS * IN_IMG_COLS * IN_IMG_DEPTH * sizeof(float));
+
+		get_data("../../models/conv1_weights.txt", 0, weights);
+		get_data("../../models/primcaps_weights.txt", conv1_num_weights, weights);
+		get_data("../../models/digitcaps_weights.txt", conv1_num_weights + primary_caps_num_weights, weights);
+
+		get_data("../../models/conv1_biases.txt", 0, biases);
+		get_data("../../models/primcaps_biases.txt", CONV1_FILTERS, biases);
 
 		clock_t t_1 = clock();
 		get_prediction(image, weights, biases, prediction);
@@ -69,13 +73,81 @@ int main(void)
 			std::cout << "pred: " << magnitudes[i] << std::endl;
 		}
 		uint16_t max_prediction = get_max_prediction(magnitudes);
-		std::cout << "Label: " << labels[i] << std::endl;
+		std::cout << "Label: " << (int)labels[i] << std::endl;
 		std::cout << "CapsNet prediction: " << max_prediction << std::endl;
 		printf("Time: %.4fms\n", ((float)(t_2 - t_1) / CLOCKS_PER_SEC) * 1000);
 	}
 
-	free(images);
 	free(weights);
+}
+
+int32_t bytes_to_int(const unsigned char* bytes)
+{
+	return (int32_t)(((uint32_t)bytes[0] << 24) | ((uint32_t)bytes[1] << 16) | ((uint32_t)bytes[2] << 8) | ((uint32_t)bytes[3]));
+}
+
+static errno_t load_mnist_labels(const std::string& label_path, uint32_t batch_size, std::vector<uint8_t>* labels)
+{
+	std::ifstream label_file(label_path, std::ios::binary);
+
+	// // Read headers
+	unsigned char header[8];
+	label_file.read(reinterpret_cast<char*>(header), 8);
+
+	int32_t num_labels = bytes_to_int(header + 4);
+
+	if (batch_size > num_labels)
+	{
+		throw std::runtime_error("Too large of a batch " + label_path);
+	}
+
+	labels->resize(batch_size);
+
+	for (int i = 0; i < batch_size; ++i)
+	{
+		uint8_t label_entry;
+		label_file.read(reinterpret_cast<char*>(&label_entry), 1);
+		(*labels)[i] = static_cast<uint8_t>(label_entry);
+	}
+
+	label_file.close();
+	return 0;
+}
+
+static errno_t load_mnist_images(const std::string& image_path, uint32_t batch_size, std::vector<std::vector<float>>* images)
+{
+	std::ifstream img_file(image_path, std::ios::binary);
+
+	// Read headers
+	unsigned char header[16];
+	img_file.read(reinterpret_cast<char*>(header), 16);
+
+	// Read number of images, rows, and columns
+	int32_t num_images = bytes_to_int(header + 4);
+	int32_t num_rows = bytes_to_int(header + 8);
+	int32_t num_cols = bytes_to_int(header + 12);
+
+	if (batch_size > num_images)
+	{
+		throw std::runtime_error("Too large of a batch " + image_path);
+	}
+
+	images->resize(batch_size);
+
+	for (int i = 0; i < batch_size; ++i)
+	{
+		std::vector<uint8_t> temp_image(num_rows * num_cols);
+		img_file.read(reinterpret_cast<char*>(temp_image.data()), num_rows * num_cols);
+
+		(*images)[i].resize(num_rows * num_cols);
+		for (int j = 0; j < num_rows * num_cols; ++j)
+		{
+			(*images)[i][j] = static_cast<float>(temp_image[j]) / 255.0f;
+		}
+	}
+
+	img_file.close();
+	return 0;
 }
 
 static errno_t get_data(const std::string& file_name, uint32_t start_index, float* output)

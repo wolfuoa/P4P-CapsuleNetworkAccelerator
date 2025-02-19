@@ -1,0 +1,240 @@
+INFO: [v++ 60-1548] Creating build summary session with primary output /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/relu_conv_2d.hlscompile_summary, at Thu Sep 12 14:20:27 2024
+INFO: [v++ 82-31] Launching vitis_hls: vitis_hls -nolog -run csynth -work_dir /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d -config /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg -cmdlineconfig /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/config.cmdline
+
+****** Vitis HLS - High-Level Synthesis from C, C++ and OpenCL v2024.1 (64-bit)
+  **** SW Build 5069499 on May 21 2024
+  **** IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+  **** SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+  **** Start of session at: Thu Sep 12 14:20:27 2024
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source /home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/scripts/vitis_hls/hls.tcl -notrace
+INFO: [HLS 200-10] For user 'jjos425' on host 'en432999.uoa.auckland.ac.nz' (Linux_x86_64 version 5.15.0-118-generic) on Thu Sep 12 14:20:28 NZST 2024
+INFO: [HLS 200-10] On os Ubuntu 20.04.5 LTS
+INFO: [HLS 200-10] In directory '/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel'
+INFO: [HLS 200-2005] Using work_dir /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d 
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/ReLUConv1.cpp' from /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/ReLUConv1.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/ReLUConv1.h' from /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/ReLUConv1.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/constants.h' from /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/CapsuleNetworkAccelerator/constants.h' to the project
+INFO: [HLS 200-1465] Applying ini 'tb.file=/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/ReLUConv1TestBench.cpp' from /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg(12)
+INFO: [HLS 200-10] Adding test bench file '/home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/ReLUConv1TestBench.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.top=relu_conv_2d' from /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg(7)
+INFO: [HLS 200-1465] Applying ini 'flow_target=vivado' from /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying ini 'part=xczu9eg-ffvb1156-2-e' from /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg(1)
+INFO: [HLS 200-1611] Setting target device to 'xczu9eg-ffvb1156-2-e'
+INFO: [HLS 200-1465] Applying ini 'csim.code_analyzer=0' from /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg(11)
+INFO: [HLS 200-1465] Applying ini 'package.output.format=ip_catalog' from /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/hls_config.cfg(5)
+INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 1.42 seconds. CPU system time: 0.24 seconds. Elapsed time: 1.73 seconds; current allocated memory: 318.117 MB.
+INFO: [HLS 200-10] Analyzing design file '../CapsuleNetworkAccelerator/ReLUConv1.cpp' ... 
+INFO: [HLS 200-111] Finished Source Code Analysis and Preprocessing: CPU user time: 9.99 seconds. CPU system time: 0.73 seconds. Elapsed time: 10.87 seconds; current allocated memory: 324.016 MB.
+INFO: [HLS 200-777] Using interface defaults for 'Vivado' flow target.
+INFO: [HLS 200-1995] There were 1,869 instructions in the design after the 'Compile/Link' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 591 instructions in the design after the 'Unroll/Inline (step 1)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 323 instructions in the design after the 'Unroll/Inline (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 295 instructions in the design after the 'Unroll/Inline (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 280 instructions in the design after the 'Unroll/Inline (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 10,396 instructions in the design after the 'Array/Struct (step 1)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 4,180 instructions in the design after the 'Array/Struct (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 3,396 instructions in the design after the 'Array/Struct (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 3,396 instructions in the design after the 'Array/Struct (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 3,399 instructions in the design after the 'Array/Struct (step 5)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 3,398 instructions in the design after the 'Performance' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 3,478 instructions in the design after the 'Performance (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 3,478 instructions in the design after the 'Performance (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 3,478 instructions in the design after the 'Performance (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 3,478 instructions in the design after the 'HW Transforms (step 1)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 3,494 instructions in the design after the 'HW Transforms (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/reluConv_accel/relu_conv_2d/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_108_5' (../CapsuleNetworkAccelerator/ReLUConv1.cpp:108:24) in function 'conv_2d' completely with a factor of 9 (../CapsuleNetworkAccelerator/ReLUConv1.cpp:63:0)
+INFO: [HLS 214-178] Inlining function 'relu(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>)' into 'conv_2d(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)' (../CapsuleNetworkAccelerator/ReLUConv1.cpp:63:0)
+WARNING: [HLS 214-450] Ignore address on register port 'image'
+WARNING: [HLS 214-450] Ignore address on register port 'biases'
+WARNING: [HLS 214-450] Ignore address on register port 'weights'
+WARNING: [HLS 214-450] Ignore address on register port 'output'
+INFO: [HLS 214-248] Applying array_partition to 'image_to_convolve': Complete partitioning on dimension 1. (../CapsuleNetworkAccelerator/ReLUConv1.cpp:66:13)
+WARNING: [HLS 214-322] Unsuported scalar variable on pragma 'Resource/Bind_Storage', ignore it. (../CapsuleNetworkAccelerator/ReLUConv1.cpp:67:9)
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at ../CapsuleNetworkAccelerator/ReLUConv1.cpp:85:2 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at ../CapsuleNetworkAccelerator/ReLUConv1.cpp:89:5 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_101_3> at ../CapsuleNetworkAccelerator/ReLUConv1.cpp:101:22 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at ../CapsuleNetworkAccelerator/ReLUConv1.cpp:96:3 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at ../CapsuleNetworkAccelerator/ReLUConv1.cpp:123:4 
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_105_4' is marked as complete unroll implied by the pipeline pragma (../CapsuleNetworkAccelerator/ReLUConv1.cpp:105:23)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_105_4' (../CapsuleNetworkAccelerator/ReLUConv1.cpp:105:23) in function 'conv_2d' completely with a factor of 9 (../CapsuleNetworkAccelerator/ReLUConv1.cpp:63:0)
+INFO: [HLS 200-111] Finished Compiling Optimization and Transform: CPU user time: 176.94 seconds. CPU system time: 0.35 seconds. Elapsed time: 178.21 seconds; current allocated memory: 330.855 MB.
+INFO: [HLS 200-111] Finished Checking Pragmas: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0 seconds; current allocated memory: 330.855 MB.
+INFO: [HLS 200-10] Starting code transformations ...
+INFO: [HLS 200-111] Finished Standard Transforms: CPU user time: 1.07 seconds. CPU system time: 0.02 seconds. Elapsed time: 1.12 seconds; current allocated memory: 373.727 MB.
+INFO: [HLS 200-10] Checking synthesizability ...
+WARNING: [SYNCHK 200-23] ../CapsuleNetworkAccelerator/ReLUConv1.cpp:48: variable-indexed range selection may cause suboptimal QoR.
+INFO: [SYNCHK 200-10] 0 error(s), 1 warning(s).
+INFO: [HLS 200-111] Finished Checking Synthesizability: CPU user time: 1.13 seconds. CPU system time: 0.02 seconds. Elapsed time: 1.16 seconds; current allocated memory: 416.891 MB.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (../CapsuleNetworkAccelerator/ReLUConv1.cpp:101:36) to (../CapsuleNetworkAccelerator/ReLUConv1.cpp:101:22) in function 'conv_2d'... converting 10 basic blocks.
+INFO: [HLS 200-111] Finished Loop, function and other optimizations: CPU user time: 11.7 seconds. CPU system time: 0.03 seconds. Elapsed time: 11.76 seconds; current allocated memory: 523.469 MB.
+WARNING: [HLS 200-960] Cannot flatten loop 'VITIS_LOOP_98_2' (../CapsuleNetworkAccelerator/ReLUConv1.cpp:98:20) in function 'conv_2d' either the parent loop or sub loop is do-while loop.
+Resolution: For help on HLS 200-960 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-960.html
+INFO: [HLS 200-111] Finished Architecture Synthesis: CPU user time: 29.67 seconds. CPU system time: 0.03 seconds. Elapsed time: 29.73 seconds; current allocated memory: 644.113 MB.
+INFO: [HLS 200-10] Starting hardware synthesis ...
+INFO: [HLS 200-10] Synthesizing 'relu_conv_2d' ...
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'conv_2d_Pipeline_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'Loop 1'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 1, loop 'Loop 1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 6.56 seconds. CPU system time: 0.05 seconds. Elapsed time: 6.64 seconds; current allocated memory: 688.906 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.45 seconds. CPU system time: 0 seconds. Elapsed time: 0.46 seconds; current allocated memory: 699.582 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'conv_2d_Pipeline_2' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'Loop 1'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 1, loop 'Loop 1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.32 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.34 seconds; current allocated memory: 699.582 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0 seconds; current allocated memory: 699.582 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'conv_2d_Pipeline_3' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'Loop 1'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 1, loop 'Loop 1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 699.582 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 699.582 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'conv_2d_Pipeline_VITIS_LOOP_101_3' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_101_3'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 17, loop 'VITIS_LOOP_101_3'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 2.61 seconds. CPU system time: 0.05 seconds. Elapsed time: 2.66 seconds; current allocated memory: 827.871 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.54 seconds. CPU system time: 0 seconds. Elapsed time: 0.55 seconds; current allocated memory: 827.871 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'conv_2d_Pipeline_5' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'Loop 1'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 2, loop 'Loop 1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.37 seconds. CPU system time: 0 seconds. Elapsed time: 0.37 seconds; current allocated memory: 827.871 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 827.871 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'conv_2d' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.45 seconds. CPU system time: 0 seconds. Elapsed time: 0.45 seconds; current allocated memory: 827.871 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+WARNING: [BIND 205-102] The specified resource core for memory 'weight_buffer' will be ignored if a simpler one can be used.
+WARNING: [BIND 205-102] The specified resource core for memory 'biases_buffer' will be ignored if a simpler one can be used.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.29 seconds. CPU system time: 0 seconds. Elapsed time: 0.29 seconds; current allocated memory: 827.871 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'relu_conv_2d' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.12 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.14 seconds; current allocated memory: 827.871 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.03 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 827.871 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'conv_2d_Pipeline_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-104] Estimated max fanout for 'conv_2d_Pipeline_1' is 25872 from HDL expression: ((ap_loop_exit_ready == 1'b1) & (exitcond537_fu_11798_p2 == 1'd1) & (1'b0 == ap_block_state1_pp0_stage0_iter0) & (1'b1 == ap_CS_fsm_state1))
+INFO: [RTGEN 206-100] Finished creating RTL model for 'conv_2d_Pipeline_1'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.48 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.5 seconds; current allocated memory: 835.703 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'conv_2d_Pipeline_2' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'conv_2d_Pipeline_2'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.7 seconds. CPU system time: 0.04 seconds. Elapsed time: 0.75 seconds; current allocated memory: 904.512 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'conv_2d_Pipeline_3' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Finished creating RTL model for 'conv_2d_Pipeline_3'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 904.512 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'conv_2d_Pipeline_VITIS_LOOP_101_3' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'conv_2d_Pipeline_VITIS_LOOP_101_3' pipeline 'VITIS_LOOP_101_3' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-104] Estimated max fanout for 'conv_2d_Pipeline_VITIS_LOOP_101_3' is 6648 from HDL expression: (1'b0 == ap_block_pp0_stage0_11001)
+INFO: [RTGEN 206-100] Generating core module 'dcmp_64ns_64ns_1_2_no_dsp_1': 1 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'mul_32s_32s_48_1_1': 81 instance(s).
+INFO: [RTGEN 206-100] Generating core module 'sparsemux_1105_10_32_1_1': 81 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'conv_2d_Pipeline_VITIS_LOOP_101_3'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 5.23 seconds. CPU system time: 0.13 seconds. Elapsed time: 5.37 seconds; current allocated memory: 1.223 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'conv_2d_Pipeline_5' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-1030] Apply Unified Pipeline Control on module 'conv_2d_Pipeline_5' pipeline 'Loop 1' pipeline type 'loop pipeline'
+INFO: [RTGEN 206-100] Finished creating RTL model for 'conv_2d_Pipeline_5'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 1.36 seconds. CPU system time: 0.1 seconds. Elapsed time: 1.46 seconds; current allocated memory: 1.316 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'conv_2d' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-100] Generating core module 'mul_8ns_10ns_17_1_1': 1 instance(s).
+INFO: [RTGEN 206-100] Finished creating RTL model for 'conv_2d'.
+INFO: [RTMG 210-278] Implementing memory 'relu_conv_2d_conv_2d_output_buffer_RAM_1WNR_AUTO_1R1W' using auto RAMs.
+INFO: [RTMG 210-278] Implementing memory 'relu_conv_2d_conv_2d_weight_buffer_RAM_1WNR_AUTO_1R1W' using auto RAMs.
+INFO: [RTMG 210-278] Implementing memory 'relu_conv_2d_conv_2d_biases_buffer_RAM_1WNR_AUTO_1R1W' using auto RAMs.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.16 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.19 seconds; current allocated memory: 1.330 GB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-10] -- Generating RTL for module 'relu_conv_2d' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [RTGEN 206-500] Setting interface mode on port 'relu_conv_2d/image_r' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'relu_conv_2d/weights' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'relu_conv_2d/biases' to 'ap_none'.
+INFO: [RTGEN 206-500] Setting interface mode on port 'relu_conv_2d/output_r' to 'ap_vld'.
+INFO: [RTGEN 206-500] Setting interface mode on function 'relu_conv_2d' to 'ap_ctrl_hs'.
+INFO: [RTGEN 206-100] Finished creating RTL model for 'relu_conv_2d'.
+INFO: [HLS 200-111] Finished Creating RTL model: CPU user time: 0.26 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.26 seconds; current allocated memory: 1.357 GB.
+INFO: [HLS 200-111] Finished Generating all RTL models: CPU user time: 0.28 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.31 seconds; current allocated memory: 1.357 GB.
+INFO: [HLS 200-111] Finished Updating report files: CPU user time: 0.41 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.42 seconds; current allocated memory: 1.363 GB.
+INFO: [VHDL 208-304] Generating VHDL RTL for relu_conv_2d.
+INFO: [VLOG 209-307] Generating Verilog RTL for relu_conv_2d.
+INFO: [HLS 200-790] **** Loop Constraint Status: All loop constraints were satisfied.
+INFO: [HLS 200-789] **** Estimated Fmax: 137.74 MHz
+INFO: [HLS 200-112] Total CPU user time: 252.94 seconds. Total CPU system time: 1.88 seconds. Total elapsed time: 256.21 seconds; peak allocated memory: 1.363 GB.
+INFO: [v++ 60-791] Total elapsed time: 0h 4m 19s

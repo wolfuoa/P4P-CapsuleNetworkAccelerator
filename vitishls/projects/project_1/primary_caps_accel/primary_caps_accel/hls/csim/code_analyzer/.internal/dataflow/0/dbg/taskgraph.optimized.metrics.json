@@ -1,0 +1,912 @@
+[
+    {
+        "name": "_Z16process_featuresP8ap_fixedILi32ELi16EL9ap_q_mode5EL9ap_o_mode3ELi0EES3_S3_S3_",
+        "df_function": "%F210",
+        "df_type": "Function",
+        "project": "SLX",
+        "processes": {
+            "1": {
+                "id": "1",
+                "name": "Artificial<Start>",
+                "src_range": {
+                    "start_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 168,
+                        "column": 1
+                    },
+                    "end_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 208,
+                        "column": 1
+                    }
+                },
+                "display_name": "<START>",
+                "kind": "start"
+            },
+            "2": {
+                "id": "2",
+                "name": "Artificial<End>",
+                "src_range": {
+                    "start_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 168,
+                        "column": 1
+                    },
+                    "end_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 208,
+                        "column": 1
+                    }
+                },
+                "display_name": "<END>",
+                "kind": "end"
+            },
+            "3": {
+                "id": "3",
+                "name": "Region<OutlineCall(R2 process_features) BB 'codeRepl' [Atomic] 'Outline_T3_F210_R2_Atomic'>",
+                "display_name": "Process 1",
+                "io_signatures": {
+                    "has_unresolved_accesses": false,
+                    "accesses": []
+                },
+                "metrics": {
+                    "initiation_interval": 1
+                },
+                "subregions": [
+                    {
+                        "id": "%F345_R1",
+                        "description": "<function entry>"
+                    }
+                ],
+                "subdataflow": []
+            },
+            "4": {
+                "id": "4",
+                "name": "Region<OutlineCall(R3 process_features) BB 'codeRepl1' [Atomic,Loop,Atomic] 'Outline_T4_F210_R3_Loop'>",
+                "src_range": {
+                    "start_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 185,
+                        "column": 5
+                    },
+                    "end_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 189,
+                        "column": 5
+                    }
+                },
+                "display_name": "Process 2",
+                "io_signatures": {
+                    "has_unresolved_accesses": false,
+                    "accesses": [
+                        {
+                            "variable": {
+                                "location": {
+                                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                    "line": 168,
+                                    "column": 0
+                                },
+                                "id": "VId_5_*0(0,32)arg+?(?,32).A0(0,32).A0(0,32).A0(0,32)",
+                                "name": "weights->V",
+                                "display_name": "_BitInt ssdm_int<32, true>::V"
+                            },
+                            "reads": [
+                                {
+                                    "access_kind": "Ptr",
+                                    "range": {
+                                        "ranges": [
+                                            {
+                                                "start": 0,
+                                                "end": 21233664,
+                                                "is_exact": true
+                                            }
+                                        ]
+                                    },
+                                    "instr": "load",
+                                    "exec_count": 5308416
+                                }
+                            ],
+                            "writes": [],
+                            "kind": "Ptr",
+                            "has_alias": false,
+                            "arg_idx": 1
+                        },
+                        {
+                            "variable": {
+                                "location": {
+                                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                    "line": 184,
+                                    "column": 26
+                                },
+                                "id": "VId_10_.A0(0,64)",
+                                "name": "weights_stream.Handle",
+                                "display_name": "ap_fixed<32, 16, AP_TRN, AP_WRAP, 0> *stream<ap_fixed<32, 16, AP_TRN, AP_WRAP, 0>, 0>::Handle"
+                            },
+                            "reads": [],
+                            "writes": [
+                                {
+                                    "access_kind": "Fifo",
+                                    "range": {
+                                        "is_exact": false,
+                                        "is_empty": false
+                                    },
+                                    "instr": "call",
+                                    "exec_count": 5308416
+                                }
+                            ],
+                            "kind": "Fifo",
+                            "has_alias": false
+                        }
+                    ]
+                },
+                "metrics": {
+                    "initiation_interval": 5308421
+                },
+                "subregions": [
+                    {
+                        "id": "%F346_R1",
+                        "description": "<function entry>"
+                    },
+                    {
+                        "id": "%F346_R2",
+                        "description": "<loop 'for.body'>",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 185,
+                                "column": 5
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 189,
+                                "column": 5
+                            }
+                        }
+                    },
+                    {
+                        "id": "%F346_R6",
+                        "description": "<function exit>"
+                    }
+                ],
+                "subdataflow": [],
+                "guidance": [
+                    {
+                        "type": "LoopGuidance",
+                        "ti": {
+                            "min": 5308416,
+                            "max": 5308416
+                        },
+                        "ii": {
+                            "min": 1,
+                            "max": 1
+                        },
+                        "effective_tc": {
+                            "min": 5308416,
+                            "max": 5308416
+                        },
+                        "tc": {
+                            "min": 5308416,
+                            "max": 5308416
+                        },
+                        "ureg_id": "%L1",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 185,
+                                "column": 5
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 189,
+                                "column": 5
+                            }
+                        },
+                        "details": [
+                            {
+                                "type": "MemPortContention",
+                                "available_ports": {
+                                    "min": 1,
+                                    "max": 1
+                                },
+                                "required_ports": {
+                                    "min": 1,
+                                    "max": 1
+                                },
+                                "ii_lower_bound": {
+                                    "min": 1,
+                                    "max": 1
+                                },
+                                "variable": {
+                                    "name": "weights",
+                                    "display_name": "weights",
+                                    "id": "494",
+                                    "location": {
+                                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                        "line": 168,
+                                        "column": 0
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+            },
+            "5": {
+                "id": "5",
+                "name": "Region<OutlineCall(R4 process_features) BB 'codeRepl2' [Atomic,Call] 'Outline_T5_F210_R15_Call'>",
+                "src_range": {
+                    "start_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 192,
+                        "column": 4
+                    },
+                    "end_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 192,
+                        "column": 54
+                    }
+                },
+                "display_name": "Process 3",
+                "io_signatures": {
+                    "has_unresolved_accesses": false,
+                    "accesses": [
+                        {
+                            "variable": {
+                                "location": {
+                                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                    "line": 178,
+                                    "column": 12
+                                },
+                                "id": "VId_8_[?(?,32)].A0(0,32).A0(0,32).A0(0,32)",
+                                "name": "conv_output[*].V",
+                                "display_name": "_BitInt ssdm_int<32, true>::V"
+                            },
+                            "reads": [],
+                            "writes": [
+                                {
+                                    "access_kind": "Ptr",
+                                    "range": {
+                                        "is_exact": false,
+                                        "is_empty": false
+                                    },
+                                    "instr": "call",
+                                    "exec_count": 1
+                                }
+                            ],
+                            "kind": "Ptr",
+                            "has_alias": false
+                        },
+                        {
+                            "variable": {
+                                "location": {
+                                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                    "line": 168,
+                                    "column": 0
+                                },
+                                "id": "VId_4_*0(0,32)arg.A0(0,32).A0(0,32).A0(0,32)",
+                                "name": "input->V",
+                                "display_name": "_BitInt ssdm_int<32, true>::V"
+                            },
+                            "reads": [
+                                {
+                                    "access_kind": "Ptr",
+                                    "range": {
+                                        "is_exact": false,
+                                        "is_empty": false
+                                    },
+                                    "instr": "call",
+                                    "exec_count": 1
+                                }
+                            ],
+                            "writes": [],
+                            "kind": "Ptr",
+                            "has_alias": false,
+                            "arg_idx": 0
+                        },
+                        {
+                            "variable": {
+                                "location": {
+                                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                    "line": 184,
+                                    "column": 26
+                                },
+                                "id": "VId_10_.A0(0,64)",
+                                "name": "weights_stream.Handle",
+                                "display_name": "ap_fixed<32, 16, AP_TRN, AP_WRAP, 0> *stream<ap_fixed<32, 16, AP_TRN, AP_WRAP, 0>, 0>::Handle"
+                            },
+                            "reads": [
+                                {
+                                    "access_kind": "Fifo",
+                                    "range": {
+                                        "is_exact": false,
+                                        "is_empty": false
+                                    },
+                                    "instr": "call",
+                                    "exec_count": 5308416
+                                }
+                            ],
+                            "writes": [],
+                            "kind": "Fifo",
+                            "has_alias": false
+                        },
+                        {
+                            "variable": {
+                                "location": {
+                                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                    "line": 168,
+                                    "column": 0
+                                },
+                                "id": "VId_6_*0(0,32)arg.A0(0,32).A0(0,32).A0(0,32)",
+                                "name": "biases->V",
+                                "display_name": "_BitInt ssdm_int<32, true>::V"
+                            },
+                            "reads": [
+                                {
+                                    "access_kind": "Ptr",
+                                    "range": {
+                                        "is_exact": false,
+                                        "is_empty": false
+                                    },
+                                    "instr": "call",
+                                    "exec_count": 1
+                                }
+                            ],
+                            "writes": [],
+                            "kind": "Ptr",
+                            "has_alias": false,
+                            "arg_idx": 2
+                        }
+                    ]
+                },
+                "metrics": {
+                    "initiation_interval": 108168968
+                },
+                "subregions": [
+                    {
+                        "id": "%F347_R1",
+                        "description": "<function entry>",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 192,
+                                "column": 43
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 192,
+                                "column": 43
+                            }
+                        }
+                    },
+                    {
+                        "id": "%F347_R2",
+                        "description": "<call 'conv_2d'>",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 192,
+                                "column": 4
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 192,
+                                "column": 54
+                            }
+                        }
+                    }
+                ],
+                "subdataflow": [
+                    {
+                        "id": "%F213",
+                        "region_type": "Function",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 192,
+                                "column": 4
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 192,
+                                "column": 54
+                            }
+                        }
+                    }
+                ],
+                "guidance": [
+                    {
+                        "type": "CallGuidance",
+                        "ti": {
+                            "min": 108168967,
+                            "max": 108168967
+                        },
+                        "ureg_id": "%F213",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 192,
+                                "column": 4
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 192,
+                                "column": 54
+                            }
+                        }
+                    }
+                ]
+            },
+            "6": {
+                "id": "6",
+                "name": "Region<OutlineCall(R5 process_features) BB 'codeRepl3' [Atomic,Call] 'Outline_T6_F210_R16_Call'>",
+                "src_range": {
+                    "start_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 201,
+                        "column": 4
+                    },
+                    "end_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 201,
+                        "column": 39
+                    }
+                },
+                "display_name": "Process 4",
+                "io_signatures": {
+                    "has_unresolved_accesses": false,
+                    "accesses": [
+                        {
+                            "variable": {
+                                "location": {
+                                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                    "line": 178,
+                                    "column": 12
+                                },
+                                "id": "VId_8_[?(?,32)].A0(0,32).A0(0,32).A0(0,32)",
+                                "name": "conv_output[*].V",
+                                "display_name": "_BitInt ssdm_int<32, true>::V"
+                            },
+                            "reads": [
+                                {
+                                    "access_kind": "Ptr",
+                                    "range": {
+                                        "is_exact": false,
+                                        "is_empty": false
+                                    },
+                                    "instr": "call",
+                                    "exec_count": 1
+                                }
+                            ],
+                            "writes": [],
+                            "kind": "Ptr",
+                            "has_alias": false
+                        },
+                        {
+                            "variable": {
+                                "location": {
+                                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                    "line": 181,
+                                    "column": 12
+                                },
+                                "id": "VId_9_[?(?,32)].A0(0,32).A0(0,32).A0(0,32)",
+                                "name": "reshape_output[*].V",
+                                "display_name": "_BitInt ssdm_int<32, true>::V"
+                            },
+                            "reads": [],
+                            "writes": [
+                                {
+                                    "access_kind": "Ptr",
+                                    "range": {
+                                        "is_exact": false,
+                                        "is_empty": false
+                                    },
+                                    "instr": "call",
+                                    "exec_count": 1
+                                }
+                            ],
+                            "kind": "Ptr",
+                            "has_alias": false
+                        }
+                    ]
+                },
+                "metrics": {
+                    "initiation_interval": 27654
+                },
+                "subregions": [
+                    {
+                        "id": "%F348_R1",
+                        "description": "<function entry>",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 201,
+                                "column": 12
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 201,
+                                "column": 25
+                            }
+                        }
+                    },
+                    {
+                        "id": "%F348_R2",
+                        "description": "<call 'reshape'>",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 201,
+                                "column": 4
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 201,
+                                "column": 39
+                            }
+                        }
+                    }
+                ],
+                "subdataflow": [
+                    {
+                        "id": "%F214",
+                        "region_type": "Function",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 201,
+                                "column": 4
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 201,
+                                "column": 39
+                            }
+                        }
+                    }
+                ],
+                "guidance": [
+                    {
+                        "type": "CallGuidance",
+                        "ti": {
+                            "min": 27653,
+                            "max": 27653
+                        },
+                        "ureg_id": "%F214",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 201,
+                                "column": 4
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 201,
+                                "column": 39
+                            }
+                        }
+                    }
+                ]
+            },
+            "7": {
+                "id": "7",
+                "name": "Region<OutlineCall(R6 process_features) BB 'codeRepl4' [Atomic,Call] 'Outline_T7_F210_R17_Call'>",
+                "src_range": {
+                    "start_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 206,
+                        "column": 4
+                    },
+                    "end_loc": {
+                        "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                        "line": 206,
+                        "column": 33
+                    }
+                },
+                "display_name": "Process 5",
+                "io_signatures": {
+                    "has_unresolved_accesses": false,
+                    "accesses": [
+                        {
+                            "variable": {
+                                "location": {
+                                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                    "line": 181,
+                                    "column": 12
+                                },
+                                "id": "VId_9_[?(?,32)].A0(0,32).A0(0,32).A0(0,32)",
+                                "name": "reshape_output[*].V",
+                                "display_name": "_BitInt ssdm_int<32, true>::V"
+                            },
+                            "reads": [
+                                {
+                                    "access_kind": "Ptr",
+                                    "range": {
+                                        "is_exact": false,
+                                        "is_empty": false
+                                    },
+                                    "instr": "call",
+                                    "exec_count": 1
+                                }
+                            ],
+                            "writes": [],
+                            "kind": "Ptr",
+                            "has_alias": false
+                        },
+                        {
+                            "variable": {
+                                "location": {
+                                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                    "line": 168,
+                                    "column": 0
+                                },
+                                "id": "VId_7_*0(0,32)arg.A0(0,32).A0(0,32).A0(0,32)",
+                                "name": "output->V",
+                                "display_name": "_BitInt ssdm_int<32, true>::V"
+                            },
+                            "reads": [],
+                            "writes": [
+                                {
+                                    "access_kind": "Ptr",
+                                    "range": {
+                                        "is_exact": false,
+                                        "is_empty": false
+                                    },
+                                    "instr": "call",
+                                    "exec_count": 1
+                                }
+                            ],
+                            "kind": "Ptr",
+                            "has_alias": false,
+                            "arg_idx": 3
+                        }
+                    ]
+                },
+                "metrics": {
+                    "initiation_interval": 907791
+                },
+                "subregions": [
+                    {
+                        "id": "%F349_R1",
+                        "description": "<function entry>",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 206,
+                                "column": 11
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 206,
+                                "column": 11
+                            }
+                        }
+                    },
+                    {
+                        "id": "%F349_R2",
+                        "description": "<call 'squash'>",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 206,
+                                "column": 4
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 206,
+                                "column": 33
+                            }
+                        }
+                    }
+                ],
+                "subdataflow": [
+                    {
+                        "id": "%F215",
+                        "region_type": "Function",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 206,
+                                "column": 4
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 206,
+                                "column": 33
+                            }
+                        }
+                    }
+                ],
+                "guidance": [
+                    {
+                        "type": "CallGuidance",
+                        "ti": {
+                            "min": 907790,
+                            "max": 907790
+                        },
+                        "ureg_id": "%F215",
+                        "src_range": {
+                            "start_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 206,
+                                "column": 4
+                            },
+                            "end_loc": {
+                                "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                                "line": 206,
+                                "column": 33
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        "channels": {
+            "weights->V_RAW_1_4_#0": {
+                "name": "weights->V_RAW_1_4_#0",
+                "variable_id": "VId_5_*0(0,32)arg+?(?,32).A0(0,32).A0(0,32).A0(0,32)",
+                "variable_name": "weights->V",
+                "declaration": "_BitInt ssdm_int<32, true>::V",
+                "kind": "Ptr",
+                "dependence": "RAW",
+                "channel_width": 32,
+                "src_loc": {
+                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                    "line": 168,
+                    "column": 0
+                },
+                "metrics": {
+                    "volume": 169869312,
+                    "channel_rate": 1.570407069058845E0
+                },
+                "source": "1",
+                "sink": "4"
+            },
+            "input->V_RAW_1_5_#1": {
+                "name": "input->V_RAW_1_5_#1",
+                "variable_id": "VId_4_*0(0,32)arg.A0(0,32).A0(0,32).A0(0,32)",
+                "variable_name": "input->V",
+                "declaration": "_BitInt ssdm_int<32, true>::V",
+                "kind": "Ptr",
+                "dependence": "RAW",
+                "channel_width": 32,
+                "src_loc": {
+                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                    "line": 168,
+                    "column": 0
+                },
+                "metrics": {
+                    "volume": 3276800,
+                    "channel_rate": 3.0293346239561054E-2
+                },
+                "source": "1",
+                "sink": "5"
+            },
+            "biases->V_RAW_1_5_#2": {
+                "name": "biases->V_RAW_1_5_#2",
+                "variable_id": "VId_6_*0(0,32)arg.A0(0,32).A0(0,32).A0(0,32)",
+                "variable_name": "biases->V",
+                "declaration": "_BitInt ssdm_int<32, true>::V",
+                "kind": "Ptr",
+                "dependence": "RAW",
+                "channel_width": 32,
+                "src_loc": {
+                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                    "line": 168,
+                    "column": 0
+                },
+                "metrics": {
+                    "volume": 8192,
+                    "channel_rate": 7.573336559890263E-5
+                },
+                "source": "1",
+                "sink": "5"
+            },
+            "weights_stream.Handle_RAW_4_5_#3": {
+                "name": "weights_stream.Handle_RAW_4_5_#3",
+                "variable_id": "VId_10_.A0(0,64)",
+                "variable_name": "weights_stream.Handle",
+                "declaration": "ap_fixed<32, 16, AP_TRN, AP_WRAP, 0> *stream<ap_fixed<32, 16, AP_TRN, AP_WRAP, 0>, 0>::Handle",
+                "kind": "Fifo",
+                "dependence": "RAW",
+                "channel_width": 32,
+                "src_loc": {
+                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                    "line": 184,
+                    "column": 26
+                },
+                "metrics": {
+                    "volume": 169869312,
+                    "channel_rate": 1.570407069058845E0
+                },
+                "source": "4",
+                "sink": "5"
+            },
+            "conv_output[*].V_RAW_5_6_#4": {
+                "name": "conv_output[*].V_RAW_5_6_#4",
+                "variable_id": "VId_8_[?(?,32)].A0(0,32).A0(0,32).A0(0,32)",
+                "variable_name": "conv_output[*].V",
+                "declaration": "_BitInt ssdm_int<32, true>::V",
+                "kind": "Ptr",
+                "dependence": "RAW",
+                "channel_width": 32,
+                "src_loc": {
+                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                    "line": 178,
+                    "column": 12
+                },
+                "metrics": {
+                    "volume": 294912,
+                    "channel_rate": 2.726401161560495E-3
+                },
+                "source": "5",
+                "sink": "6"
+            },
+            "reshape_output[*].V_RAW_6_7_#5": {
+                "name": "reshape_output[*].V_RAW_6_7_#5",
+                "variable_id": "VId_9_[?(?,32)].A0(0,32).A0(0,32).A0(0,32)",
+                "variable_name": "reshape_output[*].V",
+                "declaration": "_BitInt ssdm_int<32, true>::V",
+                "kind": "Ptr",
+                "dependence": "RAW",
+                "channel_width": 32,
+                "src_loc": {
+                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                    "line": 181,
+                    "column": 12
+                },
+                "metrics": {
+                    "volume": 294912,
+                    "channel_rate": 2.726401161560495E-3
+                },
+                "source": "6",
+                "sink": "7"
+            },
+            "output->V_RAW_7_2_#6": {
+                "name": "output->V_RAW_7_2_#6",
+                "variable_id": "VId_7_*0(0,32)arg.A0(0,32).A0(0,32).A0(0,32)",
+                "variable_name": "output->V",
+                "declaration": "_BitInt ssdm_int<32, true>::V",
+                "kind": "Ptr",
+                "dependence": "RAW",
+                "channel_width": 32,
+                "src_loc": {
+                    "file": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp",
+                    "line": 168,
+                    "column": 0
+                },
+                "metrics": {
+                    "volume": 294912,
+                    "channel_rate": 2.726401161560495E-3
+                },
+                "source": "7",
+                "sink": "2"
+            }
+        },
+        "control": [
+            {
+                "source": "3",
+                "sink": "4"
+            },
+            {
+                "source": "4",
+                "sink": "5"
+            },
+            {
+                "source": "5",
+                "sink": "6"
+            },
+            {
+                "source": "6",
+                "sink": "7"
+            },
+            {
+                "source": "1",
+                "sink": "3"
+            },
+            {
+                "source": "7",
+                "sink": "2"
+            }
+        ]
+    }
+]

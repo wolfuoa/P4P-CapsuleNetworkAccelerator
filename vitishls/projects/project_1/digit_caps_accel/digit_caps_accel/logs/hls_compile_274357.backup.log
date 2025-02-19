@@ -1,0 +1,216 @@
+INFO: [v++ 60-1548] Creating build summary session with primary output /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/digit_caps_accel.hlscompile_summary, at Thu Aug 29 16:10:31 2024
+INFO: [v++ 82-31] Launching vitis_hls: vitis_hls -nolog -run csynth -work_dir /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel -config /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg -cmdlineconfig /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/config.cmdline
+
+****** Vitis HLS - High-Level Synthesis from C, C++ and OpenCL v2024.1 (64-bit)
+  **** SW Build 5069499 on May 21 2024
+  **** IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+  **** SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+  **** Start of session at: Thu Aug 29 16:10:32 2024
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source /home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/scripts/vitis_hls/hls.tcl -notrace
+INFO: [HLS 200-10] For user 'jjos425' on host 'en432999.uoa.auckland.ac.nz' (Linux_x86_64 version 5.15.0-118-generic) on Thu Aug 29 16:10:32 NZST 2024
+INFO: [HLS 200-10] On os Ubuntu 20.04.5 LTS
+INFO: [HLS 200-10] In directory '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel'
+INFO: [HLS 200-2005] Using work_dir /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel 
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/constants.h' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/constants.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.cpp' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.h' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/testing_suite.h' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(11)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/testing_suite.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=DigitTestBench.cpp' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(12)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitTestBench.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'tb.file=DigitTestBench.cpp' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(13)
+INFO: [HLS 200-10] Adding test bench file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitTestBench.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.top=dynamic_routing' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(7)
+INFO: [HLS 200-1465] Applying ini 'flow_target=vitis' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vitis'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_latency=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_alignment_byte_size=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_max_widen_bitwidth=512
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_rtl -register_reset_num=3
+INFO: [HLS 200-1465] Applying ini 'part=xczu9eg-ffvb1156-2-e' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(1)
+INFO: [HLS 200-1611] Setting target device to 'xczu9eg-ffvb1156-2-e'
+INFO: [HLS 200-1465] Applying ini 'package.output.format=xo' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(5)
+INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 1.43 seconds. CPU system time: 0.14 seconds. Elapsed time: 1.48 seconds; current allocated memory: 318.211 MB.
+INFO: [HLS 200-10] Analyzing design file 'DigitTestBench.cpp' ... 
+INFO: [HLS 200-10] Analyzing design file 'DigitCaps.cpp' ... 
+INFO: [HLS 200-111] Finished Source Code Analysis and Preprocessing: CPU user time: 10.3 seconds. CPU system time: 0.88 seconds. Elapsed time: 11.18 seconds; current allocated memory: 324.207 MB.
+INFO: [HLS 200-777] Using interface defaults for 'Vitis' flow target.
+INFO: [HLS 200-1995] There were 9,217 instructions in the design after the 'Compile/Link' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 47,194 instructions in the design after the 'Unroll/Inline (step 1)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 14,267 instructions in the design after the 'Unroll/Inline (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 7,248 instructions in the design after the 'Unroll/Inline (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 7,040 instructions in the design after the 'Unroll/Inline (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 8,529 instructions in the design after the 'Array/Struct (step 1)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 7,841 instructions in the design after the 'Array/Struct (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 7,841 instructions in the design after the 'Array/Struct (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 7,841 instructions in the design after the 'Array/Struct (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 7,767 instructions in the design after the 'Array/Struct (step 5)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 7,771 instructions in the design after the 'Performance' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 9,122 instructions in the design after the 'Performance (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 34,556 instructions in the design after the 'Performance (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 27,464 instructions in the design after the 'Performance (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 27,178 instructions in the design after the 'HW Transforms' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 27,202 instructions in the design after the 'HW Transforms (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 214-291] Loop 'anonymous' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:104:2)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_109_3' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:109:22)
+INFO: [HLS 214-291] Loop 'dot_product' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:122:17)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_229_6' (DigitCaps.cpp:229:22) in function 'sum_of_products' completely with a factor of 1152 (DigitCaps.cpp:204:0)
+INFO: [HLS 214-186] Unrolling loop 'anonymous' (DigitCaps.cpp:104:2) in function 'apply_weights' completely with a factor of 128 (DigitCaps.cpp:88:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_109_3' (DigitCaps.cpp:109:22) in function 'apply_weights' completely with a factor of 16 (DigitCaps.cpp:88:0)
+INFO: [HLS 214-186] Unrolling loop 'dot_product' (DigitCaps.cpp:122:17) in function 'apply_weights' completely with a factor of 8 (DigitCaps.cpp:88:0)
+INFO: [HLS 214-178] Inlining function 'agreement(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)' into 'dynamic_routing(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)' (DigitCaps.cpp:36:0)
+INFO: [HLS 214-178] Inlining function 'add(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)' into 'dynamic_routing(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)' (DigitCaps.cpp:36:0)
+INFO: [HLS 214-248] Applying array_partition to 'weight_buffer': Complete partitioning on dimension 1. (DigitCaps.cpp:101:10)
+INFO: [HLS 214-248] Applying array_partition to 'squashed_v': Complete partitioning on dimension 1. (DigitCaps.cpp:38:10)
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_246_1> at DigitCaps.cpp:246:20 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_209_2> at DigitCaps.cpp:209:21 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_226_5> at DigitCaps.cpp:226:20 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_179_1> at DigitCaps.cpp:179:20 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at DigitCaps.cpp:42:2 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_270_2> at DigitCaps.cpp:270:21 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at DigitCaps.cpp:84:2 
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_273_3' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:273:22)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_250_2' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:250:21)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_257_3' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:257:21)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_214_3' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:214:22)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_185_2' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:185:21)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_195_3' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:195:21)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_273_3' (DigitCaps.cpp:273:22) in function 'dynamic_routing' completely with a factor of 16 (DigitCaps.cpp:36:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_250_2' (DigitCaps.cpp:250:21) in function 'squash' completely with a factor of 16 (DigitCaps.cpp:240:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_257_3' (DigitCaps.cpp:257:21) in function 'squash' completely with a factor of 16 (DigitCaps.cpp:240:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_214_3' (DigitCaps.cpp:214:22) in function 'sum_of_products' completely with a factor of 16 (DigitCaps.cpp:204:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_185_2' (DigitCaps.cpp:185:21) in function 'softmax' completely with a factor of 10 (DigitCaps.cpp:177:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_195_3' (DigitCaps.cpp:195:21) in function 'softmax' completely with a factor of 10 (DigitCaps.cpp:177:0)
+INFO: [HLS 214-270] Inferring pragma 'array_partition type=cyclic factor=8 dim=1' for array 'weighted_input_u' due to pipeline pragma (DigitCaps.cpp:44:10)
+INFO: [HLS 214-270] Inferring pragma 'array_partition type=cyclic factor=11 dim=1' for array 'coupling_b' due to pipeline pragma (DigitCaps.cpp:47:10)
+INFO: [HLS 214-270] Inferring pragma 'array_partition type=cyclic factor=11 dim=1' for array 'coupling_c' due to pipeline pragma (DigitCaps.cpp:48:10)
+INFO: [HLS 214-270] Inferring pragma 'array_partition type=cyclic factor=8 dim=1' for array 'sum_of_products_s' due to pipeline pragma (DigitCaps.cpp:49:10)
+INFO: [HLS 214-248] Applying array_partition to 'weighted_input_u': Cyclic partitioning with factor 8 on dimension 1. (DigitCaps.cpp:44:10)
+INFO: [HLS 214-248] Applying array_partition to 'coupling_b': Cyclic partitioning with factor 11 on dimension 1. (DigitCaps.cpp:47:10)
+INFO: [HLS 214-248] Applying array_partition to 'coupling_c': Cyclic partitioning with factor 11 on dimension 1. (DigitCaps.cpp:48:10)
+INFO: [HLS 214-248] Applying array_partition to 'sum_of_products_s': Cyclic partitioning with factor 8 on dimension 1. (DigitCaps.cpp:49:10)
+INFO: [HLS 214-115] Multiple burst reads of length 92160 and bit width 512 in loop 'VITIS_LOOP_95_1'(DigitCaps.cpp:95:19) has been inferred on bundle 'gmem'. These burst requests might be further partitioned into multiple requests during RTL generation, based on max_read_burst_length or max_write_burst_length settings. (DigitCaps.cpp:95:19)
+INFO: [HLS 214-115] Multiple burst reads of length 576 and bit width 512 has been inferred on bundle 'gmem'. These burst requests might be further partitioned into multiple requests during RTL generation, based on max_read_burst_length or max_write_burst_length settings. (DigitCaps.cpp:42:2)
+INFO: [HLS 214-115] Multiple burst writes of length 10 and bit width 512 has been inferred on bundle 'gmem'. These burst requests might be further partitioned into multiple requests during RTL generation, based on max_read_burst_length or max_write_burst_length settings. (DigitCaps.cpp:84:2)
+INFO: [HLS 200-111] Finished Compiling Optimization and Transform: CPU user time: 41.49 seconds. CPU system time: 0.31 seconds. Elapsed time: 46.67 seconds; current allocated memory: 326.059 MB.
+INFO: [HLS 200-111] Finished Checking Pragmas: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0 seconds; current allocated memory: 326.059 MB.
+INFO: [HLS 200-10] Starting code transformations ...
+INFO: [HLS 200-111] Finished Standard Transforms: CPU user time: 7.05 seconds. CPU system time: 0.01 seconds. Elapsed time: 7.05 seconds; current allocated memory: 350.562 MB.
+INFO: [HLS 200-10] Checking synthesizability ...
+WARNING: [SYNCHK 200-120] DigitCaps.cpp:252: multiplication is assumed not to overflow by default, otherwise, please add option '-fwrapv'.
+WARNING: [SYNCHK 200-23] DigitCaps.cpp:255: variable-indexed range selection may cause suboptimal QoR.
+INFO: [SYNCHK 200-10] 0 error(s), 2 warning(s).
+INFO: [HLS 200-111] Finished Checking Synthesizability: CPU user time: 6.48 seconds. CPU system time: 0.01 seconds. Elapsed time: 6.52 seconds; current allocated memory: 380.000 MB.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (DigitCaps.cpp:246:34) to (DigitCaps.cpp:259:29) in function 'squash'... converting 16 basic blocks.
+INFO: [XFORM 203-401] Performing if-conversion on hyperblock from (DigitCaps.cpp:179:34) to (DigitCaps.cpp:198:24) in function 'softmax'... converting 151 basic blocks.
+INFO: [XFORM 203-11] Balancing expressions in function 'sum_of_products' (DigitCaps.cpp:206:20)...2301 expression(s) balanced.
+INFO: [XFORM 203-11] Balancing expressions in function 'softmax' (DigitCaps.cpp:179:20)...9 expression(s) balanced.
+INFO: [XFORM 203-11] Balancing expressions in function 'apply_weights' (DigitCaps.cpp:95:10)...112 expression(s) balanced.
+INFO: [HLS 200-111] Finished Loop, function and other optimizations: CPU user time: 21.49 seconds. CPU system time: 0.01 seconds. Elapsed time: 21.51 seconds; current allocated memory: 442.586 MB.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_206_1'(DigitCaps.cpp:206:20) and 'VITIS_LOOP_209_2'(DigitCaps.cpp:209:21) in function 'sum_of_products' into perfectly nested loops.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_222_4'(DigitCaps.cpp:222:20) and 'VITIS_LOOP_226_5'(DigitCaps.cpp:226:20) in function 'sum_of_products' into perfectly nested loops.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_267_1'(DigitCaps.cpp:267:20) and 'VITIS_LOOP_270_2'(DigitCaps.cpp:270:21) in function 'dynamic_routing' into perfectly nested loops.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_95_1'(DigitCaps.cpp:95:19) and 'VITIS_LOOP_97_2'(DigitCaps.cpp:97:20) in function 'apply_weights' into perfectly nested loops.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_206_1' (DigitCaps.cpp:206:20) in function 'sum_of_products'.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_222_4' (DigitCaps.cpp:222:20) in function 'sum_of_products'.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_267_1' (DigitCaps.cpp:267:20) in function 'dynamic_routing'.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_95_1' (DigitCaps.cpp:95:19) in function 'apply_weights'.
+INFO: [HLS 200-111] Finished Architecture Synthesis: CPU user time: 57.52 seconds. CPU system time: 0.03 seconds. Elapsed time: 57.55 seconds; current allocated memory: 625.457 MB.
+INFO: [HLS 200-10] Starting hardware synthesis ...
+INFO: [HLS 200-10] Synthesizing 'dynamic_routing' ...
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'dynamic_routing_Pipeline_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-1457] Automatically inferring inferring RAM_1WNR storage type for array 'primary_caps'. Use bind_storage pragma to override this type.
+INFO: [SCHED 204-61] Pipelining loop 'Loop 1'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 3, loop 'Loop 1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 12.74 seconds. CPU system time: 0.04 seconds. Elapsed time: 12.79 seconds; current allocated memory: 642.184 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 642.184 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'apply_weights_Pipeline_VITIS_LOOP_95_1_VITIS_LOOP_97_2' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-1457] Automatically inferring inferring RAM_1WNR storage type for array 'input_mat'. Use bind_storage pragma to override this type.
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_95_1_VITIS_LOOP_97_2'.
+INFO: [HLS 200-1470] Pipelining result : Target II = 8, Final II = 8, Depth = 11, loop 'VITIS_LOOP_95_1_VITIS_LOOP_97_2'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.43 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.44 seconds; current allocated memory: 647.055 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.05 seconds. CPU system time: 0 seconds. Elapsed time: 0.05 seconds; current allocated memory: 647.055 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'apply_weights' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.03 seconds; current allocated memory: 647.055 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.02 seconds; current allocated memory: 647.055 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'softmax' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [HLS 200-486] Changing DSP latency (root=mul_ln187_6) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=mul_ln187_2) to 3 in order to utilize available DSP registers.
+INFO: [HLS 200-486] Changing DSP latency (root=mul_ln187) to 3 in order to utilize available DSP registers.
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_179_1'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 73, loop 'VITIS_LOOP_179_1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.88 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.9 seconds; current allocated memory: 669.172 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.16 seconds. CPU system time: 0 seconds. Elapsed time: 0.16 seconds; current allocated memory: 683.027 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'sum_of_products_Pipeline_VITIS_LOOP_206_1_VITIS_LOOP_209_2' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_206_1_VITIS_LOOP_209_2'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 18, loop 'VITIS_LOOP_206_1_VITIS_LOOP_209_2'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.29 seconds. CPU system time: 0 seconds. Elapsed time: 0.3 seconds; current allocated memory: 683.027 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0.02 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 683.027 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'sum_of_products' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_222_4_VITIS_LOOP_226_5'.
+WARNING: [HLS 200-885] The II Violation in module 'sum_of_products' (loop 'VITIS_LOOP_222_4_VITIS_LOOP_226_5'): Unable to schedule 'load' operation 32 bit ('output_mat_0_load_1', DigitCaps.cpp:232) on array 'output_mat_0' due to limited memory ports (II = 1). Please consider using a memory core with more ports or partitioning the array 'output_mat_0'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+WARNING: [HLS 200-885] The II Violation in module 'sum_of_products' (loop 'VITIS_LOOP_222_4_VITIS_LOOP_226_5'): Unable to schedule 'load' operation 32 bit ('output_mat_0_load_3', DigitCaps.cpp:232) on array 'output_mat_0' due to limited memory ports (II = 2). Please consider using a memory core with more ports or partitioning the array 'output_mat_0'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+WARNING: [HLS 200-885] The II Violation in module 'sum_of_products' (loop 'VITIS_LOOP_222_4_VITIS_LOOP_226_5'): Unable to schedule 'load' operation 32 bit ('output_mat_0_load_5', DigitCaps.cpp:232) on array 'output_mat_0' due to limited memory ports (II = 3). Please consider using a memory core with more ports or partitioning the array 'output_mat_0'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html
+WARNING: [HLS 200-885] The II Violation in module 'sum_of_products' (loop 'VITIS_LOOP_222_4_VITIS_LOOP_226_5'): Unable to schedule 'load' operation 32 bit ('output_mat_0_load_7', DigitCaps.cpp:232) on array 'output_mat_0' due to limited memory ports (II = 4). Please consider using a memory core with more ports or partitioning the array 'output_mat_0'.
+Resolution: For help on HLS 200-885 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-885.html

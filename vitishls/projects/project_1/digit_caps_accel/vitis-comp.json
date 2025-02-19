@@ -1,0 +1,11 @@
+{
+  "name": "digit_caps_accel",
+  "type": "HLS",
+  "configuration": {
+    "componentType": "HLS",
+    "configFiles": [
+      "hls_config.cfg"
+    ],
+    "work_dir": "digit_caps_accel"
+  }
+}

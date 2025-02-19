@@ -1,0 +1,246 @@
+dfgPass::INFOR: DFG Pass going to run on Module: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/instrument/app_0/project.symbols.bc
+dfgPass::INFOR:     Getting ProgramContainer for application app
+dfgPass::INFOR:     Parsing the provided input trace files...
+dfgPass::INFOR:     Initializing InstructionCounter...
+dfgPass::VERBO:     main is skipped for analysis (only accesses local vars)
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:       - BEFORE BREAK
+dfgPass::VERBO:       - for.cond
+dfgPass::VERBO:         - memlocal of :i:0
+dfgPass::VERBO:         - LCV conditional branch 6:48
+dfgPass::VERBO:       - AFTER BREAK
+dfgPass::VERBO:       - for.body
+dfgPass::VERBO:         - memlocal of :weights:0
+dfgPass::VERBO:         - memlocal of :i:0
+dfgPass::VERBO:         - invalid TR:4:0
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +1 is not an innermost loop
+dfgPass::VERBO:       - BEFORE BREAK
+dfgPass::VERBO:       - for.cond2
+dfgPass::VERBO:         - memlocal of :i:0
+dfgPass::VERBO:         - LCV conditional branch 6:48
+dfgPass::VERBO:       - AFTER BREAK
+dfgPass::VERBO:       - for.body4
+dfgPass::VERBO:         - memlocal of :weights:0
+dfgPass::VERBO:         - invalid TR:4:0
+dfgPass::VERBO:     +3 is not an innermost loop
+dfgPass::VERBO:       - BEFORE BREAK
+dfgPass::VERBO:       - for.cond8
+dfgPass::VERBO:         - memlocal of :output_width:0
+dfgPass::VERBO:         - LCV conditional branch 6:48
+dfgPass::VERBO:       - AFTER BREAK
+dfgPass::VERBO:       - for.body10
+dfgPass::VERBO:         - invalid TR:4:0
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +1 is not an innermost loop
+dfgPass::VERBO:     +2 is not an innermost loop
+dfgPass::VERBO:     +3 is not an innermost loop
+dfgPass::VERBO:     +4 fails R.hasBlockSchema
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +1 is not an innermost loop
+dfgPass::VERBO:       - BEFORE BREAK
+dfgPass::VERBO:       - for.cond59
+dfgPass::VERBO:         - memlocal of :grid_cols:0
+dfgPass::VERBO:         - LCV conditional branch 6:48
+dfgPass::VERBO:       - AFTER BREAK
+dfgPass::VERBO:       - for.body61
+dfgPass::VERBO:         - memlocal of :grid_rows:0
+dfgPass::VERBO:         - memlocal of :grid_cols:0
+dfgPass::VERBO:         - memlocal of :grid_rows:0
+dfgPass::VERBO:         - invalid TR:4:0
+dfgPass::VERBO:     +3 is not an innermost loop
+dfgPass::VERBO:       - BEFORE BREAK
+dfgPass::VERBO:       - for.cond23
+dfgPass::VERBO:         - memlocal of :grid_cols:0
+dfgPass::VERBO:         - LCV conditional branch 6:48
+dfgPass::VERBO:       - AFTER BREAK
+dfgPass::VERBO:       - for.body25
+dfgPass::VERBO:         - memlocal of :grid_rows:0
+dfgPass::VERBO:         - memlocal of :grid_cols:0
+dfgPass::VERBO:         - memlocal of :grid_rows:0
+dfgPass::VERBO:         - invalid TR:4:0
+dfgPass::VERBO:     +5 is not an innermost loop
+dfgPass::VERBO:       - BEFORE BREAK
+dfgPass::VERBO:       - for.cond2
+dfgPass::VERBO:         - memlocal of :grid_cols:0
+dfgPass::VERBO:         - LCV conditional branch 6:48
+dfgPass::VERBO:       - AFTER BREAK
+dfgPass::VERBO:       - for.body4
+dfgPass::VERBO:         - memlocal of :grid_rows:0
+dfgPass::VERBO:         - memlocal of :grid_cols:0
+dfgPass::VERBO:         - memlocal of :grid_rows:0
+dfgPass::VERBO:         - memlocal of :grid_cols:0
+dfgPass::VERBO:         - invalid TR:4:0
+dfgPass::VERBO:       - BEFORE BREAK
+dfgPass::VERBO:       - arrayinit.body
+dfgPass::VERBO:         - invalid TR:4:0
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     _ZN13ap_fixed_baseILi32ELi16ELb1EL9ap_q_mode5EL9ap_o_mode3ELi0EE6reportEv is skipped for analysis (only accesses local vars)
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     _ZN13ap_fixed_baseILi65ELi33ELb1EL9ap_q_mode5EL9ap_o_mode3ELi0EE6reportEv is skipped for analysis (only accesses local vars)
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     _Z15doubleToRawBitsd is skipped for analysis (only accesses local vars)
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     _Z14rawBitsToFloatm is skipped for analysis (only accesses local vars)
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     _ZN13ap_fixed_baseILi33ELi17ELb1EL9ap_q_mode5EL9ap_o_mode3ELi0EE6reportEv is skipped for analysis (only accesses local vars)
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     _ZN13ap_fixed_baseILi48ELi16ELb1EL9ap_q_mode5EL9ap_o_mode3ELi0EE6reportEv is skipped for analysis (only accesses local vars)
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     _ZN13ap_fixed_baseILi49ELi33ELb1EL9ap_q_mode5EL9ap_o_mode3ELi0EE6reportEv is skipped for analysis (only accesses local vars)
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +1 is not an innermost loop
+dfgPass::VERBO:     +2 is not an innermost loop
+dfgPass::VERBO:       - BEFORE BREAK
+dfgPass::VERBO:       - for.cond6
+dfgPass::VERBO:         - memlocal of :kernel_col:0
+dfgPass::VERBO:         - LCV conditional branch 6:48
+dfgPass::VERBO:       - AFTER BREAK
+dfgPass::VERBO:       - for.body8
+dfgPass::VERBO:         - memlocal of :input_a:0
+dfgPass::VERBO:         - memlocal of :kernel_depth:0
+dfgPass::VERBO:         - memlocal of :stride_index_lengthwise:0
+dfgPass::VERBO:         - memlocal of :kernel_row:0
+dfgPass::VERBO:         - memlocal of :stride_index_widthwise:0
+dfgPass::VERBO:         - memlocal of :kernel_col:0
+dfgPass::VERBO:         - memlocal may be aliased :operand
+dfgPass::VERBO:         - memlocal of :input_b:0
+dfgPass::VERBO:         - memlocal of :kernel_depth:0
+dfgPass::VERBO:         - memlocal of :kernel_row:0
+dfgPass::VERBO:         - memlocal of :kernel_col:0
+dfgPass::VERBO:         - memlocal may be aliased :weight
+dfgPass::VERBO:         - invalid TR:4:0
+dfgPass::VERBO:       - BEFORE BREAK
+dfgPass::VERBO:       - arrayinit.body
+dfgPass::VERBO:         - invalid TR:4:0
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +1 is not an innermost loop
+dfgPass::VERBO:       - BEFORE BREAK
+dfgPass::VERBO:       - for.cond1
+dfgPass::VERBO:         - memlocal of :j:0
+dfgPass::VERBO:         - LCV conditional branch 6:48
+dfgPass::VERBO:       - AFTER BREAK
+dfgPass::VERBO:       - for.body3
+dfgPass::VERBO:         - invalid TR:4:0
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::VERBO:     +0 is not a loop
+dfgPass::INFOR:     Parsing trace...
+dfgPass::INFOR:     End of the trace parse
+dfgPass::INFOR: Saving ProgramContainer...

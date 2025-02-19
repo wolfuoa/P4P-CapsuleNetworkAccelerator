@@ -1,0 +1,223 @@
+{
+    "rules": {
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCapsTestbench.cpp.0.o', '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCapsTestbench.cpp.0.o.d']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/clang",
+                "-c",
+                "-MD",
+                "-MF",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCapsTestbench.cpp.0.o.d",
+                "-fhls-tb",
+                "-hls-sim-headers-dir=/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/data/include",
+                "-vitis-hls=/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1",
+                "-fhlstoplevel=process_features",
+                "-fslxskipfunctionbody",
+                "-fslxtrace",
+                "PrimaryCapsTestbench.cpp",
+                "-o",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCapsTestbench.cpp.0.o"
+            ],
+            "exectime": 0.07151150703430176,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+        },
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCaps.cpp.0.o', '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCaps.cpp.0.o.d']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/clang",
+                "-c",
+                "-MD",
+                "-MF",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCaps.cpp.0.o.d",
+                "-fhls-tb",
+                "-hls-sim-headers-dir=/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/data/include",
+                "-vitis-hls=/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1",
+                "-fhlstoplevel=process_features",
+                "-fslxskipfunctionbody",
+                "-fslxtrace",
+                "PrimaryCaps.cpp",
+                "-o",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCaps.cpp.0.o"
+            ],
+            "exectime": 1.1968035697937012,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+        },
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCaps.cpp.0.bc', '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCaps.cpp.0.bc.d']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/clang",
+                "-c",
+                "-emit-llvm",
+                "-MD",
+                "-MF",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCaps.cpp.0.bc.d",
+                "-fhls",
+                "-hls-syn-headers-dir=/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/data/autopilot",
+                "-vitis-hls=/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1",
+                "-fhlstoplevel=process_features",
+                "-fslxtrace",
+                "PrimaryCaps.cpp",
+                "-o",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCaps.cpp.0.bc"
+            ],
+            "exectime": 5.056443929672241,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+        },
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/syn_srcs.bc']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/llvm-link",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCaps.cpp.0.bc",
+                "-o",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/syn_srcs.bc"
+            ],
+            "exectime": 0.03686094284057617,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+        },
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/syn_srcs.opt.bc']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/opt",
+                "-check-single-toplevel",
+                "-make-non-toplevel-internal",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/syn_srcs.bc",
+                "-o",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/syn_srcs.opt.bc"
+            ],
+            "exectime": 0.08080768585205078,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+        },
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/app.exe']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/clang++",
+                "-o",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/app.exe",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCapsTestbench.cpp.0.o",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/PrimaryCaps.cpp.0.o",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/syn_srcs.opt.bc",
+                "-fhls",
+                "-fhlstoplevel=process_features",
+                "-vitis-hls=/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1",
+                "-fslxtrace",
+                "-Wl,-mllvm,-profilerOutputDirectory=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/profiler/0",
+                "-fslxpthreads"
+            ],
+            "exectime": 0.37012243270874023,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+        },
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/instrument/app_0/binary_dependencies.json']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/clang-scan-deps",
+                "--compilation-database=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/instrument/app_0/compile_commands.json",
+                "--format=vitiscxx",
+                "--reuse-filemanager=false",
+                "--output=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/instrument/app_0/binary_dependencies.json"
+            ],
+            "exectime": 0.07495498657226562,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+        },
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/output/app.functionGraph']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/staticCallGraph",
+                "-i",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/instrument/app_0/static.xml",
+                "-o",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/output/app.functionGraph"
+            ],
+            "exectime": 0.1412830352783203,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+        },
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/output/app.functionMapping']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/functionMapper",
+                "--static-xml",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/instrument/app_0/static.xml",
+                "--function-mapping",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/output/app.functionMapping",
+                "--ir-module",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/instrument/app_0/project.symbols.bc",
+                "--fn",
+                "210"
+            ],
+            "exectime": 0.07398676872253418,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+        },
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/bin/.tracing_stdout.txt', '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/bin/.tracing_stderr.txt']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/rwd",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/build/app.exe"
+            ],
+            "exectime": 0.05142521858215332,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/tracing/csim/build"
+        },
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/output/reduced_programmodel.app']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/optimizer",
+                "-DFGPass",
+                "-appName=app",
+                "-outputDir",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/output",
+                "-logDir",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/log",
+                "-pmout=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/output/reduced_programmodel.app",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/instrument/app_0/project.symbols.bc",
+                "-staticFile",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/instrument/app_0/static.xml",
+                "-traceFile",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/profiler/0/app_0_0/thread0000-trace.txt",
+                "-o",
+                "/dev/null"
+            ],
+            "exectime": 0.12406063079833984,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+        },
+        "['/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/dataflow/0/taskgraph.json']": {
+            "command": [
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/parallelismSelector",
+                "-g",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/output/reduced_programmodel.app",
+                "--basepath",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel",
+                "--static-xml",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/instrument/app_0/static.xml",
+                "--fpga-part",
+                "xczu9eg-ffvb1156-2-e",
+                "--device-totals",
+                "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/data/platform/logic/fpga.devicetotals",
+                "--clock-frequency",
+                "100.0",
+                "--out-dir",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/output",
+                "--log-dir",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/log",
+                "--mapping",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/output/app.functionMapping",
+                "--objective",
+                "none",
+                "--performance-target",
+                "target_both",
+                "--max-array-optimization-factor",
+                "1024",
+                "--complete-partition-limit",
+                "4",
+                "--lut-constraint",
+                "100.0",
+                "--ff-constraint",
+                "100.0",
+                "--dsp-constraint",
+                "100.0",
+                "--bram-constraint",
+                "100.0",
+                "--uram-constraint",
+                "100.0",
+                "--ir-module",
+                "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/csim/code_analyzer/.internal/instrument/app_0/project.symbols.bc",
+                "--max-iterations",
+                "1000",
+                "--max-iterations-branch-full-log",
+                "20",
+                "--df-id",
+                "0",
+                "--df-target",
+                "%F210"
+            ],
+            "exectime": 0.6408264636993408,
+            "cwd": "/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel"
+        }
+    }
+}

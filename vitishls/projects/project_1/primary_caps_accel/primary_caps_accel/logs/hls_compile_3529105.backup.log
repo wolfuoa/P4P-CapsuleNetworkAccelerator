@@ -1,0 +1,144 @@
+INFO: [v++ 60-1548] Creating build summary session with primary output /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/primary_caps_accel.hlscompile_summary, at Thu Aug  1 12:50:24 2024
+INFO: [v++ 82-31] Launching vitis_hls: vitis_hls -nolog -run csynth -work_dir /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel -config /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg -cmdlineconfig /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/config.cmdline
+
+****** Vitis HLS - High-Level Synthesis from C, C++ and OpenCL v2024.1 (64-bit)
+  **** SW Build 5069499 on May 21 2024
+  **** IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+  **** SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+  **** Start of session at: Thu Aug  1 12:50:25 2024
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source /home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/scripts/vitis_hls/hls.tcl -notrace
+INFO: [HLS 200-10] For user 'jjos425' on host 'en432999.uoa.auckland.ac.nz' (Linux_x86_64 version 5.15.0-113-generic) on Thu Aug 01 12:50:26 NZST 2024
+INFO: [HLS 200-10] On os Ubuntu 20.04.5 LTS
+INFO: [HLS 200-10] In directory '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel'
+INFO: [HLS 200-2005] Using work_dir /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel 
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/constants.h' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(7)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/constants.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.h' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/testing_suite.h' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/testing_suite.h' to the project
+INFO: [HLS 200-1465] Applying ini 'tb.file=PrimaryCapsTestbench.cpp' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(11)
+INFO: [HLS 200-10] Adding test bench file '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCapsTestbench.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.top=process_features' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(12)
+INFO: [HLS 200-1465] Applying ini 'flow_target=vitis' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vitis'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_latency=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_alignment_byte_size=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_max_widen_bitwidth=512
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_rtl -register_reset_num=3
+INFO: [HLS 200-1465] Applying ini 'part=xczu9eg-ffvb1156-2-e' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(1)
+INFO: [HLS 200-1611] Setting target device to 'xczu9eg-ffvb1156-2-e'
+INFO: [HLS 200-1465] Applying ini 'package.output.format=xo' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(5)
+INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 1.31 seconds. CPU system time: 0.16 seconds. Elapsed time: 1.34 seconds; current allocated memory: 299.672 MB.
+INFO: [HLS 200-10] Analyzing design file 'PrimaryCaps.cpp' ... 
+WARNING: [HLS 207-5580] Ignoring invalid 'distance' value in 'dependence' pragma , 'inter' option require 'distance' option presented and 'distance' should be more than 0 (PrimaryCaps.cpp:143:9)
+WARNING: [HLS 207-5579] Unknown pragma bind_op variable value 'output', please check that the variable exists in the same scope as the pragma. (PrimaryCaps.cpp:145:9)
+INFO: [HLS 200-111] Finished Source Code Analysis and Preprocessing: CPU user time: 9.71 seconds. CPU system time: 0.74 seconds. Elapsed time: 10.47 seconds; current allocated memory: 305.859 MB.
+INFO: [HLS 200-777] Using interface defaults for 'Vitis' flow target.
+INFO: [HLS 200-1995] There were 483 instructions in the design after the 'Compile/Link' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,519 instructions in the design after the 'Unroll/Inline (step 1)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,395 instructions in the design after the 'Unroll/Inline (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,332 instructions in the design after the 'Unroll/Inline (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,324 instructions in the design after the 'Unroll/Inline (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,328 instructions in the design after the 'Array/Struct (step 1)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,328 instructions in the design after the 'Array/Struct (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,328 instructions in the design after the 'Array/Struct (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,328 instructions in the design after the 'Array/Struct (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,457 instructions in the design after the 'Array/Struct (step 5)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,463 instructions in the design after the 'Performance (step 1)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,399 instructions in the design after the 'Performance (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,524 instructions in the design after the 'Performance (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,442 instructions in the design after the 'Performance (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,453 instructions in the design after the 'HW Transforms (step 1)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 1,493 instructions in the design after the 'HW Transforms (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/syn/report/csynth_design_size.rpt
+WARNING: [HLS 214-386] A depth specification is required for MAXI interface port 'biases' for cosimulation. (PrimaryCaps.cpp:155:0)
+WARNING: [HLS 214-386] A depth specification is required for MAXI interface port 'output' for cosimulation. (PrimaryCaps.cpp:155:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_114_6' (PrimaryCaps.cpp:114:38) in function 'conv_2d' completely with a factor of 9 (PrimaryCaps.cpp:62:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_117_7' (PrimaryCaps.cpp:117:20) in function 'conv_2d' completely with a factor of 9 (PrimaryCaps.cpp:62:0)
+INFO: [HLS 214-178] Inlining function 'coalesce_partial_sums(float*, float*)' into 'conv_2d(float*, hls::stream<float, 0>&, float*, float*)' (PrimaryCaps.cpp:62:0)
+INFO: [HLS 214-178] Inlining function 'reshape(float*, float*)' into 'process_features(float*, float*, float*, float*)' (PrimaryCaps.cpp:155:0)
+INFO: [HLS 214-178] Inlining function 'squash(float*, float*)' into 'process_features(float*, float*, float*, float*)' (PrimaryCaps.cpp:155:0)
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at PrimaryCaps.cpp:80:2 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at PrimaryCaps.cpp:81:4 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_108_5> at PrimaryCaps.cpp:108:34 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at  
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_97_2> at PrimaryCaps.cpp:97:26 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at PrimaryCaps.cpp:132:4 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_171_1> at PrimaryCaps.cpp:171:23 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at PrimaryCaps.cpp:203:4 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_221_4> at PrimaryCaps.cpp:221:34 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at PrimaryCaps.cpp:233:4 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at PrimaryCaps.cpp:248:4 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_254_2> at PrimaryCaps.cpp:254:26 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_262_3> at PrimaryCaps.cpp:262:22 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_275_6> at PrimaryCaps.cpp:275:26 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at PrimaryCaps.cpp:282:4 
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_264_4' is marked as complete unroll implied by the pipeline pragma (PrimaryCaps.cpp:264:26)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_264_4' (PrimaryCaps.cpp:264:26) in function 'process_features' completely with a factor of 8 (PrimaryCaps.cpp:155:0)
+INFO: [HLS 214-270] Inferring pragma 'array_partition type=cyclic factor=4 dim=1' for array 'squared_input.i' due to pipeline pragma (PrimaryCaps.cpp:243:10)
+INFO: [HLS 214-248] Applying array_partition to 'squared_input.i': Cyclic partitioning with factor 4 on dimension 1. (PrimaryCaps.cpp:243:10)
+INFO: [HLS 214-115] Multiple burst reads of length 6400 and bit width 512 has been inferred on bundle 'gmem0'. These burst requests might be further partitioned into multiple requests during RTL generation, based on max_read_burst_length or max_write_burst_length settings. (PrimaryCaps.cpp:80:2)
+INFO: [HLS 214-115] Multiple burst reads of length 16 and bit width 512 has been inferred on bundle 'gmem2'. These burst requests might be further partitioned into multiple requests during RTL generation, based on max_read_burst_length or max_write_burst_length settings. (PrimaryCaps.cpp:81:4)
+INFO: [HLS 214-115] Multiple burst reads of length 331776 and bit width 512 has been inferred on bundle 'gmem1'. These burst requests might be further partitioned into multiple requests during RTL generation, based on max_read_burst_length or max_write_burst_length settings. (PrimaryCaps.cpp:171:23)
+INFO: [HLS 214-115] Multiple burst writes of length 576 and bit width 512 has been inferred on bundle 'gmem3'. These burst requests might be further partitioned into multiple requests during RTL generation, based on max_read_burst_length or max_write_burst_length settings. (PrimaryCaps.cpp:282:4)
+INFO: [HLS 200-111] Finished Compiling Optimization and Transform: CPU user time: 2.39 seconds. CPU system time: 0.27 seconds. Elapsed time: 6.49 seconds; current allocated memory: 306.859 MB.
+INFO: [HLS 200-111] Finished Checking Pragmas: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0 seconds; current allocated memory: 306.859 MB.
+INFO: [HLS 200-10] Starting code transformations ...
+INFO: [HLS 200-111] Finished Standard Transforms: CPU user time: 0.06 seconds. CPU system time: 0 seconds. Elapsed time: 0.06 seconds; current allocated memory: 308.715 MB.
+INFO: [HLS 200-10] Checking synthesizability ...
+INFO: [HLS 200-111] Finished Checking Synthesizability: CPU user time: 0.04 seconds. CPU system time: 0 seconds. Elapsed time: 0.04 seconds; current allocated memory: 309.703 MB.
+WARNING: [HLS 200-805] An internal stream 'weights_stream' (PrimaryCaps.cpp:170) with default size can result in deadlock. Please consider resizing the stream using the directive 'set_directive_stream' or the 'HLS stream' pragma.
+INFO: [HLS 200-111] Finished Loop, function and other optimizations: CPU user time: 0.26 seconds. CPU system time: 0.01 seconds. Elapsed time: 0.28 seconds; current allocated memory: 337.344 MB.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_219_3'(PrimaryCaps.cpp:219:30) and 'VITIS_LOOP_221_4'(PrimaryCaps.cpp:221:34) in function 'process_features' into perfectly nested loops.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_217_2'(PrimaryCaps.cpp:217:26) and 'VITIS_LOOP_219_3'(PrimaryCaps.cpp:219:30) in function 'process_features' into perfectly nested loops.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_215_1'(PrimaryCaps.cpp:215:22) and 'VITIS_LOOP_217_2'(PrimaryCaps.cpp:217:26) in function 'process_features' into perfectly nested loops.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_252_1'(PrimaryCaps.cpp:252:22) and 'VITIS_LOOP_254_2'(PrimaryCaps.cpp:254:26) in function 'process_features' into perfectly nested loops.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_273_5'(PrimaryCaps.cpp:273:22) and 'VITIS_LOOP_275_6'(PrimaryCaps.cpp:275:26) in function 'process_features' into perfectly nested loops.
+INFO: [HLS 200-2061] Successfully converted nested loops 'VITIS_LOOP_137_1'(PrimaryCaps.cpp:137:20) and 'VITIS_LOOP_139_2'(PrimaryCaps.cpp:139:21) in function 'conv_2d' into perfectly nested loops.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_219_3' (PrimaryCaps.cpp:219:30) in function 'process_features'.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_217_2' (PrimaryCaps.cpp:217:26) in function 'process_features'.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_215_1' (PrimaryCaps.cpp:215:22) in function 'process_features'.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_252_1' (PrimaryCaps.cpp:252:22) in function 'process_features'.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_273_5' (PrimaryCaps.cpp:273:22) in function 'process_features'.
+INFO: [XFORM 203-541] Flattening a loop nest 'VITIS_LOOP_137_1' (PrimaryCaps.cpp:137:20) in function 'conv_2d'.
+WARNING: [HLS 200-1946] Dependence pragma (PrimaryCaps.cpp:143:9) in loop 'VITIS_LOOP_139_2' may become invalid because the loop was flattened with the outer loop 'VITIS_LOOP_137_1'.
+INFO: [ANALYSIS 214-51] Found intra dependency for variable 'sum' (PrimaryCaps.cpp:126).
+INFO: [ANALYSIS 214-51] Found inter dependency for variable 'sum' (PrimaryCaps.cpp:126).
+INFO: [ANALYSIS 214-51] Found intra dependency for variable 'sum' (PrimaryCaps.cpp:126).
+INFO: [ANALYSIS 214-51] Found inter dependency for variable 'sum' (PrimaryCaps.cpp:126).
+INFO: [HLS 200-111] Finished Architecture Synthesis: CPU user time: 0.31 seconds. CPU system time: 0.03 seconds. Elapsed time: 0.34 seconds; current allocated memory: 491.926 MB.
+INFO: [HLS 200-10] Starting hardware synthesis ...
+INFO: [HLS 200-10] Synthesizing 'process_features' ...
+INFO: [SYN 201-201] Setting up clock 'default' with a period of 10ns.
+WARNING: [SYN 201-303] Incompatible memory assignment of 'ROM_nP_BRAM' (PrimaryCaps.cpp:64) on 'input_buffer', which is not a const array.
+WARNING: [SYN 201-303] Incompatible memory assignment of 'ROM_nP_BRAM' (PrimaryCaps.cpp:73) on 'weight_buffer', which is not a const array.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'process_features_Pipeline_VITIS_LOOP_171_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+INFO: [SCHED 204-61] Pipelining loop 'VITIS_LOOP_171_1'.
+INFO: [HLS 200-1470] Pipelining result : Target II = NA, Final II = 1, Depth = 3, loop 'VITIS_LOOP_171_1'
+INFO: [SCHED 204-11] Finished scheduling.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.1 seconds. CPU system time: 0.02 seconds. Elapsed time: 0.11 seconds; current allocated memory: 491.926 MB.
+INFO: [BIND 205-100] Starting micro-architecture generation ...
+INFO: [BIND 205-101] Performing variable lifetime analysis.
+INFO: [BIND 205-101] Exploring resource sharing.
+INFO: [BIND 205-101] Binding ...
+INFO: [BIND 205-100] Finished micro-architecture generation.
+INFO: [HLS 200-111] Finished Binding: CPU user time: 0 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 491.926 MB.
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [HLS 200-42] -- Implementing module 'conv_2d_Pipeline_1' 
+INFO: [HLS 200-10] ----------------------------------------------------------------
+INFO: [SCHED 204-11] Starting scheduling ...
+ERROR: [SCHED 204-43] Cannot find a legal memory core for 'store' operation on array 'input_buffer'.
+INFO: [HLS 200-111] Finished Scheduling: CPU user time: 0.01 seconds. CPU system time: 0 seconds. Elapsed time: 0.01 seconds; current allocated memory: 491.926 MB.
+ERROR: Synthesis failed.
+INFO: [HLS 200-112] Total CPU user time: 14.2 seconds. Total CPU system time: 1.24 seconds. Total elapsed time: 19.16 seconds; peak allocated memory: 491.926 MB.

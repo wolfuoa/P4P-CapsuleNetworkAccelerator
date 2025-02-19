@@ -1,0 +1,26 @@
+[
+  {
+    "directory": "/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel",
+    "arguments": [
+      "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/clang++",
+      "-fhls",
+      "-hls-syn-headers-dir=/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/common/technology/autopilot",
+      "",
+      "-c",
+      "/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.cpp"
+    ],
+    "file": "/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.cpp"
+  },
+  {
+    "directory": "/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel",
+    "arguments": [
+      "/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/vcxx/libexec/clang++",
+      "-fhls",
+      "-hls-syn-headers-dir=/home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/common/technology/autopilot",
+      "",
+      "-c",
+      "/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitTestBench.cpp"
+    ],
+    "file": "/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitTestBench.cpp"
+  }
+]

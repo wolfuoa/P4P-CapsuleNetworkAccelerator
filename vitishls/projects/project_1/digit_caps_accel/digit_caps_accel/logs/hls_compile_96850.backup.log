@@ -1,0 +1,119 @@
+INFO: [v++ 60-1548] Creating build summary session with primary output /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/digit_caps_accel.hlscompile_summary, at Sat Sep 21 14:11:16 2024
+INFO: [v++ 82-31] Launching vitis_hls: vitis_hls -nolog -run csynth -work_dir /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel -config /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg -cmdlineconfig /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/config.cmdline
+
+****** Vitis HLS - High-Level Synthesis from C, C++ and OpenCL v2024.1 (64-bit)
+  **** SW Build 5069499 on May 21 2024
+  **** IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+  **** SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+  **** Start of session at: Sat Sep 21 14:11:16 2024
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source /home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/scripts/vitis_hls/hls.tcl -notrace
+INFO: [HLS 200-10] For user 'jjos425' on host 'en432999.uoa.auckland.ac.nz' (Linux_x86_64 version 5.15.0-122-generic) on Sat Sep 21 14:11:17 NZST 2024
+INFO: [HLS 200-10] On os Ubuntu 20.04.5 LTS
+INFO: [HLS 200-10] In directory '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel'
+INFO: [HLS 200-2005] Using work_dir /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel 
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/constants.h' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/constants.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.cpp' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.h' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitCaps.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/testing_suite.h' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(11)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/testing_suite.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=DigitTestBench.cpp' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(12)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitTestBench.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'tb.file=DigitTestBench.cpp' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(13)
+INFO: [HLS 200-10] Adding test bench file '/home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/DigitTestBench.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.top=dynamic_routing' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(7)
+INFO: [HLS 200-1465] Applying ini 'flow_target=vitis' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vitis'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_latency=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_alignment_byte_size=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_max_widen_bitwidth=512
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_rtl -register_reset_num=3
+INFO: [HLS 200-1465] Applying ini 'part=xczu9eg-ffvb1156-2-e' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(1)
+INFO: [HLS 200-1611] Setting target device to 'xczu9eg-ffvb1156-2-e'
+INFO: [HLS 200-1465] Applying ini 'package.output.format=xo' from /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/hls_config.cfg(5)
+INFO: [HLS 200-111] Finished File checks and directory preparation: CPU user time: 1.47 seconds. CPU system time: 0.14 seconds. Elapsed time: 1.52 seconds; current allocated memory: 318.273 MB.
+INFO: [HLS 200-10] Analyzing design file 'DigitTestBench.cpp' ... 
+INFO: [HLS 200-10] Analyzing design file 'DigitCaps.cpp' ... 
+WARNING: [HLS 207-5579] Unknown pragma bind_op variable value 'input_mat', please check that the variable exists in the same scope as the pragma. (DigitCaps.cpp:224:9)
+WARNING: [HLS 207-5579] Unknown pragma bind_op variable value 'input_mat', please check that the variable exists in the same scope as the pragma. (DigitCaps.cpp:288:9)
+INFO: [HLS 200-111] Finished Source Code Analysis and Preprocessing: CPU user time: 10.5 seconds. CPU system time: 0.91 seconds. Elapsed time: 11.42 seconds; current allocated memory: 324.508 MB.
+INFO: [HLS 200-777] Using interface defaults for 'Vitis' flow target.
+INFO: [HLS 200-1995] There were 9,476 instructions in the design after the 'Compile/Link' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 96,744 instructions in the design after the 'Unroll/Inline' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 30,410 instructions in the design after the 'Unroll/Inline (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 25,485 instructions in the design after the 'Unroll/Inline (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 24,945 instructions in the design after the 'Unroll/Inline (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 65,949 instructions in the design after the 'Array/Struct' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 4,817 instructions in the design after the 'Array/Struct (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 4,817 instructions in the design after the 'Array/Struct (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 4,817 instructions in the design after the 'Array/Struct (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 4,733 instructions in the design after the 'Array/Struct (step 5)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 4,703 instructions in the design after the 'Performance (step 1)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 6,089 instructions in the design after the 'Performance (step 2)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 7,724 instructions in the design after the 'Performance (step 3)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 7,080 instructions in the design after the 'Performance (step 4)' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+INFO: [HLS 200-1995] There were 4,495 instructions in the design after the 'HW Transforms' phase of compilation. See the Design Size Report for more details: /home/jjos425/Documents/vivado_projects/project_1/digit_caps_accel/digit_caps_accel/hls/syn/report/csynth_design_size.rpt
+WARNING: [HLS 214-386] A depth specification is required for MAXI interface port 'prediction' for cosimulation. (DigitCaps.cpp:37:0)
+WARNING: [HLS 214-199] Ignoring dependence pragma on local scalar variable 'result'. (DigitCaps.cpp:258:9)
+INFO: [HLS 214-291] Loop 'anonymous' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:239:31)
+INFO: [HLS 214-291] Loop 'anonymous' is marked as complete unroll implied by the pipeline pragma
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_241_6' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:241:20)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_256_1' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:256:20)
+INFO: [HLS 214-291] Loop 'anonymous' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:110:2)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_115_3' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:115:22)
+INFO: [HLS 214-291] Loop 'dot_product' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:128:17)
+INFO: [HLS 214-186] Unrolling loop 'anonymous' (DigitCaps.cpp:239:31) in function 'sum_of_products' completely with a factor of 1151 (DigitCaps.cpp:211:0)
+INFO: [HLS 214-186] Unrolling loop 'anonymous' () in function 'sum_of_products' completely with a factor of 1 (DigitCaps.cpp:211:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_241_6' (DigitCaps.cpp:241:20) in function 'sum_of_products' completely with a factor of 1152 (DigitCaps.cpp:211:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_256_1' (DigitCaps.cpp:256:20) in function 'coalesce_partial_sums' completely with a factor of 1152 (DigitCaps.cpp:254:0)
+WARNING: [HLS 214-189] Pipeline directive for loop 'VITIS_LOOP_256_1' (DigitCaps.cpp:256:20) in function 'coalesce_partial_sums' has been removed because the loop is unrolled completely (DigitCaps.cpp:254:0)
+INFO: [HLS 214-186] Unrolling loop 'anonymous' (DigitCaps.cpp:110:2) in function 'apply_weights' completely with a factor of 128 (DigitCaps.cpp:94:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_115_3' (DigitCaps.cpp:115:22) in function 'apply_weights' completely with a factor of 16 (DigitCaps.cpp:94:0)
+INFO: [HLS 214-186] Unrolling loop 'dot_product' (DigitCaps.cpp:128:17) in function 'apply_weights' completely with a factor of 8 (DigitCaps.cpp:94:0)
+WARNING: [HLS 214-366] Duplicating function 'ap_fixed_base<32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base(double)' as different function signatures were detected between this call site and other call site(s). This may impact the resources used in the design. (DigitCaps.cpp:239:32)
+INFO: [HLS 214-178] Inlining function 'agreement(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)' into 'dynamic_routing(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)' (DigitCaps.cpp:37:0)
+INFO: [HLS 214-178] Inlining function 'add(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)' into 'dynamic_routing(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)' (DigitCaps.cpp:37:0)
+INFO: [HLS 214-248] Applying array_partition to 'weight_buffer': Complete partitioning on dimension 1. (DigitCaps.cpp:107:10)
+INFO: [HLS 214-248] Applying array_partition to 'partial_sums': Complete partitioning on dimension 1. (DigitCaps.cpp:239:10)
+INFO: [HLS 214-248] Applying array_partition to 'weighted_input_u': Cyclic partitioning with factor 8 on dimension 1. (DigitCaps.cpp:49:10)
+INFO: [HLS 214-248] Applying array_partition to 'sum_of_products_s': Cyclic partitioning with factor 16 on dimension 1. (DigitCaps.cpp:54:10)
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_274_1> at DigitCaps.cpp:274:20 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_216_2> at DigitCaps.cpp:216:21 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_185_1> at DigitCaps.cpp:185:20 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at DigitCaps.cpp:47:2 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< VITIS_LOOP_298_2> at DigitCaps.cpp:298:21 
+INFO: [HLS 214-376] automatically set the pipeline for Loop< unknown> at DigitCaps.cpp:90:2 
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_301_3' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:301:22)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_278_2' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:278:21)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_285_3' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:285:21)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_221_3' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:221:22)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_191_2' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:191:21)
+INFO: [HLS 214-291] Loop 'VITIS_LOOP_201_3' is marked as complete unroll implied by the pipeline pragma (DigitCaps.cpp:201:21)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_301_3' (DigitCaps.cpp:301:22) in function 'dynamic_routing' completely with a factor of 16 (DigitCaps.cpp:37:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_278_2' (DigitCaps.cpp:278:21) in function 'squash' completely with a factor of 16 (DigitCaps.cpp:268:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_285_3' (DigitCaps.cpp:285:21) in function 'squash' completely with a factor of 16 (DigitCaps.cpp:268:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_221_3' (DigitCaps.cpp:221:22) in function 'sum_of_products' completely with a factor of 16 (DigitCaps.cpp:211:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_191_2' (DigitCaps.cpp:191:21) in function 'softmax' completely with a factor of 10 (DigitCaps.cpp:183:0)
+INFO: [HLS 214-186] Unrolling loop 'VITIS_LOOP_201_3' (DigitCaps.cpp:201:21) in function 'softmax' completely with a factor of 10 (DigitCaps.cpp:183:0)
+INFO: [HLS 214-364] Automatically inlining function 'coalesce_partial_sums(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)' to improve effectiveness of pipeline pragma in function 'sum_of_products(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)' (DigitCaps.cpp:247:13)
+INFO: [HLS 214-270] Inferring pragma 'array_partition type=cyclic factor=8 dim=1' for array 'squashed_v' due to pipeline pragma (DigitCaps.cpp:43:10)
+INFO: [HLS 214-270] Inferring pragma 'array_partition type=cyclic factor=11 dim=1' for array 'coupling_b' due to pipeline pragma (DigitCaps.cpp:52:10)
+INFO: [HLS 214-270] Inferring pragma 'array_partition type=cyclic factor=11 dim=1' for array 'coupling_c' due to pipeline pragma (DigitCaps.cpp:53:10)
+INFO: [HLS 214-248] Applying array_partition to 'squashed_v': Cyclic partitioning with factor 8 on dimension 1. (DigitCaps.cpp:43:10)
+INFO: [HLS 214-248] Applying array_partition to 'coupling_b': Cyclic partitioning with factor 11 on dimension 1. (DigitCaps.cpp:52:10)
+INFO: [HLS 214-248] Applying array_partition to 'coupling_c': Cyclic partitioning with factor 11 on dimension 1. (DigitCaps.cpp:53:10)
+INFO: [HLS 214-115] Multiple burst reads of length 92160 and bit width 512 in loop 'VITIS_LOOP_101_1'(DigitCaps.cpp:101:20) has been inferred on bundle 'gmem1'. These burst requests might be further partitioned into multiple requests during RTL generation, based on max_read_burst_length or max_write_burst_length settings. (DigitCaps.cpp:101:20)
+INFO: [HLS 214-115] Multiple burst reads of length 576 and bit width 512 has been inferred on bundle 'gmem0'. These burst requests might be further partitioned into multiple requests during RTL generation, based on max_read_burst_length or max_write_burst_length settings. (DigitCaps.cpp:47:2)
+INFO: [HLS 214-115] Multiple burst writes of length 10 and bit width 512 has been inferred on bundle 'gmem2'. These burst requests might be further partitioned into multiple requests during RTL generation, based on max_read_burst_length or max_write_burst_length settings. (DigitCaps.cpp:90:2)
+ERROR: [HLS 214-370] in function 'dynamic_routing(ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*, ap_fixed<32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>*)': Impl=uram in bind_storage is not supported for the targeted device xczu9eg-ffvb1156-2-e (DigitCaps.cpp:55:9)
+ERROR: [HLS 200-1715] Encountered problem during source synthesis
+ERROR: Pre-synthesis failed.
+INFO: [HLS 200-112] Total CPU user time: 61.61 seconds. Total CPU system time: 1.41 seconds. Total elapsed time: 67.78 seconds; peak allocated memory: 339.512 MB.

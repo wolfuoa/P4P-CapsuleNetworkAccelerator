@@ -1,0 +1,1015 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<cpuFpgaMapping:cpuFpgaMapping xmlns:cpuFpgaMapping="http://www.xilinx.com/act/cpuFpgaMapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.xilinx.com/act/cpuFpgaMapping cpuFPGAMapping.xsd">
+  <Function id="_f200" name="main">
+    <MappedTo editable="true">
+      <Partition>CPU</Partition>
+    </MappedTo>
+  </Function>
+  <Function id="_f210" name="process_features">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>true</TopLevel>
+    <IsCalledByHwFn>false</IsCalledByHwFn>
+    <Interfaces>
+      <Return>
+        <Default/>
+      </Return>
+      <Argument declaration="input (fixed_t*)" id="_v4" name="input">
+        <PragmaOrigin id="_fi210_4">
+          <CodeSection beginColumn="0" beginLine="170" endColumn="0" endLine="170" file="PrimaryCaps.cpp"/>
+        </PragmaOrigin>
+        <AXI>
+          <Depth>784</Depth>
+          <Name/>
+          <Offset>slave</Offset>
+          <NumReadOutstanding/>
+          <NumWriteOutstanding/>
+          <MaxReadBurstLength>256</MaxReadBurstLength>
+          <MaxWriteBurstLength>256</MaxWriteBurstLength>
+          <Bundle>gmem0</Bundle>
+          <PortBitwidth>128</PortBitwidth>
+        </AXI>
+      </Argument>
+      <Argument declaration="weights (fixed_t*)" id="_v5" name="weights">
+        <PragmaOrigin id="_fi210_5">
+          <CodeSection beginColumn="0" beginLine="171" endColumn="0" endLine="171" file="PrimaryCaps.cpp"/>
+        </PragmaOrigin>
+        <AXI>
+          <Depth>5308416</Depth>
+          <Name/>
+          <Offset>slave</Offset>
+          <NumReadOutstanding/>
+          <NumWriteOutstanding/>
+          <MaxReadBurstLength>256</MaxReadBurstLength>
+          <MaxWriteBurstLength>2</MaxWriteBurstLength>
+          <Bundle>gmem1</Bundle>
+          <PortBitwidth>128</PortBitwidth>
+        </AXI>
+      </Argument>
+      <Argument declaration="biases (fixed_t*)" id="_v6" name="biases">
+        <PragmaOrigin id="_fi210_6">
+          <CodeSection beginColumn="0" beginLine="172" endColumn="0" endLine="172" file="PrimaryCaps.cpp"/>
+        </PragmaOrigin>
+        <AXI>
+          <Depth/>
+          <Name/>
+          <Offset>slave</Offset>
+          <NumReadOutstanding/>
+          <NumWriteOutstanding/>
+          <MaxReadBurstLength>256</MaxReadBurstLength>
+          <MaxWriteBurstLength>256</MaxWriteBurstLength>
+          <Bundle>gmem2</Bundle>
+          <PortBitwidth>128</PortBitwidth>
+        </AXI>
+      </Argument>
+      <Argument declaration="output (fixed_t*)" id="_v7" name="output">
+        <PragmaOrigin id="_fi210_7">
+          <CodeSection beginColumn="0" beginLine="173" endColumn="0" endLine="173" file="PrimaryCaps.cpp"/>
+        </PragmaOrigin>
+        <AXI>
+          <Depth/>
+          <Name/>
+          <Offset>slave</Offset>
+          <NumReadOutstanding/>
+          <NumWriteOutstanding/>
+          <MaxReadBurstLength>256</MaxReadBurstLength>
+          <MaxWriteBurstLength>256</MaxWriteBurstLength>
+          <Bundle>gmem3</Bundle>
+          <PortBitwidth>128</PortBitwidth>
+        </AXI>
+      </Argument>
+    </Interfaces>
+  </Function>
+  <Function id="_f211" name="hls::stream&lt;ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>, 0>::stream">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f212" name="hls::stream&lt;ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>, 0>::write">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f213" name="conv_2d">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f214" name="reshape">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f215" name="squash">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f216" name="hls::stream&lt;ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>, 0>::~stream">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f217" name="hls::stream&lt;ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>, 0>::~stream">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f219" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f220" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator*&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f221" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f222" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator+=&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f223" name="operator+&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f224" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator/&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f225" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f226" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator+&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f227" name="ap_fixed_base&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator float">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f228" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f229" name="ap_fixed_base&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator/&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f230" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;66, 50, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f231" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;66, 50, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f232" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;66, 50, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f233" name="_ZN8ssdm_intILi32ELb1EEC2EDB32_">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f234" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;66, 50, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f235" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::report">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f236" name="ap_fixed_base&lt;66, 50, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator!">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f237" name="ap_fixed_base&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f238" name="ap_fixed&lt;66, 50, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;66, 50, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f239" name="ap_fixed&lt;66, 50, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;66, 50, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f240" name="ap_fixed_base&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f241" name="_ZN8ssdm_intILi65ELb1EEC2EDB65_">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f242" name="ap_fixed_base&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f243" name="ap_fixed_base&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::report">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f244" name="ap_fixed_base&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator!">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f245" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f246" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f247" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f248" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f249" name="doubleToRawBits">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f250" name="ap_int_base&lt;12, true>::ap_int_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f251" name="operator-&lt;11, false, 12, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f252" name="ap_int_base&lt;12, true>::operator=&lt;13, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f253" name="ap_int_base&lt;54, true>::operator-">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f254" name="ap_int_base&lt;54, true>::operator=&lt;55, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f255" name="ap_int_base&lt;1, false>::ap_int_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f256" name="operator-&lt;1, false, 54, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f257" name="ap_int_base&lt;55, true>::ap_int_base&lt;1, false>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f258" name="ap_int_base&lt;55, true>::ap_int_base&lt;54, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f259" name="ap_int_base&lt;55, true>::ap_int_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f260" name="ap_int&lt;55>::ap_int&lt;55, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f261" name="ap_int&lt;55>::ap_int&lt;55, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f262" name="ap_int_base&lt;55, true>::ap_int_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f263" name="_ZN8ssdm_intILi55ELb1EEC2EDB55_">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f264" name="ap_int_base&lt;55, true>::ap_int_base&lt;54, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f265" name="ap_int_base&lt;55, true>::ap_int_base&lt;1, false>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f266" name="ap_int_base&lt;1, false>::ap_int_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f267" name="_ZN8ssdm_intILi1ELb0EEC2EDU1_">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f268" name="ap_int_base&lt;13, true>::ap_int_base&lt;11, false>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f269" name="ap_int_base&lt;13, true>::ap_int_base&lt;12, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f270" name="ap_int_base&lt;13, true>::ap_int_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f271" name="ap_int&lt;13>::ap_int&lt;13, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f272" name="ap_int&lt;13>::ap_int&lt;13, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f273" name="ap_int_base&lt;13, true>::ap_int_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f274" name="_ZN8ssdm_intILi13ELb1EEC2EDB13_">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f275" name="ap_int_base&lt;13, true>::ap_int_base&lt;12, true>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f276" name="ap_int_base&lt;13, true>::ap_int_base&lt;11, false>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f277" name="ap_int_base&lt;12, true>::ap_int_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f278" name="_ZN8ssdm_intILi12ELb1EEC2EDB12_">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f279" name="ap_fixed_base&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>::to_float">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f280" name="ap_int_base&lt;33, false>::countLeadingZeros">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f281" name="rawBitsToFloat">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f282" name="ap_int_base&lt;64, false>::ap_int_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f283" name="ap_int_base&lt;64, false>::ap_int_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f284" name="_ZN8ssdm_intILi64ELb0EEC2EDU64_">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f285" name="ap_fixed_base&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f286" name="ap_fixed&lt;33, 17, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f287" name="ap_fixed&lt;33, 17, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f288" name="ap_fixed_base&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f289" name="_ZN8ssdm_intILi33ELb1EEC2EDB33_">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f290" name="ap_fixed_base&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f291" name="ap_fixed_base&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>::report">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f292" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator!">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f293" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f294" name="ap_fixed_base&lt;48, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f295" name="ap_fixed&lt;49, 33, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f296" name="ap_fixed&lt;49, 33, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f297" name="ap_fixed_base&lt;48, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f298" name="_ZN8ssdm_intILi48ELb1EEC2EDB48_">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f299" name="ap_fixed_base&lt;48, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f300" name="ap_fixed_base&lt;48, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::report">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f301" name="ap_fixed_base&lt;32, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f302" name="ap_fixed_base&lt;32, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator+&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f303" name="ap_fixed_base&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;32, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f304" name="ap_fixed_base&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f305" name="ap_fixed_base&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f306" name="_ZN8ssdm_intILi49ELb1EEC2EDB49_">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f307" name="ap_fixed_base&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f308" name="ap_fixed_base&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::report">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f309" name="ap_fixed_base&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;32, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f310" name="ap_fixed_base&lt;49, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;32, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f311" name="ap_fixed_base&lt;32, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator!">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f312" name="ap_fixed_base&lt;32, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f313" name="ap_fixed_base&lt;32, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;32, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f314" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator=&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f315" name="ap_fixed_base&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator!">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f316" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f317" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f318" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f319" name="ap_fixed_base&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator!">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f320" name="ap_fixed&lt;64, 32, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f321" name="ap_fixed&lt;64, 32, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f322" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f323" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f324" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;32, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f325" name="hls::stream&lt;ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>, 0>::read">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f326" name="calculate_single_value">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f327" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f328" name="ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f329" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f330" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;33, 17, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f331" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator+=&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f332" name="coalesce_partial_sums">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f333" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator+&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f334" name="ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator=&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f335" name="ap_fixed_base&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::operator!">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f336" name="ap_fixed_base&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f337" name="ap_fixed_base&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f338" name="ap_fixed&lt;65, 33, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f339" name="ap_fixed&lt;65, 33, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f340" name="ap_fixed_base&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f341" name="ap_fixed_base&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;64, 32, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f342" name="ap_fixed_base&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::ap_fixed_base&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f343" name="ap_fixed_base&lt;65, 33, true, (ap_q_mode)5, (ap_o_mode)3, 0>::equal_constexpr&lt;32, 16, true, (ap_q_mode)5, (ap_o_mode)3, 0>">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+  <Function id="_f344" name="hls::stream&lt;ap_fixed&lt;32, 16, (ap_q_mode)5, (ap_o_mode)3, 0>, 0>::stream">
+    <MappedTo editable="true">
+      <Partition>FPGA</Partition>
+    </MappedTo>
+    <TopLevel>false</TopLevel>
+    <IsCalledByHwFn>true</IsCalledByHwFn>
+  </Function>
+</cpuFpgaMapping:cpuFpgaMapping>

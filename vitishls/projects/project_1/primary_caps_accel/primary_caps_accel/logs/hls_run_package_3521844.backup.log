@@ -1,0 +1,118 @@
+INFO: [vitis-run 60-1548] Creating build summary session with primary output /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/primary_caps_accel.hlsrun_package_summary, at Sat Jul 13 13:34:03 2024
+INFO: [vitis-run 82-31] Launching vitis_hls: vitis_hls -nolog -run package -work_dir /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel -config /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg -cmdlineconfig /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/config.cmdline
+
+****** Vitis HLS - High-Level Synthesis from C, C++ and OpenCL v2024.1 (64-bit)
+  **** SW Build 5069499 on May 21 2024
+  **** IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+  **** SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+  **** Start of session at: Sat Jul 13 13:34:04 2024
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source /home/jjos425/Desktop/P4P33-2024/Vitis_HLS/2024.1/scripts/vitis_hls/hls.tcl -notrace
+INFO: [HLS 200-10] For user 'jjos425' on host 'en432999.uoa.auckland.ac.nz' (Linux_x86_64 version 5.15.0-113-generic) on Sat Jul 13 13:34:05 NZST 2024
+INFO: [HLS 200-10] On os Ubuntu 20.04.5 LTS
+INFO: [HLS 200-10] In directory '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel'
+INFO: [HLS 200-2005] Using work_dir /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel 
+INFO: [HLS 200-1611] Setting target device to 'xczu9eg-ffvb1156-2-e'
+INFO: [HLS 200-1505] Using default flow_target 'vivado'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/constants.h' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(7)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/constants.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(8)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.h' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(9)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCaps.h' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.file=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/testing_suite.h' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(10)
+INFO: [HLS 200-10] Adding design file '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/testing_suite.h' to the project
+INFO: [HLS 200-1465] Applying ini 'tb.file=PrimaryCapsTestbench.cpp' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(11)
+INFO: [HLS 200-10] Adding test bench file '/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/PrimaryCapsTestbench.cpp' to the project
+INFO: [HLS 200-1465] Applying ini 'syn.top=process_features' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(12)
+INFO: [HLS 200-1465] Applying ini 'flow_target=vitis' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(4)
+INFO: [HLS 200-1505] Using flow_target 'vitis'
+Resolution: For help on HLS 200-1505 see docs.xilinx.com/access/sources/dita/topic?Doc_Version=2024.1%20English&url=ug1448-hls-guidance&resourceid=200-1505.html
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_latency=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_alignment_byte_size=64
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_interface -m_axi_max_widen_bitwidth=512
+INFO: [HLS 200-435] Setting 'open_solution -flow_target vitis' configuration: config_rtl -register_reset_num=3
+INFO: [HLS 200-1465] Applying ini 'part=xczu9eg-ffvb1156-2-e' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(1)
+INFO: [HLS 200-1465] Applying ini 'package.output.format=xo' from /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/hls_config.cfg(5)
+INFO: [IMPL 213-8] Exporting RTL as a Vivado IP.
+
+****** Vivado v2024.1 (64-bit)
+  **** SW Build 5076996 on Wed May 22 18:36:09 MDT 2024
+  **** IP Build 5075265 on Wed May 22 21:45:21 MDT 2024
+  **** SharedData Build 5076995 on Wed May 22 18:29:18 MDT 2024
+  **** Start of session at: Sat Jul 13 13:34:08 2024
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+    ** Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+
+source run_ippack.tcl -notrace
+INFO: calling package_hls_ip ip_types=vitis sysgen json_file=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/hls_data.json outdir=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/ip srcdir=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls sort_interfaces_ports=false
+INFO: Copied 1 ipmisc file(s) to /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/ip/misc
+INFO: Copied 41 verilog file(s) to /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/ip/hdl/verilog
+INFO: Copied 39 vhdl file(s) to /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/ip/hdl/vhdl
+INFO: Copied 10 swdriver file(s) to /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/ip/drivers
+Generating 7 subcores in /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/ip/hdl/ip.tmp:
+impl/misc/process_features_dadd_64ns_64ns_64_5_full_dsp_1_ip.tcl
+impl/misc/process_features_fadd_32ns_32ns_32_4_full_dsp_1_ip.tcl
+impl/misc/process_features_fdiv_32ns_32ns_32_9_no_dsp_1_ip.tcl
+impl/misc/process_features_fmul_32ns_32ns_32_3_max_dsp_1_ip.tcl
+impl/misc/process_features_fpext_32ns_64_2_no_dsp_1_ip.tcl
+impl/misc/process_features_fptrunc_64ns_32_2_no_dsp_1_ip.tcl
+impl/misc/process_features_fsqrt_32ns_32ns_32_8_no_dsp_1_ip.tcl
+INFO: Using COE_DIR=/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/ip/hdl/verilog
+INFO: Generating process_features_dadd_64ns_64ns_64_5_full_dsp_1_ip via file impl/misc/process_features_dadd_64ns_64ns_64_5_full_dsp_1_ip.tcl
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/home/jjos425/Desktop/P4P33-2024/Vivado/2024.1/data/ip'.
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'process_features_dadd_64ns_64ns_64_5_full_dsp_1_ip'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'process_features_dadd_64ns_64ns_64_5_full_dsp_1_ip'...
+INFO: Done generating process_features_dadd_64ns_64ns_64_5_full_dsp_1_ip via file impl/misc/process_features_dadd_64ns_64ns_64_5_full_dsp_1_ip.tcl
+INFO: Generating process_features_fadd_32ns_32ns_32_4_full_dsp_1_ip via file impl/misc/process_features_fadd_32ns_32ns_32_4_full_dsp_1_ip.tcl
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'process_features_fadd_32ns_32ns_32_4_full_dsp_1_ip'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'process_features_fadd_32ns_32ns_32_4_full_dsp_1_ip'...
+INFO: Done generating process_features_fadd_32ns_32ns_32_4_full_dsp_1_ip via file impl/misc/process_features_fadd_32ns_32ns_32_4_full_dsp_1_ip.tcl
+INFO: Generating process_features_fdiv_32ns_32ns_32_9_no_dsp_1_ip via file impl/misc/process_features_fdiv_32ns_32ns_32_9_no_dsp_1_ip.tcl
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'process_features_fdiv_32ns_32ns_32_9_no_dsp_1_ip'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'process_features_fdiv_32ns_32ns_32_9_no_dsp_1_ip'...
+INFO: Done generating process_features_fdiv_32ns_32ns_32_9_no_dsp_1_ip via file impl/misc/process_features_fdiv_32ns_32ns_32_9_no_dsp_1_ip.tcl
+INFO: Generating process_features_fmul_32ns_32ns_32_3_max_dsp_1_ip via file impl/misc/process_features_fmul_32ns_32ns_32_3_max_dsp_1_ip.tcl
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'process_features_fmul_32ns_32ns_32_3_max_dsp_1_ip'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'process_features_fmul_32ns_32ns_32_3_max_dsp_1_ip'...
+INFO: Done generating process_features_fmul_32ns_32ns_32_3_max_dsp_1_ip via file impl/misc/process_features_fmul_32ns_32ns_32_3_max_dsp_1_ip.tcl
+INFO: Generating process_features_fpext_32ns_64_2_no_dsp_1_ip via file impl/misc/process_features_fpext_32ns_64_2_no_dsp_1_ip.tcl
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'process_features_fpext_32ns_64_2_no_dsp_1_ip'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'process_features_fpext_32ns_64_2_no_dsp_1_ip'...
+INFO: Done generating process_features_fpext_32ns_64_2_no_dsp_1_ip via file impl/misc/process_features_fpext_32ns_64_2_no_dsp_1_ip.tcl
+INFO: Generating process_features_fptrunc_64ns_32_2_no_dsp_1_ip via file impl/misc/process_features_fptrunc_64ns_32_2_no_dsp_1_ip.tcl
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'process_features_fptrunc_64ns_32_2_no_dsp_1_ip'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'process_features_fptrunc_64ns_32_2_no_dsp_1_ip'...
+INFO: Done generating process_features_fptrunc_64ns_32_2_no_dsp_1_ip via file impl/misc/process_features_fptrunc_64ns_32_2_no_dsp_1_ip.tcl
+INFO: Generating process_features_fsqrt_32ns_32ns_32_8_no_dsp_1_ip via file impl/misc/process_features_fsqrt_32ns_32ns_32_8_no_dsp_1_ip.tcl
+INFO: [IP_Flow 19-1686] Generating 'Synthesis' target for IP 'process_features_fsqrt_32ns_32ns_32_8_no_dsp_1_ip'...
+INFO: [IP_Flow 19-1686] Generating 'Simulation' target for IP 'process_features_fsqrt_32ns_32ns_32_8_no_dsp_1_ip'...
+INFO: Done generating process_features_fsqrt_32ns_32ns_32_8_no_dsp_1_ip via file impl/misc/process_features_fsqrt_32ns_32ns_32_8_no_dsp_1_ip.tcl
+INFO: Import ports from HDL: /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/ip/hdl/vhdl/process_features.vhd (process_features)
+INFO: Add axi4lite interface s_axi_control
+INFO: Add clock interface ap_clk
+INFO: Add reset interface ap_rst_n
+INFO: Add interrupt interface interrupt
+INFO: [IP_Flow 19-234] Refreshing IP repositories
+INFO: [IP_Flow 19-1704] No user IP repositories specified
+INFO: [IP_Flow 19-2313] Loaded Vivado IP repository '/home/jjos425/Desktop/P4P33-2024/Vivado/2024.1/data/ip'.
+INFO: Add axi4full interface m_axi_gmem0
+INFO: Add axi4full interface m_axi_gmem1
+INFO: Add axi4full interface m_axi_gmem2
+INFO: Add axi4full interface m_axi_gmem3
+INFO: Calling post_process_vitis to specialize IP
+INFO: Calling post_process_sysgen to specialize IP
+Generating sysgen info xml from json file
+INFO: Created IP /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/ip/component.xml
+Generating XO file: process_features.xo in directory /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/..
+Running: package_xo -xo_path /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/../process_features.xo -kernel_xml /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/kernel.xml -kernel_name process_features -ip_directory /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/ip -kernel_files {/home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/../../constants.h /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/../../PrimaryCaps.cpp /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/../../PrimaryCaps.h /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/../../testing_suite.h} -hls_directory /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/misc/hls_files -kernel_json /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/hls_data.json
+INFO: Created IP archive /home/jjos425/Documents/vivado_projects/project_1/primary_caps_accel/primary_caps_accel/hls/impl/ip/xilinx_com_hls_process_features_1_0.zip
+INFO: [Common 17-206] Exiting Vivado at Sat Jul 13 13:34:21 2024...
+INFO: [HLS 200-802] Generated output file primary_caps_accel/process_features.xo
+INFO: [HLS 200-112] Total CPU user time: 16.3 seconds. Total CPU system time: 0.83 seconds. Total elapsed time: 19.92 seconds; peak allocated memory: 343.496 MB.
+INFO: [vitis-run 60-791] Total elapsed time: 0h 0m 23s
